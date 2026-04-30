@@ -1,7 +1,7 @@
 import requests
 
 # ΑΝΤΙΚΑΤΑΣΤΗΣΕ ΤΟ "YOUR_API_KEY" ΜΕ ΤΟ ΚΛΕΙΔΙ ΣΟΥ ΑΠΟ ΤΟ API-FOOTBALL
-API_KEY = "YOUR_API_KEY"
+API_KEY = "a963742bcd5642afbe8c842d057f25ad"
 BASE_URL = "https://v3.football.api-sports.io/"
 
 headers = {
