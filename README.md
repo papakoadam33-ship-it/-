@@ -9,7 +9,7 @@ def get_predictions():
     # Θα πάρουμε τα ματς των επόμενων 7 ημερών για να είμαστε σίγουροι
     url = "https://api.football-data.org/v4/matches"
     headers = { 'X-Auth-Token': API_KEY }
-    
+    a1a4edf072dc4b2c8153fced44c88de9
     try:
         response = requests.get(url, headers=headers)
         
