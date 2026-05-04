@@ -1,13 +1,1 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ ΗΜΕΡΑΣ ---
-
-Πρωτάθλημα: Ελλάδα (Super League)
-
-Πρωτάθλημα: Αγγλία (Premier League)
-
-Πρωτάθλημα: Ισπανία (La Liga)
-
-Πρωτάθλημα: Ιταλία (Serie A)
-
-Πρωτάθλημα: Γερμανία (Bundesliga)
-
-Πρωτάθλημα: Γαλλία (Ligue 1)
+Κάτι πήγε στραβά: 'latin-1' codec can't encode characters in position 0-1: ordinal not in range(256)
