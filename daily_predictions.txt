@@ -1,1 +1,7 @@
-Κάτι πήγε στραβά: 'latin-1' codec can't encode characters in position 0-1: ordinal not in range(256)
+Τα προγνωστικά γράφτηκαν στο αρχείο.
+a FC vs Nottingham Forest FC -> Προγνωστικό: Over 1.5
+[Serie A] US Cremonese vs SS Lazio -> Προγνωστικό: Over 1.5
+[Serie A] AS Roma vs ACF Fiorentina -> Προγνωστικό: Over 1.5
+[Primera Division] Sevilla FC vs Real Sociedad de Fútbol -> Προγνωστικό: Over 1.5
+[Premier League] Everton FC vs Manchester City FC -> Προγνωστικό: Over 1.5
+[Primeira Liga] Sporting Clube de Portugal vs Vitória SC -> Προγνωστικό: Over 1.5
