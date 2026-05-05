@@ -1,7 +1,6 @@
 Τα προγνωστικά γράφτηκαν στο αρχείο.
-a FC vs Nottingham Forest FC -> Προγνωστικό: Over 1.5
-[Serie A] US Cremonese vs SS Lazio -> Προγνωστικό: Over 1.5
-[Serie A] AS Roma vs ACF Fiorentina -> Προγνωστικό: Over 1.5
-[Primera Division] Sevilla FC vs Real Sociedad de Fútbol -> Προγνωστικό: Over 1.5
-[Premier League] Everton FC vs Manchester City FC -> Προγνωστικό: Over 1.5
-[Primeira Liga] Sporting Clube de Portugal vs Vitória SC -> Προγνωστικό: Over 1.5
+ None vs None -> Προγνωστικό: Over 1.5
+[Copa Libertadores] CS Cristal vs SE Palmeiras -> Προγνωστικό: Over 1.5
+[Copa Libertadores] CA Rosario Central vs Club Libertad Asuncion -> Προγνωστικό: Over 1.5
+[Copa Libertadores] Universidad Central de Venezuela FC vs CAR Independiente del Valle -> Προγνωστικό: Over 1.5
+[Copa Libertadores] Barcelona SC vs CA Boca Juniors -> Προγνωστικό: Over 1.5
