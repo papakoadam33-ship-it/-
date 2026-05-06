@@ -1,7 +1,7 @@
-Τα προγνωστικά γράφτηκαν στο αρχείο.
-celona SC vs CA Boca Juniors -> Προγνωστικό: Over 1.5
-[Copa Libertadores] Universidad Central de Venezuela FC vs CAR Independiente del Valle -> Προγνωστικό: Over 1.5
-[Copa Libertadores] Club Always Ready vs CA Lanús -> Προγνωστικό: Over 1.5
-[UEFA Champions League] None vs None -> Προγνωστικό: Over 1.5
-[Copa Libertadores] Deportivo La Guaira FC vs Club Bolívar -> Προγνωστικό: Over 1.5
-[Copa Libertadores] Cusco FC vs Estudiantes de La Plata -> Προγνωστικό: Over 1.5
+Error in Premier League: 'latin-1' codec can't encode characters in position 0-1: ordinal not in range(256)
+Error in La Liga: 'latin-1' codec can't encode characters in position 0-1: ordinal not in range(256)
+Error in Serie A: 'latin-1' codec can't encode characters in position 0-1: ordinal not in range(256)
+Error in Bundesliga: 'latin-1' codec can't encode characters in position 0-1: ordinal not in range(256)
+Error in Ligue 1: 'latin-1' codec can't encode characters in position 0-1: ordinal not in range(256)
+Error in Champions League: 'latin-1' codec can't encode characters in position 0-1: ordinal not in range(256)
+Error in Copa Libertadores: 'latin-1' codec can't encode characters in position 0-1: ordinal not in range(256)
