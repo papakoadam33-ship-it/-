@@ -1,22 +1,19 @@
 import requests
 from datetime import datetime
 
-# Βάλε εδώ το ΝΕΟ API Key από το api-sports.io
-API_KEY = "ΤΟ_ΝΕΟ_ΣΟΥ_API_KEY"
+# ΕΔΩ ΒΑΖΕΙΣ ΤΟ ΚΛΕΙΔΙ ΠΟΥ ΑΝΤΕΓΡΑΨΕΣ
+API_KEY = "9349c7cabeae94ff4e9e25a6c963a8c8"
 
-# IDs πρωταθλημάτων για το API-Football:
-# 135: Serie A (Italy), 39: Premier League, 140: La Liga, 71: Serie A (Brazil), 
-# 128: Liga Profesional (Argentina), 94: Primeira Liga (Portugal)
-LEAGUE_IDS = [39, 140, 135, 71, 128, 94]
+# Πρωταθλήματα: Αγγλία, Ισπανία, Ιταλία, Βραζιλία, Αργεντινή, Πορτογαλία, Ελλάδα
+LEAGUE_IDS = [39, 140, 135, 71, 128, 94, 197]
 
 def get_smart_tip(home_name, away_name):
-    # Εδώ μπορούμε μελλοντικά να προσθέσουμε στατιστικά.
-    # Προς το παρόν, ας χρησιμοποιήσουμε μια ποικιλία σημείων.
-    name_sum = len(home_name) + len(away_name)
-    if name_sum % 5 == 0: return "Goal-Goal"
-    if name_sum % 5 == 1: return "1X & Over 1.5"
-    if name_sum % 5 == 2: return "Over 2.5"
-    if name_sum % 5 == 3: return "2-3 Goals"
+    """Λογική για ποικιλία στα σημεία"""
+    combined = len(home_name) + len(away_name)
+    if combined % 5 == 0: return "Goal-Goal"
+    if combined % 5 == 1: return "1X & Over 1.5"
+    if combined % 5 == 2: return "Over 2.5"
+    if combined % 5 == 3: return "2-3 Goals"
     return "X2 & Under 4.5"
 
 def get_predictions():
@@ -26,12 +23,12 @@ def get_predictions():
         'x-rapidapi-host': 'v3.football.api-sports.io'
     }
     
-    all_content = f"📅 Προγνωστικά Marios Pro (API-Football)\nΕνημέρωση: {datetime.now().strftime('%d/%m %H:%M')}\n\n"
+    all_content = f"📅 Marios Pro Tips (API-Football)\nΕνημέρωση: {datetime.now().strftime('%d/%m %H:%M')}\n\n"
     found_any = False
 
     for league_id in LEAGUE_IDS:
-        # Παίρνουμε τους επόμενους 5 αγώνες για κάθε πρωτάθλημα
-        params = {'league': league_id, 'next': 5}
+        # Παίρνουμε τους επόμενους 8 αγώνες για να έχουμε γεμάτη λίστα
+        params = {'league': league_id, 'next': 8}
         
         try:
             response = requests.get(url, headers=headers, params=params)
@@ -46,7 +43,8 @@ def get_predictions():
                     for m in matches:
                         home = m['teams']['home']['name']
                         away = m['teams']['away']['name']
-                        # Μετατροπή ημερομηνίας
+                        
+                        # Διαμόρφωση ημερομηνίας
                         date_raw = m['fixture']['date'][:10]
                         date_obj = datetime.strptime(date_raw, '%Y-%m-%d')
                         date_final = date_obj.strftime('%d/%m')
@@ -57,13 +55,13 @@ def get_predictions():
                     all_content += "\n"
             
         except Exception as e:
-            print(f"Error fetching league {league_id}: {e}")
+            print(f"Error in league {league_id}: {e}")
 
     with open("daily_predictions.txt", "w", encoding="utf-8") as f:
         if found_any:
             f.write(all_content)
         else:
-            f.write("Δεν βρέθηκαν αυριανοί αγώνες. Ελέγξτε το API Key.")
+            f.write("Δεν βρέθηκαν αγώνες. Ελέγξτε αν το API Key είναι ενεργό.")
 
 if __name__ == "__main__":
     get_predictions()
