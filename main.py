@@ -1,15 +1,15 @@
+
 import requests
 from datetime import datetime, timedelta
 
-# Αντέγραψε το κλειδί από την εικόνα σου και βάλ' το εδώ
-API_KEY = "03411e3ab539f7c9723807379af72b61"
+# Το κλειδί σου από το RapidAPI
+API_KEY = "47d5da2fb8mshde110deccc94426p115d5ajsnd9cc939fa561"
 
-# Τα IDs για τα πρωταθλήματα που ζήτησες:
-# 39: Premier League, 140: La Liga, 135: Serie A, 71: Βραζιλία, 128: Αργεντινή, 94: Πορτογαλία, 197: Ελλάδα
+# IDs Πρωταθλημάτων: Αγγλία, Ισπανία, Ιταλία, Βραζιλία, Αργεντινή, Πορτογαλία, Ελλάδα
 LEAGUE_IDS = [39, 140, 135, 71, 128, 94, 197]
 
 def get_smart_tip(home_name, away_name):
-    """Μια απλή λογική για ποικιλία στα προγνωστικά"""
+    """Απλή λογική για προγνωστικά"""
     combined = len(home_name) + len(away_name)
     if combined % 4 == 0: return "Goal-Goal"
     if combined % 4 == 1: return "1X & Over 1.5"
@@ -17,26 +17,27 @@ def get_smart_tip(home_name, away_name):
     return "2-3 Goals"
 
 def get_predictions():
-    # Στο API-Football χρησιμοποιούμε αυτό το URL για επερχόμενα ματς
-    url = "https://v3.football.api-sports.io/fixtures"
+    # Προσοχή: Για RapidAPI το host αλλάζει ελαφρώς
+    url = "https://api-football-v1.p.rapidapi.com/v3/fixtures"
+    
     headers = {
-        'x-rapidapi-key': API_KEY,
-        'x-rapidapi-host': 'v3.football.api-sports.io'
+        "X-RapidAPI-Key": API_KEY,
+        "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
     }
     
-    # Ημερομηνίες για σήμερα και αύριο
     today = datetime.now().strftime('%Y-%m-%d')
     tomorrow = (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d')
     
-    all_content = f"📅 Marios Pro Tips\nΕνημέρωση: {datetime.now().strftime('%d/%m %H:%M')}\n\n"
+    all_content = f"📅 Marios Pro Tips (RapidAPI)\nΕνημέρωση: {datetime.now().strftime('%d/%m %H:%M')}\n\n"
     found_any = False
 
     for league_id in LEAGUE_IDS:
-        # Ζητάμε τα ματς του συγκεκριμένου πρωταθλήματος για σήμερα και αύριο
-        params = {'league': league_id, 'next': 10}
+        # Παίρνουμε τους επόμενους 10 αγώνες για κάθε πρωτάθλημα
+        params = {"league": str(league_id), "next": "10"}
         
         try:
             response = requests.get(url, headers=headers, params=params)
+            
             if response.status_code == 200:
                 data = response.json()
                 matches = data.get('response', [])
@@ -44,11 +45,11 @@ def get_predictions():
                 if matches:
                     league_name = matches[0]['league']['name']
                     league_content = f"--- {league_name} ---\n"
-                    has_league_matches = False
+                    has_matches = False
                     
                     for m in matches:
                         match_date = m['fixture']['date'][:10]
-                        # Κρατάμε μόνο σήμερα και αύριο
+                        # Φιλτράρουμε μόνο για σήμερα και αύριο
                         if match_date == today or match_date == tomorrow:
                             home = m['teams']['home']['name']
                             away = m['teams']['away']['name']
@@ -56,21 +57,23 @@ def get_predictions():
                             
                             tip = get_smart_tip(home, away)
                             league_content += f"⚽ [{day_label}] {home} vs {away} -> {tip}\n"
-                            has_league_matches = True
+                            has_matches = True
                             found_any = True
                     
-                    if has_league_matches:
+                    if has_matches:
                         all_content += league_content + "\n"
-            
-        except Exception as e:
-            print(f"Error league {league_id}: {e}")
+            else:
+                print(f"Σφάλμα στο πρωτάθλημα {league_id}: {response.status_code}")
 
+        except Exception as e:
+            print(f"Error: {e}")
+
+    # Αποθήκευση στο αρχείο
     with open("daily_predictions.txt", "w", encoding="utf-8") as f:
         if found_any:
             f.write(all_content)
         else:
-            f.write(f"📅 {today}\nΔεν βρέθηκαν προγραμματισμένοι αγώνες για σήμερα ή αύριο.")
+            f.write(f"📅 {today}\nΔεν βρέθηκαν αγώνες για σήμερα/αύριο. Βεβαιώσου ότι έχεις πατήσει 'Subscribe to Free Plan' στο RapidAPI.")
 
 if __name__ == "__main__":
     get_predictions()
-
