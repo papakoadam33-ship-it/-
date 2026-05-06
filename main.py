@@ -3,7 +3,7 @@ import time
 from datetime import datetime, timedelta
 
 # Το κλειδί σου - Βεβαιώσου ότι είναι το σωστό
-API_KEY = "ΤΟ_ΚΛΕΙΔΙ_ΣΟΥ_ΕΔΩ"
+API_KEY = "a1a4edf072dc4b2c8153fced44c88de9"
 
 # Προσθέσαμε Βραζιλία (BSA), Πορτογαλία (PPL) και Αργεντινή (CLI - Copa Libertadores/Sudamericana)
 # Σημείωση: Το Free Tier του football-data.org έχει περιορισμένα πρωταθλήματα Λατινικής Αμερικής.
