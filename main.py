@@ -3,7 +3,7 @@ import time
 from datetime import datetime, timedelta
 
 # Βάλε το κλειδί σου εδώ
-API_KEY = "ΤΟ_ΚΛΕΙΔΙ_ΣΟΥ_ΕΔΩ"
+API_KEY = "a1a4edf072dc4b2c8153fced44c88de9"
 
 # Επιλεγμένα πρωταθλήματα (Free Tier)
 LEAGUES = {
