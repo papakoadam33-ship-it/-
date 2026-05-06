@@ -1,42 +1,57 @@
-import requests
-import os
 
-# Βάλε το κλειδί σου εδώ
-API_KEY = "a1a4edf072dc4b2c8153fced44c88de9"
+import requests
+
+API_KEY = "ΤΟ_ΚΛΕΙΔΙ_ΣΟΥ_ΕΔΩ"
+
+# Λίστα με τα πρωταθλήματα που θέλουμε να ελέγχουμε
+LEAGUES = {
+    'Premier League': 'PL',
+    'La Liga': 'PD',
+    'Serie A': 'SA',
+    'Bundesliga': 'BL1',
+    'Ligue 1': 'FL1',
+    'Champions League': 'CL',
+    'Copa Libertadores': 'CLI'
+}
 
 def get_predictions():
-    # Στο Free Tier έχουμε πρόσβαση σε συγκεκριμένα πρωταθλήματα (π.χ. PL, CL, BL1, SA, PD, FL1)
-    # Θα πάρουμε τα ματς των επόμενων 7 ημερών για να είμαστε σίγουροι
-    url = "https://api.football-data.org/v4/matches"
     headers = { 'X-Auth-Token': API_KEY }
+    all_content = ""
     
-    try:
-        response = requests.get(url, headers=headers)
+    for league_name, league_code in LEAGUES.items():
+        # Ζητάμε μόνο τα προγραμματισμένα ματς (SCHEDULED)
+        url = f"https://api.football-data.org/v4/competitions/{league_code}/matches?status=SCHEDULED"
         
-        if response.status_code == 429:
-            print("Σφάλμα: Πολλά αιτήματα (Rate Limit). Περίμενε ένα λεπτό.")
-            return
+        try:
+            response = requests.get(url, headers=headers)
+            data = response.json()
             
-        data = response.json()
-
-        with open("daily_predictions.txt", "w", encoding="utf-8") as f:
-            f.write("=== ΠΡΟΓΝΩΣΤΙΚΑ ΗΜΕΡΑΣ ===\n\n")
-            
-            if 'matches' in data and len(data['matches']) > 0:
-                for match in data['matches']:
-                    home = match['homeTeam']['name']
-                    away = match['awayTeam']['name']
-                    league = match['competition']['name']
+            matches_list = []
+            if 'matches' in data:
+                # Παίρνουμε μόνο τα επόμενα 3 ματς από κάθε πρωτάθλημα για να μην γεμίζει η οθόνη
+                for match in data['matches'][:3]:
+                    home = match.get('homeTeam', {}).get('name')
+                    away = match.get('awayTeam', {}).get('name')
+                    date = match.get('utcDate', '')[:10]
                     
-                    line = f"[{league}] {home} vs {away} -> Προγνωστικό: Over 1.5\n"
-                    f.write(line)
-                print("Τα προγνωστικά γράφτηκαν στο αρχείο.")
-            else:
-                f.write("Δεν βρέθηκαν προγραμματισμένοι αγώνες για τα διαθέσιμα πρωταθλήματα σήμερα.\n")
-                print("Δεν βρέθηκαν αγώνες.")
+                    # ΕΛΕΓΧΟΣ: Πρόσθεσε το ματς ΜΟΝΟ αν υπάρχουν ονόματα ομάδων
+                    if home and away and home != "None" and away != "None":
+                        matches_list.append(f"[{date}] {home} vs {away} -> Προγνωστικό: Over 1.5")
+            
+            if matches_list:
+                all_content += f"--- {league_name} ---\n"
+                for m in matches_list:
+                    all_content += m + "\n"
+                all_content += "\n"
                 
-    except Exception as e:
-        print(f"Κάτι πήγε στραβά: {e}")
+        except Exception as e:
+            print(f"Error in {league_name}: {e}")
+
+    with open("daily_predictions.txt", "w", encoding="utf-8") as f:
+        if all_content:
+            f.write(all_content)
+        else:
+            f.write("Δεν βρέθηκαν διαθέσιμοι αγώνες για σήμερα.")
 
 if __name__ == "__main__":
     get_predictions()
