@@ -2,7 +2,7 @@ import requests
 import os
 
 # Βάλε το κλειδί σου εδώ μέσα στα εισαγωγικά
-API_KEY = "ΤΟ_ΚΛΕΙΔΙ_ΣΟΥ_ΕΔΩ"
+API_KEY = "a1a4edf072dc4b2c8153fced44c88de9"
 
 LEAGUES = {
     'Premier League': 'PL',
