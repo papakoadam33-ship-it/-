@@ -1,93 +1,70 @@
 import requests
-import time
-from datetime import datetime, timedelta
+from datetime import datetime
 
-# Το κλειδί σου - Βεβαιώσου ότι είναι το σωστό
-API_KEY = "a1a4edf072dc4b2c8153fced44c88de9"
+# Βάλε εδώ το ΝΕΟ API Key από το api-sports.io
+API_KEY = "ΤΟ_ΝΕΟ_ΣΟΥ_API_KEY"
 
-# Προσθέσαμε Βραζιλία (BSA), Πορτογαλία (PPL) και Αργεντινή (CLI - Copa Libertadores/Sudamericana)
-# Σημείωση: Το Free Tier του football-data.org έχει περιορισμένα πρωταθλήματα Λατινικής Αμερικής.
-LEAGUES = {
-    'Premier League': 'PL',
-    'La Liga': 'PD',
-    'Serie A': 'SA',
-    'Bundesliga': 'BL1',
-    'Ligue 1': 'FL1',
-    'Champions League': 'CL',
-    'Brazil Serie A': 'BSA',
-    'Portugal Primeira Liga': 'PPL',
-    'Copa Libertadores': 'CLI'
-}
+# IDs πρωταθλημάτων για το API-Football:
+# 135: Serie A (Italy), 39: Premier League, 140: La Liga, 71: Serie A (Brazil), 
+# 128: Liga Profesional (Argentina), 94: Primeira Liga (Portugal)
+LEAGUE_IDS = [39, 140, 135, 71, 128, 94]
 
-def get_prediction_logic(home_team, away_team):
-    """Λογική για ποικιλία στα προγνωστικά"""
-    combined_len = len(home_team) + len(away_team)
-    if combined_len % 4 == 0:
-        return "Over 2.5"
-    elif combined_len % 4 == 1:
-        return "Goal-Goal"
-    elif combined_len % 4 == 2:
-        return "1X & Over 1.5"
-    else:
-        return "2-3 Goals"
+def get_smart_tip(home_name, away_name):
+    # Εδώ μπορούμε μελλοντικά να προσθέσουμε στατιστικά.
+    # Προς το παρόν, ας χρησιμοποιήσουμε μια ποικιλία σημείων.
+    name_sum = len(home_name) + len(away_name)
+    if name_sum % 5 == 0: return "Goal-Goal"
+    if name_sum % 5 == 1: return "1X & Over 1.5"
+    if name_sum % 5 == 2: return "Over 2.5"
+    if name_sum % 5 == 3: return "2-3 Goals"
+    return "X2 & Under 4.5"
 
 def get_predictions():
-    clean_key = str(API_KEY).strip()
-    headers = { 'X-Auth-Token': clean_key }
+    url = "https://v3.football.api-sports.io/fixtures"
+    headers = {
+        'x-rapidapi-key': API_KEY,
+        'x-rapidapi-host': 'v3.football.api-sports.io'
+    }
     
-    # Ημερομηνίες: Σήμερα και Αύριο
-    today = datetime.utcnow().date()
-    tomorrow = today + timedelta(days=1)
-    
-    all_content = f"📅 Προγνωστικά: {today.strftime('%d/%m')} & {tomorrow.strftime('%d/%m')}\n\n"
-    
-    found_any_match = False
+    all_content = f"📅 Προγνωστικά Marios Pro (API-Football)\nΕνημέρωση: {datetime.now().strftime('%d/%m %H:%M')}\n\n"
+    found_any = False
 
-    for league_name, league_code in LEAGUES.items():
-        # status=SCHEDULED για να βλέπουμε τα επόμενα ματς
-        url = f"https://api.football-data.org/v4/competitions/{league_code}/matches?status=SCHEDULED"
+    for league_id in LEAGUE_IDS:
+        # Παίρνουμε τους επόμενους 5 αγώνες για κάθε πρωτάθλημα
+        params = {'league': league_id, 'next': 5}
         
         try:
-            response = requests.get(url, headers=headers)
-            
+            response = requests.get(url, headers=headers, params=params)
             if response.status_code == 200:
                 data = response.json()
-                matches_list = []
+                matches = data.get('response', [])
                 
-                if 'matches' in data:
-                    for match in data['matches']:
-                        match_date_str = match.get('utcDate', '')[:10]
-                        match_date = datetime.strptime(match_date_str, '%Y-%m-%d').date()
-                        
-                        # Φίλτρο: Μόνο σήμερα και αύριο
-                        if match_date == today or match_date == tomorrow:
-                            home = match.get('homeTeam', {}).get('name')
-                            away = match.get('awayTeam', {}).get('name')
-                            
-                            if home and away:
-                                tip = get_prediction_logic(home, away)
-                                day_label = "Σήμερα" if match_date == today else "Αύριο"
-                                matches_list.append(f"⚽ [{day_label}] {home} vs {away} -> {tip}")
-                                found_any_match = True
-                
-                if matches_list:
+                if matches:
+                    league_name = matches[0]['league']['name']
                     all_content += f"--- {league_name} ---\n"
-                    for m in matches_list:
-                        all_content += m + "\n"
+                    
+                    for m in matches:
+                        home = m['teams']['home']['name']
+                        away = m['teams']['away']['name']
+                        # Μετατροπή ημερομηνίας
+                        date_raw = m['fixture']['date'][:10]
+                        date_obj = datetime.strptime(date_raw, '%Y-%m-%d')
+                        date_final = date_obj.strftime('%d/%m')
+                        
+                        tip = get_smart_tip(home, away)
+                        all_content += f"⚽ [{date_final}] {home} vs {away} -> {tip}\n"
+                        found_any = True
                     all_content += "\n"
             
-            # Μικρή παύση 2 δευτερολέπτων για να μην μας μπλοκάρει το API (Limit 10 calls/min)
-            time.sleep(2)
-            
         except Exception as e:
-            print(f"Σφάλμα στο πρωτάθλημα {league_name}: {e}")
+            print(f"Error fetching league {league_id}: {e}")
 
-    # Αποθήκευση
     with open("daily_predictions.txt", "w", encoding="utf-8") as f:
-        if found_any_match:
+        if found_any:
             f.write(all_content)
         else:
-            f.write(f"📅 {today.strftime('%d/%m')}\nΔεν βρέθηκαν αγώνες για σήμερα ή αύριο στα επιλεγμένα πρωταθλήματα.")
+            f.write("Δεν βρέθηκαν αυριανοί αγώνες. Ελέγξτε το API Key.")
 
 if __name__ == "__main__":
     get_predictions()
+
