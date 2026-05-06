@@ -2,8 +2,10 @@ import requests
 import time
 from datetime import datetime, timedelta
 
-API_KEY = "a1a4edf072dc4b2c8153fced44c88de9"
+# Βάλε το κλειδί σου εδώ
+API_KEY = "ΤΟ_ΚΛΕΙΔΙ_ΣΟΥ_ΕΔΩ"
 
+# Επιλεγμένα πρωταθλήματα (Free Tier)
 LEAGUES = {
     'Premier League': 'PL',
     'La Liga': 'PD',
@@ -15,46 +17,54 @@ LEAGUES = {
 }
 
 def get_smart_prediction(home_rank, away_rank):
-    """Λογική βασισμένη στη θέση της ομάδας στη βαθμολογία"""
+    """Λογική βασισμένη στη θέση στη βαθμολογία"""
     if home_rank and away_rank:
         diff = home_rank - away_rank
-        # Αν η γηπεδούχος είναι πολύ καλύτερη (π.χ. 1η vs 15η)
-        if diff < -10: return "1 & Over 1.5"
-        # Αν η φιλοξενούμενη είναι πολύ καλύτερη
-        if diff > 10: return "X2 & Over 1.5"
-        # Αν είναι κοντά στη βαθμολογία
-        if abs(diff) <= 3: return "Goal-Goal"
-    
+        if diff < -8: return "1 & Over 1.5"
+        if diff > 8: return "X2 & Over 1.5"
+        if abs(diff) <= 4: return "Goal-Goal"
     return "Over 1.5"
 
 def get_predictions():
     clean_key = str(API_KEY).strip()
     headers = { 'X-Auth-Token': clean_key }
+    
     today = datetime.utcnow().date()
     tomorrow = today + timedelta(days=1)
+    
     all_content = f"📅 Προγνωστικά: {today.strftime('%d/%m')} & {tomorrow.strftime('%d/%m')}\n\n"
+    found_any_match = False
 
     for league_name, league_code in LEAGUES.items():
         try:
-            # 1. Παίρνουμε τη βαθμολογία (Standings) για να ξέρουμε ποιος είναι καλός
+            print(f"Fetching {league_name}...")
+            
+            # 1. Λήψη Βαθμολογίας
             standings_url = f"https://api.football-data.org/v4/competitions/{league_code}/standings"
             st_res = requests.get(standings_url, headers=headers)
             ranks = {}
             if st_res.status_code == 200:
                 data_st = st_res.json()
                 for table in data_st.get('standings', [{}])[0].get('table', []):
-                    ranks[table['team']['name']] = table['position']
+                    team_name = table['team']['name']
+                    ranks[team_name] = table['position']
+            
+            # Μεγάλη παύση για να μην φάμε block (6 δευτερόλεπτα)
+            time.sleep(6)
 
-            time.sleep(2) # Delay για το API limit
-
-            # 2. Παίρνουμε τους αγώνες
+            # 2. Λήψη Αγώνων
             matches_url = f"https://api.football-data.org/v4/competitions/{league_code}/matches?status=SCHEDULED"
             m_res = requests.get(matches_url, headers=headers)
+            
             if m_res.status_code == 200:
                 matches_data = m_res.json()
-                matches_list = []
+                league_has_matches = False
+                temp_matches = ""
+                
                 for match in matches_data.get('matches', []):
-                    m_date = datetime.strptime(match['utcDate'][:10], '%Y-%m-%d').date()
+                    m_date_str = match.get('utcDate', '')[:10]
+                    m_date = datetime.strptime(m_date_str, '%Y-%m-%d').date()
+                    
                     if m_date == today or m_date == tomorrow:
                         h_team = match['homeTeam']['name']
                         a_team = match['awayTeam']['name']
@@ -62,18 +72,27 @@ def get_predictions():
                         a_rank = ranks.get(a_team)
                         
                         tip = get_smart_prediction(h_rank, a_rank)
-                        day = "Σήμερα" if m_date == today else "Αύριο"
-                        matches_list.append(f"⚽ [{day}] {h_team} vs {a_team} -> {tip}")
-
-                if matches_list:
-                    all_content += f"--- {league_name} ---\n" + "\n".join(matches_list) + "\n\n"
+                        day_label = "Σήμερα" if m_date == today else "Αύριο"
+                        
+                        temp_matches += f"⚽ [{day_label}] {h_team} vs {a_team} -> {tip}\n"
+                        league_has_matches = True
+                        found_any_match = True
+                
+                if league_has_matches:
+                    all_content += f"--- {league_name} ---\n" + temp_matches + "\n"
             
-            time.sleep(2)
+            # Άλλη μια παύση πριν το επόμενο πρωτάθλημα
+            time.sleep(6)
+            
         except Exception as e:
             print(f"Error in {league_name}: {e}")
 
+    # Τελική εγγραφή
     with open("daily_predictions.txt", "w", encoding="utf-8") as f:
-        f.write(all_content)
+        if found_any_match:
+            f.write(all_content)
+        else:
+            f.write(f"📅 {today.strftime('%d/%m')}\nΔεν βρέθηκαν αγώνες για σήμερα ή αύριο.")
 
 if __name__ == "__main__":
     get_predictions()
