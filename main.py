@@ -2,7 +2,7 @@ import requests
 from datetime import datetime, timedelta
 
 # Αντέγραψε το κλειδί από την εικόνα σου και βάλ' το εδώ
-API_KEY = "ΒΑΛΕ_ΤΟ_ΚΛΕΙΔΙ_ΣΟΥ_ΕΔΩ"
+API_KEY = "03411e3ab539f7c9723807379af72b61"
 
 # Τα IDs για τα πρωταθλήματα που ζήτησες:
 # 39: Premier League, 140: La Liga, 135: Serie A, 71: Βραζιλία, 128: Αργεντινή, 94: Πορτογαλία, 197: Ελλάδα
