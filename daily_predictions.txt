@@ -1,6 +1,28 @@
-Σφάλμα σύνδεσης στο Premier League: 'latin-1' codec can't encode characters in position 0-1: ordinal not in range(256)
-Σφάλμα σύνδεσης στο La Liga: 'latin-1' codec can't encode characters in position 0-1: ordinal not in range(256)
-Σφάλμα σύνδεσης στο Serie A: 'latin-1' codec can't encode characters in position 0-1: ordinal not in range(256)
-Σφάλμα σύνδεσης στο Bundesliga: 'latin-1' codec can't encode characters in position 0-1: ordinal not in range(256)
-Σφάλμα σύνδεσης στο Ligue 1: 'latin-1' codec can't encode characters in position 0-1: ordinal not in range(256)
-Σφάλμα σύνδεσης στο Champions League: 'latin-1' codec can't encode characters in position 0-1: ordinal not in range(256)
+--- Premier League ---
+[2026-05-09] Liverpool FC vs Chelsea FC -> Προγνωστικό: Over 1.5
+[2026-05-09] Sunderland AFC vs Manchester United FC -> Προγνωστικό: Over 1.5
+[2026-05-09] Brighton & Hove Albion FC vs Wolverhampton Wanderers FC -> Προγνωστικό: Over 1.5
+
+--- La Liga ---
+[2026-05-08] Levante UD vs CA Osasuna -> Προγνωστικό: Over 1.5
+[2026-05-09] Elche CF vs Deportivo Alavés -> Προγνωστικό: Over 1.5
+[2026-05-09] Sevilla FC vs RCD Espanyol de Barcelona -> Προγνωστικό: Over 1.5
+
+--- Serie A ---
+[2026-05-08] Torino FC vs US Sassuolo Calcio -> Προγνωστικό: Over 1.5
+[2026-05-09] Cagliari Calcio vs Udinese Calcio -> Προγνωστικό: Over 1.5
+[2026-05-09] SS Lazio vs FC Internazionale Milano -> Προγνωστικό: Over 1.5
+
+--- Bundesliga ---
+[2026-05-08] Borussia Dortmund vs Eintracht Frankfurt -> Προγνωστικό: Over 1.5
+[2026-05-09] VfB Stuttgart vs Bayer 04 Leverkusen -> Προγνωστικό: Over 1.5
+[2026-05-09] TSG 1899 Hoffenheim vs SV Werder Bremen -> Προγνωστικό: Over 1.5
+
+--- Ligue 1 ---
+[2026-05-08] Racing Club de Lens vs FC Nantes -> Προγνωστικό: Over 1.5
+[2026-05-10] Le Havre AC vs Olympique de Marseille -> Προγνωστικό: Over 1.5
+[2026-05-10] AJ Auxerre vs OGC Nice -> Προγνωστικό: Over 1.5
+
+--- Champions League ---
+[2026-05-06] FC Bayern München vs Paris Saint-Germain FC -> Προγνωστικό: Over 1.5
+
