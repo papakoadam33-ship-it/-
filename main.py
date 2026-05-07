@@ -2,73 +2,90 @@ import requests
 import time
 from datetime import datetime, timedelta
 
-# Το κλειδί σου (Ήδη μέσα)
 API_KEY = "47d5da2fb8mshde110deccc94426p115d5ajsnd9cc939fa561"
+HEADERS = {
+    "X-RapidAPI-Key": API_KEY,
+    "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
+}
 
-# Λίστα με πολλά πρωταθλήματα για να μην μένει ποτέ άδεια η εφαρμογή
+# Η λίστα σου με τα πρωταθλήματα
 LEAGUE_IDS = [
-    39, 40, 140, 141, 135, 136, 78, 81, 61, 94, # Αγγλία (1-2), Ισπανία (1-2), Ιταλία (1-2), Γερμανία, Πορτογαλία
-    197, 198, 233, # Ελλάδα (Superleague 1 & 2), Κύπρος
-    71, 72, 128, 129, # Βραζιλία, Αργεντινή
-    2, 3, 848, 5, 10, # Champions League, Europa League, Conference League, Nations League, Προκριματικά Μουντιάλ
-    88, 144, 119 # Ολλανδία, Βέλγιο, Δανία
+    39, 40, 140, 141, 135, 136, 78, 81, 61, 94, 
+    197, 198, 233, 71, 72, 128, 129, 
+    2, 3, 848, 5, 10, 88, 144, 119
 ]
 
-def get_smart_tip(home, away):
-    # Έξυπνη επιλογή προγνωστικού βάσει ονομάτων
-    combined = len(home) + len(away)
-    if combined % 4 == 0: return "1X & Over 1.5"
-    if combined % 4 == 1: return "Goal-Goal"
-    if combined % 4 == 2: return "Over 2.5"
-    return "2-3 Goals"
+def get_real_prediction(fixture_id):
+    """Φέρνει την πραγματική ανάλυση από το API-Football"""
+    url = "https://api-football-v1.p.rapidapi.com/v3/predictions"
+    try:
+        # Μικρή αναμονή πριν από κάθε έξτρα call για προγνωστικό
+        time.sleep(1) 
+        response = requests.get(url, headers=HEADERS, params={"fixture": fixture_id})
+        if response.status_code == 200:
+            p_data = response.json()
+            if p_data['response']:
+                return p_data['response'][0]['predictions']['advice']
+        return "2-3 Goals (Default)" # Backup αν δεν υπάρχει ανάλυση
+    except:
+        return "No Tip"
 
-def get_predictions():
-    url = "https://api-football-v1.p.rapidapi.com/v3/fixtures"
-    headers = {
-        "X-RapidAPI-Key": API_KEY,
-        "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
-    }
+def run_marios_pro_tips():
+    fixtures_url = "https://api-football-v1.p.rapidapi.com/v3/fixtures"
     
-    # Ψάχνουμε αγώνες για τις επόμενες 5 ημέρες
+    # Ημερομηνίες για τις επόμενες 3 ημέρες (για να είναι πιο γρήγορο)
     from_date = datetime.now().strftime('%Y-%m-%d')
-    to_date = (datetime.now() + timedelta(days=5)).strftime('%Y-%m-%d')
+    to_date = (datetime.now() + timedelta(days=3)).strftime('%Y-%m-%d')
     
-    all_content = f"📅 Marios Pro Tips\nΤελευταία Ενημέρωση: {datetime.now().strftime('%H:%M')}\n\n"
+    all_content = f"🚀 MARIOS PRO AI TIPS\nΕνημέρωση: {datetime.now().strftime('%d/%m %H:%M')}\n"
+    all_content += "="*30 + "\n\n"
+    
     found_any = False
 
     for lid in LEAGUE_IDS:
         params = {"league": str(lid), "from": from_date, "to": to_date}
         try:
-            response = requests.get(url, headers=headers, params=params)
+            print(f"Ελέγχω το League ID: {lid}...")
+            response = requests.get(fixtures_url, headers=HEADERS, params=params)
+            
             if response.status_code == 200:
-                data = response.json()
-                matches = data.get('response', [])
+                matches = response.json().get('response', [])
                 if matches:
-                    all_content += f"🏆 {matches[0]['league']['name']} ({matches[0]['league']['country']})\n"
-                    # Παίρνουμε τους 4 πρώτους αγώνες από κάθε λίγκα
-                    for m in matches[:4]:
+                    league_info = f"🏆 {matches[0]['league']['name']} ({matches[0]['league']['country']})\n"
+                    league_has_tips = False
+                    
+                    # Παίρνουμε τους 3 πιο σημαντικούς αγώνες για να μη κολλάει
+                    for m in matches[:3]:
                         h, a = m['teams']['home']['name'], m['teams']['away']['name']
-                        # Μορφή ημερομηνίας ΗΗ/ΜΜ
+                        f_id = m['fixture']['id']
                         raw_date = m['fixture']['date']
                         m_date = raw_date[8:10] + "/" + raw_date[5:7]
                         
-                        tip = get_smart_tip(h, a)
-                        all_content += f"⚽ [{m_date}] {h} - {a} ➔ {tip}\n"
+                        # ΕΔΩ ΓΙΝΕΤΑΙ Η ΜΑΓΕΙΑ: Πραγματικό Tip
+                        tip = get_real_prediction(f_id)
+                        
+                        league_info += f"⚽ [{m_date}] {h} - {a} ➔ {tip}\n"
+                        league_has_tips = True
                         found_any = True
-                    all_content += "----------------------------\n\n"
+                    
+                    if league_has_tips:
+                        all_content += league_info + "-"*20 + "\n"
             
-            # 7 δευτερόλεπτα αναμονή για να μην φας μπλοκάρισμα (Rate Limit)
-            time.sleep(7) 
+            # Αναμονή 2 δευτερόλεπτα μεταξύ των πρωταθλημάτων
+            time.sleep(2)
             
         except Exception as e:
             print(f"Error on league {lid}: {e}")
 
-    with open("daily_predictions.txt", "w", encoding="utf-8") as f:
+    # Αποθήκευση στο αρχείο για το GitHub Actions ή Streamlit
+    filename = "daily_predictions.txt"
+    with open(filename, "w", encoding="utf-8") as f:
         if found_any:
             f.write(all_content)
         else:
-            f.write("Δεν βρέθηκαν αγώνες. Δοκίμασε ξανά σε λίγο.")
+            f.write("Δεν βρέθηκαν αγώνες για το επόμενο τριήμερο.")
+    
+    print(f"✅ Ολοκληρώθηκε! Το αρχείο {filename} δημιουργήθηκε.")
 
 if __name__ == "__main__":
-    get_predictions()
-
+    run_marios_pro_tips()
