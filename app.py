@@ -1,27 +1,35 @@
 import streamlit as st
 import os
 
-st.set_page_config(page_title="Marios Pro-Bet", page_icon="⚽")
+# Ρύθμιση Εμφάνισης
+st.set_page_config(page_title="Marios Pro-Bet", page_icon="⚽", layout="centered")
+
+# Custom CSS για πιο όμορφο look
+st.markdown("""
+    <style>
+    .main { background-color: #f5f7f9; }
+    .stText { font-family: 'monospace'; font-size: 14px; background-color: #ffffff; padding: 15px; border-radius: 10px; border: 1px solid #ddd; }
+    </style>
+    """, unsafe_allow_html=True)
 
 st.title("⚽ Marios Pro-Bet")
+st.write("Καλώς ήρθατε στα πιο έξυπνα προγνωστικά βασισμένα σε AI ανάλυση.")
 st.markdown("---")
 
-# Το όνομα του αρχείου που δημιουργεί το GitHub Actions
 filename = "daily_predictions.txt"
 
 if os.path.exists(filename):
     with open(filename, "r", encoding="utf-8") as f:
         content = f.read()
-        
+    
     if content:
-        # Εμφάνιση του περιεχομένου
-        st.text_area("📋 Σημερινά Προγνωστικά", content, height=500)
-        st.success("✅ Τα προγνωστικά ενημερώθηκαν επιτυχώς από το GitHub!")
+        st.subheader("📋 Προγνωστικά Εβδομάδας")
+        st.text(content)
+        st.success("✅ Τα δεδομένα είναι ενημερωμένα.")
     else:
-        st.warning("Το αρχείο είναι άδειο. Περίμενε την επόμενη ενημέρωση.")
+        st.info("🔄 Γίνεται ανανέωση των δεδομένων... Δοκιμάστε σε λίγα λεπτά.")
 else:
-    st.error(f"⚠️ Το αρχείο {filename} δεν βρέθηκε. Βεβαιώσου ότι το GitHub Action έχει ολοκληρωθεί τουλάχιστον μία φορά.")
+    st.error("❌ Το αρχείο δεδομένων δεν βρέθηκε. Παρακαλώ τρέξτε το GitHub Action.")
 
 st.markdown("---")
-st.caption("Τελευταία αυτόματη ενημέρωση μέσω GitHub Actions")
-
+st.caption("© 2026 Marios Pro-Bet | Data provided by API-Football")
