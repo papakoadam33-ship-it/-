@@ -2,86 +2,66 @@ import requests
 from datetime import datetime, timedelta
 import time
 
-# Το κλειδί σου από το RapidAPI
 API_KEY = "47d5da2fb8mshde110deccc94426p115d5ajsnd9cc939fa561"
+HEADERS = {
+    "X-RapidAPI-Key": API_KEY,
+    "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
+}
 
-# IDs Πρωταθλημάτων
 LEAGUE_IDS = [39, 140, 135, 71, 128, 94, 197]
 
-def get_smart_tip(home_name, away_name):
-    """Απλή λογική για προγνωστικά (αλγόριθμος modulo)"""
-    combined = len(home_name) + len(away_name)
-    if combined % 4 == 0: return "Goal-Goal"
-    if combined % 4 == 1: return "1X & Over 1.5"
-    if combined % 4 == 2: return "Over 2.5"
-    return "2-3 Goals"
+def get_real_prediction(fixture_id):
+    """Παίρνει το πραγματικό προγνωστικό για έναν συγκεκριμένο αγώνα"""
+    url = "https://api-football-v1.p.rapidapi.com/v3/predictions"
+    params = {"fixture": fixture_id}
+    
+    try:
+        response = requests.get(url, headers=HEADERS, params=params)
+        if response.status_code == 200:
+            data = response.json()
+            if data['response']:
+                prediction_data = data['response'][0]['predictions']
+                advice = prediction_data['advice']
+                # Παίρνουμε την πιθανότητα για το αποτέλεσμα που προτείνει
+                return f"💡 Tip: {advice}"
+        return "💡 Tip: No data available"
+    except:
+        return "💡 Tip: Analysis error"
 
-def get_predictions():
-    url = "https://api-football-v1.p.rapidapi.com/v3/fixtures"
-    
-    headers = {
-        "X-RapidAPI-Key": API_KEY,
-        "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
-    }
-    
+def run_pro_tips():
+    fixtures_url = "https://api-football-v1.p.rapidapi.com/v3/fixtures"
     today = datetime.now().strftime('%Y-%m-%d')
-    tomorrow = (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d')
     
-    all_content = f"📅 Marios Pro Tips (RapidAPI)\nΕνημέρωση: {datetime.now().strftime('%d/%m %H:%M')}\n\n"
-    found_any = False
-
+    output = f"🚀 MARIOS PRO AI TIPS\nΗμερομηνία: {today}\n" + "="*30 + "\n\n"
+    
     for league_id in LEAGUE_IDS:
-        # Παίρνουμε τους επόμενους 10 αγώνες
-        params = {"league": str(league_id), "next": "10"}
+        params = {"league": str(league_id), "date": today} # Παίρνουμε μόνο τα σημερινά
         
-        try:
-            response = requests.get(url, headers=headers, params=params)
+        print(f"Αναζήτηση αγώνων για το League ID: {league_id}...")
+        response = requests.get(fixtures_url, headers=HEADERS, params=params)
+        
+        if response.status_code == 200:
+            matches = response.json().get('response', [])
             
-            if response.status_code == 200:
-                data = response.json()
-                matches = data.get('response', [])
+            for m in matches:
+                home = m['teams']['home']['name']
+                away = m['teams']['away']['name']
+                f_id = m['fixture']['id']
                 
-                if matches:
-                    # Προσπάθεια εύρεσης ονόματος πρωταθλήματος από το πρώτο fixture
-                    league_name = matches[0]['league']['name']
-                    league_matches_info = ""
-                    has_matches = False
-                    
-                    for m in matches:
-                        match_date = m['fixture']['date'][:10]
-                        if match_date == today or match_date == tomorrow:
-                            home = m['teams']['home']['name']
-                            away = m['teams']['away']['name']
-                            day_label = "Σήμερα" if match_date == today else "Αύριο"
-                            
-                            tip = get_smart_tip(home, away)
-                            league_matches_info += f"⚽ [{day_label}] {home} vs {away} -> {tip}\n"
-                            has_matches = True
-                            found_any = True
-                    
-                    if has_matches:
-                        all_content += f"--- {league_name} ---\n" + league_matches_info + "\n"
-            
-            elif response.status_code == 429:
-                print("⚠️ Ξεπέρασες το όριο των requests (Rate Limit).")
-            else:
-                print(f"Σφάλμα στο πρωτάθλημα {league_id}: {response.status_code}")
-
-            # Μικρή παύση για αποφυγή rate limiting
-            time.sleep(0.5)
-
-        except Exception as e:
-            print(f"Error: {e}")
-
-    # Αποθήκευση
-    with open("daily_predictions.txt", "w", encoding="utf-8") as f:
-        if found_any:
-            f.write(all_content)
-            print("✅ Το αρχείο daily_predictions.txt ενημερώθηκε!")
-        else:
-            msg = f"📅 {today}\nΔεν βρέθηκαν αγώνες για σήμερα/αύριο."
-            f.write(msg)
-            print(msg)
+                # Καλούμε το API για το προγνωστικό
+                tip = get_real_prediction(f_id)
+                
+                match_info = f"⚽ {home} vs {away}\n{tip}\n"
+                output += match_info + "-"*20 + "\n"
+                
+                print(f"✅ Βρέθηκε: {home} vs {away}")
+                time.sleep(1.2) # Καθυστέρηση για το Rate Limit
+        
+    with open("marios_pro_tips.txt", "w", encoding="utf-8") as f:
+        f.write(output)
+    
+    print("\n✨ Η ανάλυση ολοκληρώθηκε! Δες το αρχείο marios_pro_tips.txt")
 
 if __name__ == "__main__":
-    get_predictions()
+    run_pro_tips()
+
