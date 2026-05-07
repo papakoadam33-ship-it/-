@@ -1,43 +1,27 @@
 import streamlit as st
 import os
 
-# Ρυθμίσεις εμφάνισης
-st.set_page_config(page_title="Marios Pro Tips", page_icon="⚽")
-
-# CSS για ωραίες κάρτες
-st.markdown("""
-    <style>
-    .league-title { color: #2e7d32; font-size: 24px; font-weight: bold; margin-top: 20px; }
-    .match-card { 
-        background-color: #f9f9f9; 
-        padding: 15px; 
-        border-radius: 10px; 
-        border-left: 5px solid #2e7d32;
-        margin-bottom: 10px;
-        box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
-        color: black;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+st.set_page_config(page_title="Marios Pro-Bet", page_icon="⚽")
 
 st.title("⚽ Marios Pro-Bet")
+st.markdown("---")
 
-# Έλεγχος αν υπάρχει το αρχείο
-if os.path.exists("daily_predictions.txt"):
-    with open("daily_predictions.txt", "r", encoding="utf-8") as f:
-        lines = f.readlines()
+# Το όνομα του αρχείου που δημιουργεί το GitHub Actions
+filename = "daily_predictions.txt"
+
+if os.path.exists(filename):
+    with open(filename, "r", encoding="utf-8") as f:
+        content = f.read()
         
-    if len(lines) > 0:
-        for line in lines:
-            line = line.strip()
-            if line.startswith("---"):
-                st.markdown(f'<div class="league-title">{line.replace("---", "")}</div>', unsafe_allow_html=True)
-            elif "vs" in line:
-                st.markdown(f'<div class="match-card">{line}</div>', unsafe_allow_html=True)
+    if content:
+        # Εμφάνιση του περιεχομένου
+        st.text_area("📋 Σημερινά Προγνωστικά", content, height=500)
+        st.success("✅ Τα προγνωστικά ενημερώθηκαν επιτυχώς από το GitHub!")
     else:
-        st.info("⏳ Η λίστα είναι κενή. Ανανέωση σε λίγο...")
+        st.warning("Το αρχείο είναι άδειο. Περίμενε την επόμενη ενημέρωση.")
 else:
-    st.error("❌ Το αρχείο daily_predictions.txt δεν βρέθηκε. Τρέξε το GitHub Action!")
+    st.error(f"⚠️ Το αρχείο {filename} δεν βρέθηκε. Βεβαιώσου ότι το GitHub Action έχει ολοκληρωθεί τουλάχιστον μία φορά.")
 
-
+st.markdown("---")
+st.caption("Τελευταία αυτόματη ενημέρωση μέσω GitHub Actions")
 
