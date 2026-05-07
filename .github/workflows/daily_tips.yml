@@ -2,9 +2,9 @@ name: Daily Betting Tips
 
 on:
   schedule:
-    # Τρέχει κάθε μέρα στις 08:00 το πρωί (ώρα UTC)
+    # Τρέχει κάθε μέρα στις 08:00 το πρωί
     - cron: '0 8 * * *'
-  workflow_dispatch: # Σου επιτρέπει να το τρέχεις και χειροκίνητα όποτε θες
+  workflow_dispatch: # Σου επιτρέπει να το τρέχεις χειροκίνητα
 
 jobs:
   build:
@@ -22,12 +22,14 @@ jobs:
         run: pip install requests
 
       - name: Run Prediction Script
-        run: python main.py > daily_predictions.txt
+        run: |
+          python main.py
+        # Εδώ αφαιρέσαμε το "> daily_predictions.txt" γιατί η Python το φτιάχνει μόνη της σωστά.
 
       - name: Commit and Push results
         run: |
-          git config --global user.name "GitHub Action"
-          git config --global user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git config --local user.email "action@github.com"
           git add daily_predictions.txt
           git commit -m "Update daily predictions" || exit 0
           git push
