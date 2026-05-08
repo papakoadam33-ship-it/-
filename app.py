@@ -3,66 +3,54 @@ import os
 
 st.set_page_config(page_title="Marios Pro-Bet", page_icon="⚽")
 
-# Το CSS για την "Βιτρίνα"
+# CSS για επαγγελματική εμφάνιση
 st.markdown("""
     <style>
-    .stApp { background-color: #0e1117; color: white; }
     .match-card {
         background-color: #1f2937;
-        border-radius: 12px;
-        padding: 15px;
-        margin-bottom: 12px;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 15px;
         border-left: 6px solid #10b981;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
     }
-    .league-name { color: #3b82f6; font-weight: bold; font-size: 14px; margin-bottom: 5px; }
-    .team-names { font-size: 17px; font-weight: 600; color: #f3f4f6; margin: 8px 0; }
-    .tip-style { 
-        background: rgba(16, 185, 129, 0.2); 
-        color: #10b981; 
-        padding: 6px 12px; 
-        border-radius: 6px; 
-        font-weight: bold; 
-        display: inline-block;
-    }
+    .league-label { color: #3b82f6; font-size: 13px; font-weight: bold; text-transform: uppercase; }
+    .team-text { font-size: 18px; font-weight: bold; color: white; margin: 10px 0; }
+    .tip-text { color: #10b981; font-weight: bold; background: rgba(16, 185, 129, 0.1); padding: 8px; border-radius: 8px; display: inline-block; }
     </style>
     """, unsafe_allow_html=True)
 
-st.markdown("<h1 style='text-align: center;'>⚽ Marios Pro-Bet</h1>", unsafe_allow_html=True)
+st.title("⚽ Marios Pro-Bet")
 
 if os.path.exists("daily_predictions.txt"):
     with open("daily_predictions.txt", "r", encoding="utf-8") as f:
         lines = f.readlines()
     
-    current_league = ""
+    current_league = "Διάφορα"
+    temp_teams = "" # Εδώ θα κρατάμε το όνομα των ομάδων
     
     for line in lines:
         line = line.strip()
-        if not line or "===" in line or "MARIOS PRO" in line or line.startswith("---"):
-            continue
-            
+        if not line or "===" in line or "MARIOS PRO" in line: continue
+        
         if "Ενημέρωση" in line:
             st.info(f"📅 {line}")
         elif "🏆" in line:
             current_league = line.replace("🏆", "").strip()
-        elif "➔" in line or "Προγνωστικό:" in line:
-            # Διαχωρισμός ομάδων και tips
-            if "➔" in line:
-                parts = line.split("➔")
+        elif "⚽" in line or "🔹" in line:
+            # Αν η γραμμή έχει μόνο ομάδες (χωρίς βέλος)
+            if "➔" not in line:
+                temp_teams = line.replace("⚽", "").replace("🔹", "").strip()
             else:
-                parts = line.split("Προγνωστικό:")
-                
-            teams = parts[0].replace("⚽", "").replace("🔹", "").strip()
-            tip = parts[1].strip()
-            
-            # Εμφάνιση Κάρτας
-            st.markdown(f"""
-                <div class="match-card">
-                    <div class="league-name">🏆 {current_league}</div>
-                    <div class="team-names">{teams}</div>
-                    <div class="tip-style">🎯 {tip}</div>
-                </div>
-            """, unsafe_allow_html=True)
+                # Αν έχει και ομάδες και βέλος στην ίδια γραμμή
+                parts = line.split("➔")
+                temp_teams = parts[0].replace("⚽", "").replace("🔹", "").strip()
+                tip = parts[1].replace("Προγνωστικό:", "").strip()
+                st.markdown(f'<div class="match-card"><div class="league-label">{current_league}</div><div class="team-text">{temp_teams}</div><div class="tip-text">🎯 {tip}</div></div>', unsafe_allow_html=True)
+                temp_teams = ""
+        elif "➔" in line and temp_teams:
+            # Αν το βέλος είναι στην από κάτω γραμμή από την ομάδα
+            tip = line.replace("➔", "").replace("Προγνωστικό:", "").strip()
+            st.markdown(f欲'<div class="match-card"><div class="league-label">{current_league}</div><div class="team-text">{temp_teams}</div><div class="tip-text">🎯 {tip}</div></div>', unsafe_allow_html=True)
+            temp_teams = ""
 else:
-    st.error("Αναμονή για δεδομένα...")
-
+    st.write("Ανανέωση δεδομένων...")
