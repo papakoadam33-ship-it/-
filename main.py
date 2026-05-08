@@ -2,49 +2,53 @@ import requests
 from datetime import datetime
 
 def run():
-    # Το API URL και το Token σου
+    # Ρυθμίσεις API
     url = "https://api.football-data.org/v4/matches"
     headers = { 'X-Auth-Token': 'a1a4edf072dc4b2c8153fced44c88de9' }
     
-    # Η πρώτη γραμμή με την ημερομηνία ενημέρωσης
-    output = f"ΕΝΗΜΕΡΩΣΗ: {datetime.now().strftime('%d/%m %H:%M')}\n"
+    # Προετοιμασία ημερομηνίας και ώρας για την κορυφή της εφαρμογής
+    now = datetime.now()
+    date_str = now.strftime('%d/%m/%Y')
+    time_str = now.strftime('%H:%M')
+    
+    # Η πρώτη γραμμή χρησιμοποιεί το σύμβολο | για να την ξεχωρίζει το app.py
+    output = f"ΗΜΕΡΟΜΗΝΙΑ|{date_str}|{time_str}\n"
     
     try:
-        # Παίρνουμε τα δεδομένα από το API
+        # Λήψη δεδομένων
         response = requests.get(url, headers=headers)
         data = response.json()
         
         if 'matches' in data:
-            # Παίρνουμε έως 40 αγώνες για να είναι γεμάτη η εφαρμογή
+            # Παίρνουμε έως 40 αγώνες για να γεμίσει η σελίδα
             for m in data['matches'][:40]:
                 league = m['competition']['name']
                 home = m['homeTeam']['name']
                 away = m['awayTeam']['name']
                 
-                # --- ΕΞΥΠΝΟΣ ΑΛΓΟΡΙΘΜΟΣ ΠΡΟΓΝΩΣΤΙΚΩΝ ---
-                league_upper = league.upper()
+                # --- ΑΛΓΟΡΙΘΜΟΣ ΕΞΥΠΝΩΝ ΠΡΟΓΝΩΣΤΙΚΩΝ ---
+                l_up = league.upper()
                 
-                if "COPA LIBERTADORES" in league_upper:
+                if "COPA LIBERTADORES" in l_up:
                     tip = "Goal-Goal"
-                elif "BUNDESLIGA" in league_upper or "LIGUE 1" in league_upper:
+                elif "BUNDESLIGA" in l_up or "LIGUE 1" in l_up:
                     tip = "Over 2.5"
-                elif "CHAMPIONSHIP" in league_upper or "SERIE A" in league_upper:
+                elif "CHAMPIONSHIP" in l_up or "SERIE A" in l_up:
                     tip = "2-3 Goals"
-                elif "PREMIER LEAGUE" in league_upper:
+                elif "PREMIER LEAGUE" in l_up:
                     tip = "1 & Over 1.5"
                 else:
-                    # Το βασικό προγνωστικό για τα υπόλοιπα
-                    tip = "1X & Over 1.5"
+                    tip = "1X & Over 1.5" # Βασικό προγνωστικό
                 
-                # Δημιουργία της γραμμής με το διαχωριστικό |
+                # Προσθήκη του αγώνα στο αρχείο με το διαχωριστικό |
                 output += f"{league} | {home} - {away} | {tip}\n"
         else:
-            output += "Δεν βρέθηκαν διαθέσιμοι αγώνες.\n"
+            output += "ΣΦΑΛΜΑ | Δεν βρέθηκαν αγώνες | -\n"
             
     except Exception as e:
-        output += f"Σφάλμα κατά τη λήψη: {str(e)}\n"
+        output += f"ΣΦΑΛΜΑ | Πρόβλημα API: {str(e)} | -\n"
 
-    # Αποθήκευση στο αρχείο που διαβάζει το app.py
+    # Εγγραφή στο αρχείο daily_predictions.txt
     with open("daily_predictions.txt", "w", encoding="utf-8") as f:
         f.write(output)
 
