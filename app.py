@@ -26,7 +26,7 @@ if os.path.exists("daily_predictions.txt"):
         lines = f.readlines()
     
     current_league = "Διάφορα"
-    temp_teams = "" # Εδώ θα κρατάμε το όνομα των ομάδων
+    temp_teams = "" 
     
     for line in lines:
         line = line.strip()
@@ -37,20 +37,17 @@ if os.path.exists("daily_predictions.txt"):
         elif "🏆" in line:
             current_league = line.replace("🏆", "").strip()
         elif "⚽" in line or "🔹" in line:
-            # Αν η γραμμή έχει μόνο ομάδες (χωρίς βέλος)
             if "➔" not in line:
                 temp_teams = line.replace("⚽", "").replace("🔹", "").strip()
             else:
-                # Αν έχει και ομάδες και βέλος στην ίδια γραμμή
                 parts = line.split("➔")
                 temp_teams = parts[0].replace("⚽", "").replace("🔹", "").strip()
                 tip = parts[1].replace("Προγνωστικό:", "").strip()
                 st.markdown(f'<div class="match-card"><div class="league-label">{current_league}</div><div class="team-text">{temp_teams}</div><div class="tip-text">🎯 {tip}</div></div>', unsafe_allow_html=True)
                 temp_teams = ""
         elif "➔" in line and temp_teams:
-            # Αν το βέλος είναι στην από κάτω γραμμή από την ομάδα
             tip = line.replace("➔", "").replace("Προγνωστικό:", "").strip()
-            st.markdown(f欲'<div class="match-card"><div class="league-label">{current_league}</div><div class="team-text">{temp_teams}</div><div class="tip-text">🎯 {tip}</div></div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="match-card"><div class="league-label">{current_league}</div><div class="team-text">{temp_teams}</div><div class="tip-text">🎯 {tip}</div></div>', unsafe_allow_html=True)
             temp_teams = ""
 else:
     st.write("Ανανέωση δεδομένων...")
