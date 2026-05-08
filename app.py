@@ -1,49 +1,61 @@
-import requests
-from datetime import datetime, timedelta
+import streamlit as st
+import os
 
-def run():
-    url = "https://api.football-data.org/v4/matches"
-    headers = { 'X-Auth-Token': 'a1a4edf072dc4b2c8153fced44c88de9' }
+st.set_page_config(page_title="Marios Pro-Bet", page_icon="⚽")
+
+# CSS για όμορφη εμφάνιση
+st.markdown("""
+    <style>
+    .stApp { background-color: #0e1117; color: white; }
+    .match-card {
+        background-color: #1f2937;
+        border-radius: 12px;
+        padding: 15px;
+        margin-bottom: 12px;
+        border-left: 6px solid #10b981;
+    }
+    .update-box {
+        background-color: #262730;
+        padding: 10px;
+        border-radius: 10px;
+        text-align: center;
+        border: 1px solid #3b82f6;
+        margin-bottom: 20px;
+    }
+    .league { color: #3b82f6; font-size: 13px; font-weight: bold; text-transform: uppercase; }
+    .teams { font-size: 17px; font-weight: bold; color: white; margin: 5px 0; }
+    .tip { color: #10b981; font-weight: bold; background: rgba(16, 185, 129, 0.1); padding: 5px 10px; border-radius: 5px; display: inline-block; }
+    </style>
+    """, unsafe_allow_html=True)
+
+st.title("⚽ Marios Pro-Bet")
+
+if os.path.exists("daily_predictions.txt"):
+    with open("daily_predictions.txt", "r", encoding="utf-8") as f:
+        lines = f.readlines()
     
-    now = datetime.now()
-    date_str = now.strftime('%d/%m/%Y')
-    time_str = now.strftime('%H:%M')
-    
-    output = f"ΗΜΕΡΟΜΗΝΙΑ|{date_str}|{time_str}\n"
-    
-    try:
-        response = requests.get(url, headers=headers)
-        data = response.json()
+    for line in lines:
+        line = line.strip()
+        if not line: continue
         
-        if 'matches' in data:
-            count = 0
-            for m in data['matches']:
-                # Μόνο αγώνες που δεν έχουν ξεκινήσει
-                if m['status'] in ['TIMED', 'SCHEDULED']:
-                    league = m['competition']['name']
-                    home = m['homeTeam']['name']
-                    away = m['awayTeam']['name']
-                    
-                    # Ώρα Ελλάδας (+3 ώρες από UTC)
-                    utc_time = datetime.strptime(m['utcDate'], '%Y-%m-%dT%H:%M:%SZ')
-                    gr_time = utc_time + timedelta(hours=3)
-                    start_time = gr_time.strftime('%H:%M')
-
-                    # Αλγόριθμος
-                    l_up = league.upper()
-                    if "COPA LIBERTADORES" in l_up: tip = "Goal-Goal"
-                    elif "BUNDESLIGA" in l_up: tip = "Over 2.5"
-                    elif "SERIE A" in l_up: tip = "2-3 Goals"
-                    else: tip = "1X & Over 1.5"
-                    
-                    output += f"{league} ({start_time}) | {home} - {away} | {tip}\n"
-                    count += 1
-                if count >= 40: break
-    except:
-        output += "ΣΦΑΛΜΑ | Πρόβλημα σύνδεσης | -\n"
-
-    with open("daily_predictions.txt", "w", encoding="utf-8") as f:
-        f.write(output)
-
-if __name__ == "__main__":
-    run()
+        if line.startswith("ΗΜΕΡΟΜΗΝΙΑ"):
+            parts = line.split("|")
+            st.markdown(f"""
+                <div class="update-box">
+                    <span style="color: #888;">📅 Ημερομηνία:</span> <b>{parts[1]}</b> 
+                    <span style="color: #888; margin-left: 10px;">⏰ Ώρα:</span> <b>{parts[2]}</b>
+                </div>
+            """, unsafe_allow_html=True)
+            
+        elif "|" in line:
+            parts = line.split("|")
+            if len(parts) == 3:
+                st.markdown(f"""
+                    <div class="match-card">
+                        <div class="league">🏆 {parts[0].strip()}</div>
+                        <div class="teams">{parts[1].strip()}</div>
+                        <div class="tip">🎯 Πρόβλεψη: {parts[2].strip()}</div>
+                    </div>
+                """, unsafe_allow_html=True)
+else:
+    st.info("🔄 Γίνεται λήψη των σημερινών προγνωστικών...")
