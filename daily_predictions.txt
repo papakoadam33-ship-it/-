@@ -1,4 +1,4 @@
-ΕΝΗΜΕΡΩΣΗ: 08/05 09:17
+ΕΝΗΜΕΡΩΣΗ: 08/05 09:30
 Copa Libertadores | CD Coquimbo Unido - Club Universitario de Deportes | 1X & Over 1.5
 Copa Libertadores | CD Independiente Medellín - CR Flamengo | 1X & Over 1.5
 Copa Libertadores | CDP Junior FC - Club Cerro Porteño | 1X & Over 1.5
@@ -6,3 +6,4 @@ Bundesliga | Borussia Dortmund - Eintracht Frankfurt | 1X & Over 1.5
 Ligue 1 | Racing Club de Lens - FC Nantes | 1X & Over 1.5
 Serie A | Torino FC - US Sassuolo Calcio | 1X & Over 1.5
 Primera Division | Levante UD - CA Osasuna | 1X & Over 1.5
+Championship | Hull City AFC - Millwall FC | 1X & Over 1.5
