@@ -2,9 +2,12 @@ name: Daily Betting Tips
 
 on:
   schedule:
-    # Τρέχει κάθε μέρα στις 08:00 το πρωί
-    - cron: '0 8 * * *'
-  workflow_dispatch: # Σου επιτρέπει να το τρέχεις χειροκίνητα
+    # 06:00 (Πρωί - για τα πρώτα νέα)
+    # 13:00 (Μεσημέρι - πριν τους αγώνες)
+    # 21:00 (Βράδυ - για τα νυχτερινά και το Copa Libertadores)
+    # Σημείωση: Οι ώρες είναι σε UTC (2-3 ώρες πίσω από Ελλάδα)
+    - cron: '0 4,11,19 * * *'
+  workflow_dispatch: # Σου επιτρέπει να το τρέχεις και χειροκίνητα
 
 jobs:
   build:
@@ -19,17 +22,17 @@ jobs:
           python-version: '3.9'
 
       - name: Install dependencies
-        run: pip install requests
-
-      - name: Run Prediction Script
         run: |
-          python main.py
-        # Εδώ αφαιρέσαμε το "> daily_predictions.txt" γιατί η Python το φτιάχνει μόνη της σωστά.
+          python -m pip install --upgrade pip
+          pip install requests
 
-      - name: Commit and Push results
+      - name: Run prediction script
+        run: python main.py
+
+      - name: Commit and push changes
         run: |
-          git config --local user.name "GitHub Action"
-          git config --local user.email "action@github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add daily_predictions.txt
-          git commit -m "Update daily predictions" || exit 0
+          git commit -m "Auto-update predictions" || exit 0
           git push
