@@ -1,55 +1,49 @@
+import requests
+from datetime import datetime, timedelta
 
-matches = get_football_data()
-
-if matches:
-    # Δημιουργία λίστας για φίλτρο διοργανώσεων
-    leagues = sorted(list(set([m['competition']['name'] for m in matches])))
-    selected_league = st.sidebar.selectbox("🏆 Επιλογή Διοργάνωσης", ["Όλες οι Λίγκες"] + leagues)
-
-    # Φιλτράρισμα
-    display_count = 0
-    for m in matches:
-        league = m['competition']['name']
-        home = m['homeTeam']['name']
-        away = m['awayTeam']['name']
-        status = m['status']
+def run():
+    url = "https://api.football-data.org/v4/matches"
+    headers = { 'X-Auth-Token': 'a1a4edf072dc4b2c8153fced44c88de9' }
+    
+    now = datetime.now()
+    date_str = now.strftime('%d/%m/%Y')
+    time_str = now.strftime('%H:%M')
+    
+    output = f"ΗΜΕΡΟΜΗΝΙΑ|{date_str}|{time_str}\n"
+    
+    try:
+        response = requests.get(url, headers=headers)
+        data = response.json()
         
-        # Λογική φίλτρων
-        if (selected_league == "Όλες οι Λίγκες" or selected_league == league) and \
-           (search.lower() in home.lower() or search.lower() in away.lower()):
-            
-            display_count += 1
-            tip = generate_tip(league)
-            
-            # Διαχείριση Live Σκορ
-            score_html = ""
-            if status == "IN_PLAY":
-                h_score = m['score']['fullTime']['home']
-                a_score = m['score']['fullTime']['away']
-                score_html = f"<span class='live-tag'> ● LIVE: {h_score} - {a_score}</span>"
-            elif status == "FINISHED":
-                h_score = m['score']['fullTime']['home']
-                a_score = m['score']['fullTime']['away']
-                score_html = f"<span style='color:#8892b0; font-size:0.9rem;'> (Τελικό: {h_score}-{a_score})</span>"
+        if 'matches' in data:
+            count = 0
+            for m in data['matches']:
+                # Μόνο αγώνες που δεν έχουν ξεκινήσει
+                if m['status'] in ['TIMED', 'SCHEDULED']:
+                    league = m['competition']['name']
+                    home = m['homeTeam']['name']
+                    away = m['awayTeam']['name']
+                    
+                    # Ώρα Ελλάδας (+3 ώρες από UTC)
+                    utc_time = datetime.strptime(m['utcDate'], '%Y-%m-%dT%H:%M:%SZ')
+                    gr_time = utc_time + timedelta(hours=3)
+                    start_time = gr_time.strftime('%H:%M')
 
-            # Εμφάνιση Κάρτας
-            st.markdown(f"""
-                <div class="prediction-card">
-                    <div class="league-label">🏆 {league}</div>
-                    <div class="match-title">{home} vs {away} {score_html}</div>
-                    <div class="tip-container">
-                        <span class="tip-icon">🎯</span>
-                        <span class="tip-text">Πρόβλεψη: {tip}</span>
-                    </div>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            if display_count >= 40: break
+                    # Αλγόριθμος
+                    l_up = league.upper()
+                    if "COPA LIBERTADORES" in l_up: tip = "Goal-Goal"
+                    elif "BUNDESLIGA" in l_up: tip = "Over 2.5"
+                    elif "SERIE A" in l_up: tip = "2-3 Goals"
+                    else: tip = "1X & Over 1.5"
+                    
+                    output += f"{league} ({start_time}) | {home} - {away} | {tip}\n"
+                    count += 1
+                if count >= 40: break
+    except:
+        output += "ΣΦΑΛΜΑ | Πρόβλημα σύνδεσης | -\n"
 
-    if display_count == 0:
-        st.warning("Δεν βρέθηκαν αγώνες για τα κριτήρια που θέσατε.")
-else:
-    st.error("⚠️ Πρόβλημα στη λήψη δεδομένων. Δοκιμάστε ξανά σε λίγο.")
+    with open("daily_predictions.txt", "w", encoding="utf-8") as f:
+        f.write(output)
 
-st.markdown("---")
-st.caption("© 2026 Marios Pro-Bet | Powered by Football-Data.org API")
+if __name__ == "__main__":
+    run()
