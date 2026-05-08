@@ -65,3 +65,4 @@ if os.path.exists("daily_predictions.txt"):
             """, unsafe_allow_html=True)
 else:
     st.error("Αναμονή για δεδομένα...")
+
