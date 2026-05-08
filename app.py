@@ -3,54 +3,66 @@ import os
 
 st.set_page_config(page_title="Marios Pro-Bet", page_icon="⚽")
 
-# Custom CSS για να μην χαλάει ποτέ η εμφάνιση
+# Το CSS για την "Βιτρίνα"
 st.markdown("""
     <style>
+    .stApp { background-color: #0e1117; color: white; }
     .match-card {
-        background-color: #262730;
+        background-color: #1f2937;
         border-radius: 12px;
         padding: 15px;
-        margin-bottom: 10px;
-        border-left: 5px solid #00ff00;
-        color: white;
+        margin-bottom: 12px;
+        border-left: 6px solid #10b981;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
     }
-    .league-title { color: #007bff; font-weight: bold; font-size: 14px; }
-    .team-names { font-size: 18px; margin: 5px 0; }
-    .prediction { color: #00ff00; font-weight: bold; background: rgba(0,255,0,0.1); padding: 5px; border-radius: 5px; }
+    .league-name { color: #3b82f6; font-weight: bold; font-size: 14px; margin-bottom: 5px; }
+    .team-names { font-size: 17px; font-weight: 600; color: #f3f4f6; margin: 8px 0; }
+    .tip-style { 
+        background: rgba(16, 185, 129, 0.2); 
+        color: #10b981; 
+        padding: 6px 12px; 
+        border-radius: 6px; 
+        font-weight: bold; 
+        display: inline-block;
+    }
     </style>
     """, unsafe_allow_html=True)
 
-st.title("⚽ Marios Pro-Bet")
+st.markdown("<h1 style='text-align: center;'>⚽ Marios Pro-Bet</h1>", unsafe_allow_html=True)
 
 if os.path.exists("daily_predictions.txt"):
     with open("daily_predictions.txt", "r", encoding="utf-8") as f:
         lines = f.readlines()
     
-    current_league = "Γενικά"
+    current_league = ""
     
     for line in lines:
         line = line.strip()
-        if not line or "===" in line or "MARIOS PRO" in line:
+        if not line or "===" in line or "MARIOS PRO" in line or line.startswith("---"):
             continue
             
-        if "🏆" in line:
-            current_league = line.replace("🏆", "")
-        elif "➔" in line or "->" in line:
-            # Εδώ είναι το μυστικό: Χωρίζουμε τη γραμμή στο βέλος
-            separator = "➔" if "➔" in line else "->"
-            parts = line.split(separator)
+        if "Ενημέρωση" in line:
+            st.info(f"📅 {line}")
+        elif "🏆" in line:
+            current_league = line.replace("🏆", "").strip()
+        elif "➔" in line or "Προγνωστικό:" in line:
+            # Διαχωρισμός ομάδων και tips
+            if "➔" in line:
+                parts = line.split("➔")
+            else:
+                parts = line.split("Προγνωστικό:")
+                
             teams = parts[0].replace("⚽", "").replace("🔹", "").strip()
             tip = parts[1].strip()
             
-            # Φτιάχνουμε την κάρτα
+            # Εμφάνιση Κάρτας
             st.markdown(f"""
                 <div class="match-card">
-                    <div class="league-title">🏆 {current_league}</div>
+                    <div class="league-name">🏆 {current_league}</div>
                     <div class="team-names">{teams}</div>
-                    <div class="prediction">🎯 {tip}</div>
+                    <div class="tip-style">🎯 {tip}</div>
                 </div>
             """, unsafe_allow_html=True)
-        elif "Ενημέρωση" in line:
-            st.info(f"📅 {line}")
 else:
-    st.error("Περιμένουμε τα δεδομένα...")
+    st.error("Αναμονή για δεδομένα...")
+
