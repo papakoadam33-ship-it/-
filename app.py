@@ -3,7 +3,6 @@ import os
 
 st.set_page_config(page_title="Marios Pro-Bet", page_icon="⚽")
 
-# CSS για επαγγελματική εμφάνιση
 st.markdown("""
     <style>
     .match-card {
@@ -13,7 +12,7 @@ st.markdown("""
         margin-bottom: 15px;
         border-left: 6px solid #10b981;
     }
-    .league-label { color: #3b82f6; font-size: 13px; font-weight: bold; text-transform: uppercase; }
+    .league-label { color: #3b82f6; font-size: 12px; font-weight: bold; text-transform: uppercase; }
     .team-text { font-size: 18px; font-weight: bold; color: white; margin: 10px 0; }
     .tip-text { color: #10b981; font-weight: bold; background: rgba(16, 185, 129, 0.1); padding: 8px; border-radius: 8px; display: inline-block; }
     </style>
@@ -26,7 +25,6 @@ if os.path.exists("daily_predictions.txt"):
         lines = f.readlines()
     
     current_league = "Διάφορα"
-    temp_teams = "" 
     
     for line in lines:
         line = line.strip()
@@ -36,18 +34,20 @@ if os.path.exists("daily_predictions.txt"):
             st.info(f"📅 {line}")
         elif "🏆" in line:
             current_league = line.replace("🏆", "").strip()
-        elif "⚽" in line or "🔹" in line:
-            if "➔" not in line:
-                temp_teams = line.replace("⚽", "").replace("🔹", "").strip()
-            else:
-                parts = line.split("➔")
-                temp_teams = parts[0].replace("⚽", "").replace("🔹", "").strip()
-                tip = parts[1].replace("Προγνωστικό:", "").strip()
-                st.markdown(f'<div class="match-card"><div class="league-label">{current_league}</div><div class="team-text">{temp_teams}</div><div class="tip-text">🎯 {tip}</div></div>', unsafe_allow_html=True)
-                temp_teams = ""
-        elif "➔" in line and temp_teams:
-            tip = line.replace("➔", "").replace("Προγνωστικό:", "").strip()
-            st.markdown(f'<div class="match-card"><div class="league-label">{current_league}</div><div class="team-text">{temp_teams}</div><div class="tip-text">🎯 {tip}</div></div>', unsafe_allow_html=True)
-            temp_teams = ""
+        elif "➔" in line or "Προγνωστικό:" in line:
+            # Πιάνει όλους τους αγώνες, ακόμα κι αν είναι σε μία γραμμή
+            separator = "➔" if "➔" in line else "Προγνωστικό:"
+            parts = line.split(separator)
+            teams = parts[0].replace("⚽", "").replace("🔹", "").strip()
+            tip = parts[1].strip()
+            
+            st.markdown(f'''
+                <div class="match-card">
+                    <div class="league-label">{current_league}</div>
+                    <div class="team-text">{teams}</div>
+                    <div class="tip-text">🎯 {tip}</div>
+                </div>
+            ''', unsafe_allow_html=True)
 else:
     st.write("Ανανέωση δεδομένων...")
+
