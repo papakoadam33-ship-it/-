@@ -9,73 +9,52 @@ HEADERS = {
     "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
 }
 
-# Λίστα Πρωταθλημάτων
-LEAGUE_IDS = [
-    39, 40, 140, 141, 135, 136, 78, 81, 61, 94, 
-    197, 198, 233, 71, 72, 128, 129, 253, 307,
-    2, 3, 848, 5, 10, 88, 144, 119
-]
+# Λίστα πρωταθλημάτων
+LEAGUE_IDS = [39, 140, 135, 78, 61, 71]
 
-def get_real_prediction(fixture_id):
-    """Παίρνει το πραγματικό advice από το API"""
+def get_advice(fixture_id):
     url = "https://api-football-v1.p.rapidapi.com/v3/predictions"
     try:
-        time.sleep(1.2) # Για αποφυγή block (Rate Limit)
-        response = requests.get(url, headers=HEADERS, params={"fixture": fixture_id})
-        if response.status_code == 200:
-            p_data = response.json()
-            if p_data['response']:
-                return p_data['response'][0]['predictions']['advice']
-        return "Under 3.5 Goals"
+        time.sleep(1.2) 
+        res = requests.get(url, headers=HEADERS, params={"fixture": fixture_id})
+        data = res.json()
+        if data.get('response'):
+            return data['response'][0]['predictions']['advice']
     except:
-        return "No Tip"
+        pass
+    return "Over 1.5 Goals"
 
-def run_script():
-    fixtures_url = "https://api-football-v1.p.rapidapi.com/v3/fixtures"
-    
-    all_content = f"🚀 MARIOS PRO AI TIPS\n"
-    all_content += f"Ενημέρωση: {datetime.now().strftime('%d/%m %H:%M')}\n"
+def run():
+    url = "https://api-football-v1.p.rapidapi.com/v3/fixtures"
+    all_content = f"⚽ MARIOS PRO TIPS\nΕνημέρωση: {datetime.now().strftime('%d/%m %H:%M')}\n"
     all_content += "="*30 + "\n\n"
     
-    found_any = False
-
+    found = False
     for lid in LEAGUE_IDS:
-        # Παίρνουμε τους επόμενους 10 αγώνες κάθε λίγκας (Πιο σίγουρο)
-        params = {"league": str(lid), "next": "10"}
+        params = {"league": str(lid), "next": "8"} # Φέρνει τους επόμενους 8 αγώνες
         try:
-            print(f"Επεξεργασία League: {lid}...")
-            response = requests.get(fixtures_url, headers=HEADERS, params=params)
-            if response.status_code == 200:
-                matches = response.json().get('response', [])
-                if matches:
-                    league_name = matches[0]['league']['name']
-                    all_content += f"🏆 {league_name}\n"
-                    
-                    # Παίρνουμε τους 3 πρώτους χρονικά αγώνες
-                    for m in matches[:3]:
-                        h, a = m['teams']['home']['name'], m['teams']['away']['name']
-                        f_id = m['fixture']['id']
-                        raw_date = m['fixture']['date']
-                        # Μορφοποίηση ημερομηνίας (ΗΗ/ΜΜ)
-                        m_date = raw_date[8:10] + "/" + raw_date[5:7]
-                        
-                        tip = get_real_prediction(f_id)
-                        all_content += f"⚽ [{m_date}] {h} - {a} ➔ {tip}\n"
-                        found_any = True
-                    all_content += "-"*20 + "\n\n"
-            
-            time.sleep(1) 
-            
-        except Exception as e:
-            print(f"Σφάλμα στη λίγκα {lid}: {e}")
+            response = requests.get(url, headers=HEADERS, params=params)
+            matches = response.json().get('response', [])
+            if matches:
+                all_content += f"🏆 {matches[0]['league']['name']}\n"
+                for m in matches[:4]:
+                    h = m['teams']['home']['name']
+                    a = m['teams']['away']['name']
+                    fid = m['fixture']['id']
+                    advice = get_advice(fid)
+                    all_content += f"🔹 {h} - {a} ➔ {advice}\n"
+                    found = True
+                all_content += "\n"
+            time.sleep(1)
+        except:
+            continue
 
-    # Αποθήκευση στο αρχείο που διαβάζει το Streamlit
     with open("daily_predictions.txt", "w", encoding="utf-8") as f:
-        if found_any:
+        if found:
             f.write(all_content)
         else:
-            f.write("📅 Δεν βρέθηκαν επερχόμενοι αγώνες.")
+            f.write("Δεν βρέθηκαν αγώνες. Ελέγξτε το API Key.")
 
 if __name__ == "__main__":
-    run_script()
+    run()
 
