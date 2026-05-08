@@ -1,1 +1,30 @@
-Δεν βρέθηκαν επερχόμενοι αγώνες. Δοκιμάστε αργότερα.
+⚽ MARIOS DEBUG MODE
+Ώρα Ελέγχου: 08/05 03:35
+==============================
+
+✅ Το API λειτουργεί! Βρέθηκαν αγώνες:
+
+🏆 Copa Libertadores
+🔹 CD Coquimbo Unido - Club Universitario de Deportes ➔ Over 1.5
+
+🏆 Copa Libertadores
+🔹 CD Independiente Medellín - CR Flamengo ➔ Over 1.5
+
+🏆 Copa Libertadores
+🔹 CDP Junior FC - Club Cerro Porteño ➔ Over 1.5
+
+🏆 Bundesliga
+🔹 Borussia Dortmund - Eintracht Frankfurt ➔ Over 1.5
+
+🏆 Ligue 1
+🔹 Racing Club de Lens - FC Nantes ➔ Over 1.5
+
+🏆 Serie A
+🔹 Torino FC - US Sassuolo Calcio ➔ Over 1.5
+
+🏆 Primera Division
+🔹 Levante UD - CA Osasuna ➔ Over 1.5
+
+🏆 Championship
+🔹 Hull City AFC - Millwall FC ➔ Over 1.5
+
