@@ -1,19 +1,10 @@
-ΗΜΕΡΟΜΗΝΙΑ|09/05/2026|14:48
-Premier League (14:30) | Liverpool FC - Chelsea FC | 1 & Over 1.5, 1X & Over 2.5
-Primera Division (15:00) | Elche CF - Deportivo Alavés | 1 & Over 1.5, 1X & Over 2.5
-Serie A (16:00) | Cagliari Calcio - Udinese Calcio | 2-3 Goals, Under 3.5
-Bundesliga (16:30) | RB Leipzig - FC St. Pauli 1910 | Over 2.5, Goal-Goal
-Bundesliga (16:30) | TSG 1899 Hoffenheim - SV Werder Bremen | Over 2.5, Goal-Goal
-Bundesliga (16:30) | FC Augsburg - Borussia Mönchengladbach | Over 2.5, Goal-Goal
-Bundesliga (16:30) | VfB Stuttgart - Bayer 04 Leverkusen | Over 2.5, Goal-Goal
-Premier League (17:00) | Brighton & Hove Albion FC - Wolverhampton Wanderers FC | 1 & Over 1.5, 1X & Over 2.5
-Premier League (17:00) | Sunderland AFC - Manchester United FC | 1 & Over 1.5, 1X & Over 2.5
-Premier League (17:00) | Fulham FC - AFC Bournemouth | 1 & Over 1.5, 1X & Over 2.5
+ΗΜΕΡΟΜΗΝΙΑ|09/05/2026|17:07
+Championship (16:30) | Middlesbrough FC - Southampton FC | 2-3 Goals, Under 3.5
 Primera Division (17:15) | Sevilla FC - RCD Espanyol de Barcelona | 1 & Over 1.5, 1X & Over 2.5
 Serie A (19:00) | SS Lazio - FC Internazionale Milano | 2-3 Goals, Under 3.5
 Bundesliga (19:30) | VfL Wolfsburg - FC Bayern München | Over 2.5, Goal-Goal
-Primera Division (19:30) | Club Atlético de Madrid - RC Celta de Vigo | 1 & Over 1.5, 1X & Over 2.5
 Premier League (19:30) | Manchester City FC - Brentford FC | 1 & Over 1.5, 1X & Over 2.5
+Primera Division (19:30) | Club Atlético de Madrid - RC Celta de Vigo | 1 & Over 1.5, 1X & Over 2.5
 Serie A (21:45) | US Lecce - Juventus FC | 2-3 Goals, Under 3.5
 Primera Division (22:00) | Real Sociedad de Fútbol - Real Betis Balompié | 1 & Over 1.5, 1X & Over 2.5
 Campeonato Brasileiro Série A (22:00) | Coritiba FBC - SC Internacional | 1X & Over 1.5, Goal-Goal
