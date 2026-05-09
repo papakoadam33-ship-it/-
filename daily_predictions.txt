@@ -1,7 +1,7 @@
-ΗΜΕΡΟΜΗΝΙΑ|09/05/2026|19:38
-Championship (16:30) | Middlesbrough FC - Southampton FC | 2-3 Goals, Under 3.5
-Serie A (21:45) | US Lecce - Juventus FC | 2-3 Goals, Under 3.5
-Campeonato Brasileiro Série A (22:00) | Coritiba FBC - SC Internacional | 1X & Over 1.5, Goal-Goal
-Primera Division (22:00) | Real Sociedad de Fútbol - Real Betis Balompié | 1 & Over 1.5, 1X & Over 2.5
-Campeonato Brasileiro Série A (00:00) | Fluminense FC - EC Vitória | 1X & Over 1.5, Goal-Goal
-Campeonato Brasileiro Série A (03:00) | EC Bahia - Cruzeiro EC | 1X & Over 1.5, Goal-Goal
+ΗΜΕΡΟΜΗΝΙΑ|09/05/2026|19:43
+Championship (16:30) | Middlesbrough FC - Southampton FC | 2-3 Goals,63%,Under 3.5,80%
+Serie A (21:45) | US Lecce - Juventus FC | 2-3 Goals,66%,Under 3.5,79%
+Primera Division (22:00) | Real Sociedad de Fútbol - Real Betis Balompié | 1 & Over 1.5,66%,1X & Over 2.5,60%
+Campeonato Brasileiro Série A (22:00) | Coritiba FBC - SC Internacional | 1X & Over 1.5,75%,Goal-Goal,67%
+Campeonato Brasileiro Série A (00:00) | Fluminense FC - EC Vitória | 1X & Over 1.5,76%,Goal-Goal,66%
+Campeonato Brasileiro Série A (03:00) | EC Bahia - Cruzeiro EC | 1X & Over 1.5,73%,Goal-Goal,65%
