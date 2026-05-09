@@ -1,9 +1,30 @@
 import requests
+import math
 from datetime import datetime, timedelta
 
+# ΣΥΝΑΡΤΗΣΗ POISSON
+def poisson_probability(lmbda, x):
+    return (math.exp(-lmbda) * (lmbda**x)) / math.factorial(x)
+
+def calculate_tips(h_avg, a_avg):
+    # Η "προσδοκία γκολ" (mu) για το ματς
+    mu = (h_avg + a_avg) / 2
+    
+    # Πιθανότητα για 0, 1, 2 γκολ
+    p0 = poisson_probability(mu, 0)
+    p1 = poisson_probability(mu, 1)
+    p2 = poisson_probability(mu, 2)
+    
+    # Πιθανότητα για Over 2.5 (1 - πιθανότητα για 0,1,2 γκολ)
+    prob_over = (1 - (p0 + p1 + p2)) * 100
+    
+    # Πιθανότητα για Goal-Goal (εκτίμηση βάσει mu)
+    prob_gg = (1 - math.exp(-mu/1.2)) * 90 
+    
+    return round(prob_over), round(prob_gg), mu
+
 def get_stats(headers):
-    # Παίρνουμε τη βαθμολογία για τις κύριες λίγκες για να έχουμε δεδομένα γκολ
-    leagues = ['PL', 'PD', 'BL1', 'SA', 'FL1', 'ELC']
+    leagues = ['PL', 'PD', 'BL1', 'SA', 'FL1', 'ELC', 'DED', 'PPL', 'BSA']
     stats = {}
     for league in leagues:
         try:
@@ -11,55 +32,50 @@ def get_stats(headers):
             res = requests.get(url, headers=headers).json()
             if 'standings' in res:
                 for row in res['standings'][0]['table']:
-                    team_name = row['team']['name']
-                    matches = row['playedGames']
-                    goals_for = row['goalsFor']
-                    goals_against = row['goalsAgainst']
-                    # Μέσος όρος γκολ ανά αγώνα (Επίθεση + Άμυνα)
-                    avg = (goals_for + goals_against) / matches if matches > 0 else 0
-                    stats[team_name] = round(avg, 2)
+                    team = row['team']['name']
+                    m = row['playedGames']
+                    if m > 0:
+                        avg = (row['goalsFor'] + row['goalsAgainst']) / m
+                        stats[team] = avg
         except: continue
     return stats
 
 def run():
     headers = { 'X-Auth-Token': 'a1a4edf072dc4b2c8153fced44c88de9' }
     team_stats = get_stats(headers)
-    
     url = "https://api.football-data.org/v4/matches"
+    
     try:
         data = requests.get(url, headers=headers).json()
         now_gr = datetime.utcnow() + timedelta(hours=3)
         output = f"ΗΜΕΡΟΜΗΝΙΑ|{now_gr.strftime('%d/%m/%Y')}|{now_gr.strftime('%H:%M')}\n"
         
         for m in data.get('matches', []):
-            if m['status'] in ['TIMED', 'SCHEDULED']:
-                league = m['competition']['name']
-                h_team = m['homeTeam']['name']
-                a_team = m['awayTeam']['name']
-                
-                # Υπολογισμός "Δύναμης Γκολ" (Goal Power)
-                h_avg = team_stats.get(h_team, 2.5) # Αν δεν υπάρχει data, βάζουμε 2.5 μ.ο.
+            match_utc = datetime.strptime(m['utcDate'], '%Y-%m-%dT%H:%M:%SZ')
+            match_gr = match_utc + timedelta(hours=3)
+            
+            if match_gr > now_gr:
+                h_team, a_team = m['homeTeam']['name'], m['awayTeam']['name']
+                h_avg = team_stats.get(h_team, 2.5)
                 a_avg = team_stats.get(a_team, 2.5)
-                total_power = (h_avg + a_avg) / 2
                 
-                # Πραγματικά Ποσοστά βάσει Goal Power
-                prob_over = int(min(total_power * 25, 92)) # max 92%
-                prob_gg = int(min(total_power * 22, 88))
-                
-                l_up = league.upper()
-                if total_power > 3.0:
-                    t1, p1, t2, p2 = "Over 2.5", f"{prob_over}%", "Goal-Goal", f"{prob_gg}%"
-                elif total_power < 2.2:
-                    t1, p1, t2, p2 = "Under 3.5", f"{int(100-prob_over+20)}%", "2-3 Goals", "65%"
-                else:
-                    t1, p1, t2, p2 = "1X & Over 1.5", f"{prob_over-5}%", "Goal-Goal", f"{prob_gg-5}%"
+                # ΕΦΑΡΜΟΓΗ POISSON
+                p_over, p_gg, mu = calculate_tips(h_avg, a_avg)
+                start_time = match_gr.strftime('%H:%M')
+                league = m['competition']['name']
 
-                output += f"{league}|{h_team} - {a_team}|{t1},{p1},{t2},{p2}\n"
+                if mu > 2.8:
+                    t1, p1, t2, p2 = "Over 2.5", f"{p_over}%", "Goal-Goal", f"{p_gg}%"
+                elif mu < 2.2:
+                    t1, p1, t2, p2 = "Under 3.5", f"{95-p_over}%", "2-3 Goals", "68%"
+                else:
+                    t1, p1, t2, p2 = "1X & Over 1.5", f"{p_over+15}%", "Goal-Goal", f"{p_gg-5}%"
+
+                output += f"{league} ({start_time})|{h_team} - {a_team}|{t1},{p1},{t2},{p2}\n"
         
         with open("daily_predictions.txt", "w", encoding="utf-8") as f:
             f.write(output)
-    except Exception as e:
-        print(f"Error: {e}")
+    except Exception as e: print(f"Error: {e}")
 
 if __name__ == "__main__":
     run()
