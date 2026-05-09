@@ -1,1 +1,21 @@
-
+ΗΜΕΡΟΜΗΝΙΑ|09/05/2026|22:59
+Premier League|Liverpool FC - Chelsea FC|1X & Over 1.5,68%,Goal-Goal,59%
+Primera Division|Elche CF - Deportivo Alavés|1X & Over 1.5,64%,Goal-Goal,56%
+Serie A|Cagliari Calcio - Udinese Calcio|1X & Over 1.5,56%,Goal-Goal,49%
+Bundesliga|FC Augsburg - Borussia Mönchengladbach|1X & Over 1.5,68%,Goal-Goal,59%
+Bundesliga|VfB Stuttgart - Bayer 04 Leverkusen|Over 2.5,86%,Goal-Goal,76%
+Bundesliga|RB Leipzig - FC St. Pauli 1910|1X & Over 1.5,68%,Goal-Goal,59%
+Bundesliga|TSG 1899 Hoffenheim - SV Werder Bremen|Over 2.5,78%,Goal-Goal,69%
+Premier League|Sunderland AFC - Manchester United FC|1X & Over 1.5,62%,Goal-Goal,54%
+Premier League|Fulham FC - AFC Bournemouth|1X & Over 1.5,65%,Goal-Goal,56%
+Premier League|Brighton & Hove Albion FC - Wolverhampton Wanderers FC|1X & Over 1.5,59%,Goal-Goal,51%
+Primera Division|Sevilla FC - RCD Espanyol de Barcelona|1X & Over 1.5,62%,Goal-Goal,54%
+Serie A|SS Lazio - FC Internazionale Milano|1X & Over 1.5,61%,Goal-Goal,53%
+Premier League|Manchester City FC - Brentford FC|1X & Over 1.5,67%,Goal-Goal,58%
+Bundesliga|VfL Wolfsburg - FC Bayern München|Over 2.5,92%,Goal-Goal,87%
+Primera Division|Club Atlético de Madrid - RC Celta de Vigo|1X & Over 1.5,62%,Goal-Goal,54%
+Serie A|US Lecce - Juventus FC|1X & Over 1.5,50%,Goal-Goal,44%
+Primera Division|Real Sociedad de Fútbol - Real Betis Balompié|1X & Over 1.5,65%,Goal-Goal,57%
+Campeonato Brasileiro Série A|Coritiba FBC - SC Internacional|1X & Over 1.5,57%,Goal-Goal,50%
+Campeonato Brasileiro Série A|Fluminense FC - EC Vitória|1X & Over 1.5,57%,Goal-Goal,50%
+Campeonato Brasileiro Série A|EC Bahia - Cruzeiro EC|1X & Over 1.5,57%,Goal-Goal,50%
