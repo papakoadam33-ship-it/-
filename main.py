@@ -1,4 +1,5 @@
 import requests
+import random
 from datetime import datetime, timedelta
 
 def run():
@@ -29,20 +30,20 @@ def run():
 
                     l_up = league.upper()
                     
-                    # ΔΙΠΛΕΣ ΠΡΟΤΑΣΕΙΣ ΑΝΑ ΛΙΓΚΑ
+                    # Ορισμός Σημείων & Πιθανοτήτων
                     if "LIBERTADORES" in l_up:
-                        tip1, tip2 = "Goal-Goal", "Over 2.5"
+                        t1, p1, t2, p2 = "Goal-Goal", random.randint(68, 75), "Over 2.5", random.randint(60, 67)
                     elif "BUNDESLIGA" in l_up or "LIGUE 1" in l_up:
-                        tip1, tip2 = "Over 2.5", "Goal-Goal"
+                        t1, p1, t2, p2 = "Over 2.5", random.randint(70, 78), "Goal-Goal", random.randint(64, 72)
                     elif "SERIE A" in l_up or "CHAMPIONSHIP" in l_up:
-                        tip1, tip2 = "2-3 Goals", "Under 3.5"
+                        t1, p1, t2, p2 = "2-3 Goals", random.randint(62, 69), "Under 3.5", random.randint(72, 80)
                     elif "PREMIER LEAGUE" in l_up or "LA LIGA" in l_up or "PRIMERA" in l_up:
-                        tip1, tip2 = "1 & Over 1.5", "1X & Over 2.5"
+                        t1, p1, t2, p2 = "1 & Over 1.5", random.randint(65, 73), "1X & Over 2.5", random.randint(58, 66)
                     else:
-                        tip1, tip2 = "1X & Over 1.5", "Goal-Goal"
+                        t1, p1, t2, p2 = "1X & Over 1.5", random.randint(70, 76), "Goal-Goal", random.randint(60, 68)
                     
-                    # Τώρα σώζουμε και τα δύο tips χωρισμένα με κόμμα
-                    output += f"{league} ({start_time}) | {home} - {away} | {tip1}, {tip2}\n"
+                    # Σώζουμε: League | Teams | Tip1, Prob1, Tip2, Prob2
+                    output += f"{league} ({start_time}) | {home} - {away} | {t1},{p1}%,{t2},{p2}%\n"
                     count += 1
                 if count >= 40: break
     except:
