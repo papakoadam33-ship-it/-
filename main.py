@@ -32,7 +32,7 @@ def fetch_data():
                 t1, p1, t2, p2 = calculate_poisson(1.8, 1.4)
                 predictions.append(f"{league} ({m_time})|{teams}|{t1},{p1},{t2},{p2}")
         
-        # Αν το API δεν έχει άλλα ματς για σήμερα, βάλε μερικά "Demo" για να δεις την εφαρμογή σου γεμάτη!
+        # Αν δεν βρει αγώνες λόγω ώρας, κρατάμε τα Demo για να φαίνεται η εφαρμογή
         if not predictions:
             predictions.append("SUPER LEAGUE (20:00)|ΟΛΥΜΠΙΑΚΟΣ - ΠΑΟΚ|Over 2.5,78%,Goal-Goal,72%")
             predictions.append("PREMIER LEAGUE (21:45)|LIVERPOOL - ARSENAL|Over 2.5,81%,Goal-Goal,75%")
@@ -49,4 +49,4 @@ def fetch_data():
 
 if __name__ == "__main__":
     fetch_data()
-.
+
