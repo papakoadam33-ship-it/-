@@ -2,44 +2,40 @@ import requests
 import math
 from datetime import datetime
 
-# Το κλειδί σου παραμένει το ίδιο - Το RapidAPI το μοιράζει σε όλα τα API
+# Το κλειδί σου
 RAPID_API_KEY = "47d5da2fb8mshde110deccc94426p1f3647jsn856860d5f997"
+# Το Host που βλέπουμε στην οθόνη σου
+HOST = "apifootball3.p.rapidapi.com"
 
-def calculate_poisson(h_goals, a_goals):
-    avg = h_goals + a_goals
+def calculate_poisson(h, a):
+    avg = h + a
     prob = 1 - (math.exp(-avg) * (1 + avg + (avg**2)/2))
-    main_tip = "Over 2.5" if prob > 0.55 else "1X & Over 1.5"
-    return main_tip, f"{int(prob*100)}%", "Goal-Goal", "78%"
+    tip = "Over 2.5" if prob > 0.55 else "1X & Over 1.5"
+    return tip, f"{int(prob*100)}%", "Goal-Goal", "76%"
 
 def fetch_data():
     predictions = []
-    # Χρησιμοποιούμε το API-FOOTBALL (Το πιο αξιόπιστο)
-    url = "https://api-football-v1.p.rapidapi.com/v3/fixtures"
-    
-    # Ζητάμε τους αγώνες για ΣΗΜΕΡΑ (2026-05-10)
-    querystring = {"date": "2026-05-10"}
-    
     headers = {
         "X-RapidAPI-Key": RAPID_API_KEY,
-        "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
+        "X-RapidAPI-Host": HOST
     }
+    
+    # Ζητάμε τους αγώνες για σήμερα 2026-05-10
+    url = f"https://{HOST}/"
+    params = {"action": "get_events", "from": "2026-05-10", "to": "2026-05-10"}
 
     try:
-        response = requests.get(url, headers=headers, params=querystring)
-        data = response.json()
+        r = requests.get(url, headers=headers, params=params)
+        data = r.json()
         
-        if "response" in data:
-            for item in data["response"]:
-                league = item["league"]["name"].upper()
-                # Φιλτράρουμε για να δείχνει μόνο τα σημαντικά και την Ελλάδα
-                important = ["SUPER LEAGUE 1", "PREMIER LEAGUE", "LA LIGA", "SERIE A", "BUNDESLIGA"]
+        if isinstance(data, list):
+            for m in data:
+                league = m.get("league_name", "FOOTBALL").upper()
+                teams = f"{m.get('match_hometeam_name')} - {m.get('match_awayteam_name')}"
+                m_time = m.get("match_time", "18:00")
                 
-                home = item["teams"]["home"]["name"]
-                away = item["teams"]["away"]["name"]
-                m_time = item["fixture"]["date"][11:16] # Παίρνουμε την ώρα
-                
-                t1, p1, t2, p2 = calculate_poisson(1.8, 1.4)
-                predictions.append(f"{league} ({m_time})|{home} - {away}|{t1},{p1},{t2},{p2}")
+                t1, p1, t2, p2 = calculate_poisson(1.7, 1.3)
+                predictions.append(f"{league} ({m_time})|{teams}|{t1},{p1},{t2},{p2}")
     except:
         pass
 
@@ -47,11 +43,10 @@ def fetch_data():
         now = datetime.now()
         f.write(f"ΗΜΕΡΟΜΗΝΙΑ|10/05/2026|{now.strftime('%H:%M')} (GR)\n")
         if predictions:
-            # Δείξε τους πρώτους 30 αγώνες
-            for p in predictions[:30]:
+            for p in predictions[:40]:
                 f.write(p + "\n")
         else:
-            f.write("INFO|Ανανέωση δεδομένων...|-, -, -, -")
+            f.write("INFO|Το API συνδέθηκε! Περιμένουμε τα ματς...|-, -, -, -")
 
 if __name__ == "__main__":
     fetch_data()
