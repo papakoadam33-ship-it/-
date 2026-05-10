@@ -1,2 +1,4 @@
-ΗΜΕΡΟΜΗΝΙΑ|10/05/2026|19:34 (GR)
-INFO|Το API συνδέθηκε! Περιμένουμε τα ματς...|-, -, -, -
+ΗΜΕΡΟΜΗΝΙΑ|10/05/2026|22:55 (GR)
+SUPER LEAGUE (23:30)|ΟΛΥΜΠΙΑΚΟΣ - ΠΑΟΚ|Over 2.5,78%,Goal-Goal,72%
+PREMIER LEAGUE (23:45)|LIVERPOOL - ARSENAL|Over 2.5,81%,Goal-Goal,75%
+LA LIGA (23:55)|REAL MADRID - BARCELONA|Over 2.5,85%,Goal-Goal,80%
