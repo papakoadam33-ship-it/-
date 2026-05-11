@@ -2,36 +2,60 @@ import requests
 from datetime import datetime
 
 # --- ΡΥΘΜΙΣΕΙΣ API ---
+# Χρησιμοποιούμε το κλειδί σου από τη φωτογραφία 1778487500377.jpeg
 RAPID_API_KEY = "47d5da2fb8mshde110deccc94426p115d5ajsnd9cc939fa561"
 HOST = "apifootball3.p.rapidapi.com"
 
+def calculate_poisson(h, a):
+    """Υπολογισμός εικονικού προγνωστικού για το demo"""
+    tip = "Over 2.5"
+    prob = "78%"
+    cover = "Goal-Goal"
+    cover_prob = "72%"
+    return tip, prob, cover, cover_prob
+
 def fetch_data():
     predictions = []
-    headers = {"X-RapidAPI-Key": RAPID_API_KEY, "X-RapidAPI-Host": HOST}
+    headers = {
+        "X-RapidAPI-Key": RAPID_API_KEY,
+        "X-RapidAPI-Host": HOST
+    }
     
-    # Αλλάζουμε σε get_leagues για να σιγουρευτούμε ότι θα φέρει δεδομένα
-    url = f"https://{HOST}/?action=get_leagues"
+    today = datetime.now().strftime('%Y-%m-%d')
+    
+    # Χρήση του "Events" endpoint για αγώνες
+    url = f"https://{HOST}/"
+    params = {
+        "action": "get_events",
+        "from": today,
+        "to": today,
+        "timezone": "Europe/Athens"
+    }
 
     try:
-        r = requests.get(url, headers=headers)
+        r = requests.get(url, headers=headers, params=params)
         data = r.json()
         
+        # Αν το API επιστρέψει λίστα αγώνων
         if isinstance(data, list) and len(data) > 0:
-            # Παίρνουμε τις πρώτες 10 λίγκες για να γεμίσει η οθόνη
-            for item in data[:10]:
-                league_name = item.get("league_name", "Unknown").upper()
-                country = item.get("country_name", "World")
+            for item in data:
+                league = item.get("league_name", "ΔΙΕΘΝΕΣ").upper()
+                home = item.get("match_hometeam_name", "Home")
+                away = item.get("match_awayteam_name", "Away")
+                m_time = item.get("match_time", "00:00")
                 
-                # Εικονική πρόβλεψη βασισμένη στη λίγκα
-                predictions.append(f"{league_name}|{country}|ΣΤΑΤΙΣΤΙΚΑ ΔΙΑΘΕΣΙΜΑ, 100%, ΣΥΝΔΕΣΗ OK, 100%")
+                teams = f"{home} - {away}"
+                t1, p1, t2, p2 = calculate_poisson(1.5, 1.3)
+                predictions.append(f"{league} ({m_time})|{teams}|{t1},{p1},{t2},{p2}")
         
+        # Αν η λίστα είναι άδεια
         if not predictions:
             predictions.append("INFO|Το API συνδέθηκε αλλά δεν βρήκε αγώνες. Δοκίμασε αργότερα.|-, -, -, -")
 
     except Exception as e:
-        predictions.append(f"ERROR|Σφάλμα: {str(e)}|-, -, -, -")
+        predictions.append(f"ERROR|Σφάλμα Σύνδεσης: {str(e)}|-, -, -, -")
 
-    # Εγγραφή στο αρχείο
+    # Εγγραφή στο αρχείο daily_predictions.txt
     with open("daily_predictions.txt", "w", encoding="utf-8") as f:
         now = datetime.now()
         f.write(f"ΗΜΕΡΟΜΗΝΙΑ|{now.strftime('%d/%m/%Y')}|{now.strftime('%H:%M')} (GR)\n")
