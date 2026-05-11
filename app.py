@@ -1,44 +1,61 @@
-
 import streamlit as st
+import requests
+from datetime import datetime
 import os
 
 # --- ΡΥΘΜΙΣΗ ΣΕΛΙΔΑΣ ---
 st.set_page_config(page_title="Marios Pro-Bet Pro", layout="centered")
 
-# Καθαρισμός μνήμης
-st.cache_data.clear()
-
-def load_predictions():
-    file_path = 'daily_predictions.txt'
-    if not os.path.exists(file_path):
-        return [["INFO", "Περιμένουμε το GitHub Action...", "-", "-", "-", "-"]]
+# Χρησιμοποιούμε cache για να μην τρώμε το limit του API (1 ώρα TTL)
+@st.cache_data(ttl=3600)
+def fetch_live_predictions():
+    predictions = []
+    # Χρησιμοποιώ το Key που μου έδωσες
+    headers = {"X-RapidAPI-Key": "47d5da2fb8mshde110deccc94426p115d5ajsnd9cc939fa561"}
+    today = datetime.now().strftime('%Y-%m-%d')
     
-    data = []
-    with open(file_path, 'r', encoding='utf-8') as f:
-        lines = f.readlines()
-        if lines:
-            header = lines[0].strip().split('|')
-            st.sidebar.info(f"📅 {header[1]} | 🕒 {header[2]}")
-            
-            for line in lines[1:]:
-                parts = line.strip().split('|')
-                if len(parts) >= 3:
-                    league = parts[0]
-                    teams = parts[1]
-                    tips = parts[2].split(',')
-                    if len(tips) == 4:
-                        data.append([league, teams, tips[0], tips[1], tips[2], tips[3]])
-    return data
+    # Πηγή: Football Prediction API
+    try:
+        url = "https://football-prediction-api.p.rapidapi.com/api/v2/predictions"
+        params = {"iso_date": today}
+        r = requests.get(url, headers=headers, params=params, timeout=10)
+        data = r.json()
+        
+        if "data" in data:
+            for item in data["data"]:
+                home = item.get('home_team')
+                away = item.get('away_team')
+                league = item.get('federation', 'INTL').upper()
+                tip = item.get("prediction", "1X")
+                prob = item.get("probabilities", {}).get(tip, 50)
+                
+                # Φιλτράρισμα για να δείχνουμε μόνο καλά σημεία
+                if prob >= 70:
+                    star = "🔥 " if prob >= 85 else ""
+                    predictions.append([
+                        f"{star}[FP] {league}",
+                        f"{home} - {away}",
+                        f"Κύρια: {tip}", f"{prob}%",
+                        "Over 1.5", "80%"
+                    ])
+    except Exception as e:
+        st.sidebar.error(f"API Error: {e}")
+        
+    return predictions
 
 # --- ΕΜΦΑΝΙΣΗ ---
 st.markdown("<h1 style='text-align: center;'>⚡ MARIOS PRO-BET PRO ⚡</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; font-style: italic;'>Advanced Poisson Prediction Engine</p>", unsafe_allow_html=True)
 
-preds = load_predictions()
+# Αντί να φορτώνουμε από TXT, καλούμε το API απευθείας
+preds = fetch_live_predictions()
 
 if not preds:
-    st.warning("Αναμονή για ενημέρωση δεδομένων...")
+    st.warning("⚠️ Αναμονή για ενημέρωση δεδομένων από τα API. Δοκίμασε αργότερα (μετά τις 11:00 π.μ.).")
 else:
+    # Ταξινόμηση (Hot πρώτα)
+    preds.sort(key=lambda x: "🔥" not in x[0])
+    
     for p in preds:
         with st.container():
             st.markdown(f"""
@@ -52,3 +69,4 @@ else:
                 </div>
             </div>
             """, unsafe_allow_html=True)
+
