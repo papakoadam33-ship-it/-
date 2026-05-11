@@ -1,2 +1,4 @@
-ΗΜΕΡΟΜΗΝΙΑ|11/05/2026|04:35 (GR)
-INFO|Το API συνδέθηκε! Περιμένουμε τους επόμενους αγώνες...|-, -, -, -
+ΗΜΕΡΟΜΗΝΙΑ|11/05/2026|05:15 (GR)
+SUPER LEAGUE (20:00)|ΟΛΥΜΠΙΑΚΟΣ - ΠΑΟΚ|Over 2.5,78%,Goal-Goal,72%
+PREMIER LEAGUE (21:45)|LIVERPOOL - ARSENAL|Over 2.5,81%,Goal-Goal,75%
+LA LIGA (22:00)|REAL MADRID - BARCELONA|Over 2.5,85%,Goal-Goal,80%
