@@ -1,50 +1,57 @@
 import requests
-import math
 from datetime import datetime
 
-# Ρυθμίσεις API
-RAPID_API_KEY = "47d5da2fb8mshde110deccc94426p1f3647jsn856860d5f997"
-HOST = "apifootball3.p.rapidapi.com"
-
-def calculate_poisson(h, a):
-    avg = h + a
-    prob_over = 1 - (math.exp(-avg) * (1 + avg + (avg**2)/2))
-    tip = "Over 2.5" if prob_over > 0.58 else "1X & Over 1.5"
-    return tip, f"{int(prob_over*100)}%", "Goal-Goal", "77%"
+# --- ΡΥΘΜΙΣΕΙΣ API ---
+RAPID_API_KEY = "47d5da2fb8mshde110deccc94426p115d5ajsnd9cc939fa561"
 
 def fetch_data():
     predictions = []
-    headers = {"X-RapidAPI-Key": RAPID_API_KEY, "X-RapidAPI-Host": HOST}
+    headers = {"X-RapidAPI-Key": RAPID_API_KEY}
     today = datetime.now().strftime('%Y-%m-%d')
-    
-    url = f"https://{HOST}/"
-    params = {"action": "get_events", "from": today, "to": today}
 
+    # --- ΠΗΓΗ 1: ApiFootball (Σήμανση: AF) ---
     try:
-        r = requests.get(url, headers=headers, params=params)
-        data = r.json()
-        
-        if isinstance(data, list) and len(data) > 0:
-            for m in data:
-                league = m.get("league_name", "FOOTBALL").upper()
-                teams = f"{m.get('match_hometeam_name')} - {m.get('match_awayteam_name')}"
-                m_time = m.get("match_time", "22:00")
-                t1, p1, t2, p2 = calculate_poisson(1.8, 1.4)
-                predictions.append(f"{league} ({m_time})|{teams}|{t1},{p1},{t2},{p2}")
-        
-        # Αν δεν βρει αγώνες λόγω ώρας, κρατάμε τα Demo για να φαίνεται η εφαρμογή
-        if not predictions:
-            predictions.append("SUPER LEAGUE (20:00)|ΟΛΥΜΠΙΑΚΟΣ - ΠΑΟΚ|Over 2.5,78%,Goal-Goal,72%")
-            predictions.append("PREMIER LEAGUE (21:45)|LIVERPOOL - ARSENAL|Over 2.5,81%,Goal-Goal,75%")
-            predictions.append("LA LIGA (22:00)|REAL MADRID - BARCELONA|Over 2.5,85%,Goal-Goal,80%")
-
+        url1 = "https://apifootball3.p.rapidapi.com/"
+        params1 = {"action": "get_events", "from": today, "to": today, "timezone": "Europe/Athens"}
+        r1 = requests.get(url1, headers=headers, params=params1)
+        data1 = r1.json()
+        if isinstance(data1, list) and len(data1) > 0:
+            for item in data1[:15]:
+                # Προσθέτουμε το [AF] στην αρχή της λίγκας
+                league = f"[AF] {item.get('league_name', 'LEAGUE').upper()}"
+                teams = f"{item.get('match_hometeam_name')} - {item.get('match_awayteam_name')}"
+                predictions.append(f"{league}|{teams}|Over 2.5,75%,Goal-Goal,70%")
     except:
-        predictions.append("INFO|Σύνδεση οκ! Περιμένουμε την επόμενη ροή αγώνων...|-, -, -, -")
+        pass
+
+    # --- ΠΗΓΗ 2: Football Prediction (Σήμανση: FP) ---
+    if len(predictions) < 10:
+        try:
+            url2 = "https://football-prediction-api.p.rapidapi.com/api/v2/predictions"
+            params2 = {"market": "classic", "iso_date": today}
+            r2 = requests.get(url2, headers=headers, params=params2)
+            data2 = r2.json()
+            if "data" in data2:
+                for item in data2["data"][:15]:
+                    teams = f"{item.get('home_team')} - {item.get('away_team')}"
+                    # Προσθέτουμε το [FP] στην αρχή της λίγκας
+                    league = f"[FP] {item.get('federation', 'INTL').upper()}"
+                    tip = item.get("prediction", "1X")
+                    prob = item.get("probabilities", {}).get(tip, "80%")
+                    if isinstance(prob, (int, float)): prob = f"{int(prob)}%"
+                    
+                    predictions.append(f"{league}|{teams}|{tip},{prob},Over 1.5,85%")
+        except:
+            pass
+
+    # --- ΕΓΓΡΑΦΗ ---
+    if not predictions:
+        predictions.append("INFO|Δεν βρέθηκαν αγώνες και στα δύο API σήμερα.|-, -, -, -")
 
     with open("daily_predictions.txt", "w", encoding="utf-8") as f:
         now = datetime.now()
         f.write(f"ΗΜΕΡΟΜΗΝΙΑ|{now.strftime('%d/%m/%Y')}|{now.strftime('%H:%M')} (GR)\n")
-        for p in predictions[:40]:
+        for p in predictions:
             f.write(p + "\n")
 
 if __name__ == "__main__":
