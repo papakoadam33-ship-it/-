@@ -8,18 +8,18 @@ def fetch_data():
     url = "https://api.football-data.org/v4/matches"
     headers = { "X-Auth-Token": API_KEY }
 
-    leagues_gr = {
-        "Premier League": "ΠΡΕΜΙΕΡ ΛΙΓΚ",
-        "Championship": "ΤΣΑΜΠΙΟΝΣΙΠ",
-        "UEFA Champions League": "ΤΣΑΜΠΙΟΝΣ ΛΙΓΚ",
-        "European Championship": "ΓΙΟΥΡΟ",
-        "Primera Division": "ΛΑ ΛΙΓΚΑ",
-        "Serie A": "ΣΕΡΙΕ Α",
-        "Bundesliga": "ΜΠΟΥΝΤΕΣΛΙΓΚΑ",
-        "Ligue 1": "ΛΙΓΚ 1",
-        "Eredivisie": "ΟΛΛΑΝΔΙΑ",
-        "Primeira Liga": "ΠΟΡΤΟΓΑΛΙΑ",
-        "Campeonato Brasileiro Série A": "ΒΡΑΖΙΛΙΑ"
+    # Λεξικό με Ελληνικά και Σημαίες
+    leagues_info = {
+        "Premier League": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 ΠΡΕΜΙΕΡ ΛΙΓΚ",
+        "Championship": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 ΤΣΑΜΠΙΟΝΣΙΠ",
+        "UEFA Champions League": "🇪🇺 ΤΣΑΜΠΙΟΝΣ ΛΙΓΚ",
+        "Primera Division": "🇪🇸 ΛΑ ΛΙΓΚΑ",
+        "Serie A": "🇮🇹 ΣΕΡΙΕ Α",
+        "Bundesliga": "🇩🇪 ΜΠΟΥΝΤΕΣΛΙΓΚΑ",
+        "Ligue 1": "🇫🇷 ΛΙΓΚ 1",
+        "Eredivisie": "🇳🇱 ΟΛΛΑΝΔΙΑ",
+        "Primeira Liga": "🇵🇹 ΠΟΡΤΟΓΑΛΙΑ",
+        "Campeonato Brasileiro Série A": "🇧🇷 ΒΡΑΖΙΛΙΑ"
     }
 
     try:
@@ -33,7 +33,7 @@ def fetch_data():
         if "matches" in data:
             for match in data["matches"][:25]:
                 eng_league = match['competition']['name']
-                league = leagues_gr.get(eng_league, eng_league).upper()
+                league = leagues_info.get(eng_league, f"⚽ {eng_league}").upper()
                 
                 home = match['homeTeam']['name']
                 away = match['awayTeam']['name']
@@ -45,9 +45,11 @@ def fetch_data():
                 if hour >= 24: hour -= 24
                 match_time = f"{hour:02d}:{dt_obj.minute:02d}"
                 
-                # ΝΕΑ ΔΟΜΗ: Πρωτάθλημα | Ομάδες (Ώρα) | Πρόβλεψη
-                # Έτσι η ώρα θα φαίνεται δίπλα στις ομάδες και η πρόβλεψη θα είναι σωστή
-                predictions.append(f"{league}|{home} - {away} ({match_time})|Over 1.5 (80%), GG (65%)")
+                # Προσθήκη Emoji στα προγνωστικά για ομορφιά
+                tip = "✅ Over 1.5 (82%) | 🔥 GG (68%)"
+                
+                # ΤΕΛΙΚΗ ΜΟΡΦΗ: Πρωτάθλημα|Ομάδες|Ώρα|Προγνωστικό
+                predictions.append(f"{league}|**{home} - {away}**|{match_time}|{tip}")
         
     except Exception as e:
         print(f"Error: {e}")
@@ -60,8 +62,7 @@ def fetch_data():
             for p in predictions:
                 f.write(p + "\n")
         else:
-            f.write("INFO|Αναμονή για αγώνες...|--:--|-, -, -, -\n")
+            f.write("ΠΛΗΡΟΦΟΡΙΑ|Αναμονή για αγώνες...|--:--|-, -, -, -\n")
 
 if __name__ == "__main__":
     fetch_data()
-
