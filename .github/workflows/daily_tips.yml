@@ -2,14 +2,14 @@ name: Daily Betting Tips
 
 on:
   schedule:
-    - cron: '0 8 * * *' # Τρέχει αυτόματα κάθε πρωί στις 11:00 Ελλάδος
-  workflow_dispatch: # Σου επιτρέπει να το τρέχεις χειροκίνητα
+    - cron: '0 8 * * *'
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # ΑΠΑΡΑΙΤΗΤΟ: Δίνει άδεια εγγραφής στο αρχείο
+      contents: write
     
     steps:
       - name: Checkout repository
