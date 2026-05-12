@@ -4,11 +4,10 @@ from datetime import datetime
 
 def fetch_data():
     predictions = []
-    API_KEY = "a963742bcd5642afbe8c842d057f25ad" # Το κλειδί σου από τη φωτό 1778620764473.jpeg
+    API_KEY = "a963742bcd5642afbe8c842d057f25ad" 
     url = "https://api.football-data.org/v4/matches"
     headers = { "X-Auth-Token": API_KEY }
 
-    # Λεξικό για Ελληνικά ονόματα πρωταθλημάτων
     leagues_gr = {
         "Premier League": "ΠΡΕΜΙΕΡ ΛΙΓΚ",
         "Championship": "ΤΣΑΜΠΙΟΝΣΙΠ",
@@ -33,21 +32,21 @@ def fetch_data():
 
         if "matches" in data:
             for match in data["matches"][:25]:
-                # Μετάφραση Πρωταθλήματος
                 eng_league = match['competition']['name']
                 league = leagues_gr.get(eng_league, eng_league).upper()
                 
                 home = match['homeTeam']['name']
                 away = match['awayTeam']['name']
                 
-                # Εξαγωγή ώρας (UTC σε Τοπική +3 ώρες για Ελλάδα)
-                raw_date = match['utcDate'] # Π.χ. "2024-05-12T19:00:00Z"
+                # Σωστή διαχείριση ώρας (Ελλάδα +3)
+                raw_date = match['utcDate'] 
                 dt_obj = datetime.strptime(raw_date, "%Y-%m-%dT%H:%M:%SZ")
                 hour = dt_obj.hour + 3
                 if hour >= 24: hour -= 24
                 match_time = f"{hour:02d}:{dt_obj.minute:02d}"
                 
-                # Το "χρυσό" πλαίσιο: Πρωτάθλημα|Ομάδες|Ώρα|Προγνωστικό
+                # Η ΣΩΣΤΗ ΣΕΙΡΑ: Πρωτάθλημα | Ομάδες | Ώρα | Προγνωστικό
+                # Το Streamlit θα διαβάσει το 4ο κομμάτι ως "Πρόβλεψη"
                 predictions.append(f"{league}|{home} - {away}|{match_time}|Over 1.5 (80%), GG (65%)")
         
     except Exception as e:
@@ -61,7 +60,7 @@ def fetch_data():
             for p in predictions:
                 f.write(p + "\n")
         else:
-            f.write("ΠΛΗΡΟΦΟΡΙΑ|Αναμονή για αγώνες...|--:--|-, -, -, -\n")
+            f.write("INFO|Αναμονή για αγώνες...|--:--|-, -, -, -\n")
 
 if __name__ == "__main__":
     fetch_data()
