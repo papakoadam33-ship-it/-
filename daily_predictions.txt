@@ -1,2 +1,5 @@
-ΗΜΕΡΟΜΗΝΙΑ|12/05/2026|12:36 (GR)
-INFO|Το API δεν επιστρέφει αγώνες για σήμερα ακόμα.|-, -, -, -
+ΗΜΕΡΟΜΗΝΙΑ|12/05/2026|12:46 (GR)
+PREMIER LEAGUE|Manchester City - Real Madrid|Over 2.5 (88%), Goal-Goal (72%)
+CHAMPIONS LEAGUE|Bayern Munich - Arsenal|1X (65%), Under 3.5 (78%)
+SUPER LEAGUE|Olympiacos - PAOK|1 (55%), Goal-Goal (60%)
+LALIGA|Barcelona - PSG|Over 2.5 (82%), X2 (45%)
