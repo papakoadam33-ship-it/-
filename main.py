@@ -38,16 +38,16 @@ def fetch_data():
                 home = match['homeTeam']['name']
                 away = match['awayTeam']['name']
                 
-                # Σωστή διαχείριση ώρας (Ελλάδα +3)
+                # Ώρα Ελλάδος
                 raw_date = match['utcDate'] 
                 dt_obj = datetime.strptime(raw_date, "%Y-%m-%dT%H:%M:%SZ")
                 hour = dt_obj.hour + 3
                 if hour >= 24: hour -= 24
                 match_time = f"{hour:02d}:{dt_obj.minute:02d}"
                 
-                # Η ΣΩΣΤΗ ΣΕΙΡΑ: Πρωτάθλημα | Ομάδες | Ώρα | Προγνωστικό
-                # Το Streamlit θα διαβάσει το 4ο κομμάτι ως "Πρόβλεψη"
-                predictions.append(f"{league}|{home} - {away}|{match_time}|Over 1.5 (80%), GG (65%)")
+                # ΝΕΑ ΔΟΜΗ: Πρωτάθλημα | Ομάδες (Ώρα) | Πρόβλεψη
+                # Έτσι η ώρα θα φαίνεται δίπλα στις ομάδες και η πρόβλεψη θα είναι σωστή
+                predictions.append(f"{league}|{home} - {away} ({match_time})|Over 1.5 (80%), GG (65%)")
         
     except Exception as e:
         print(f"Error: {e}")
@@ -64,3 +64,4 @@ def fetch_data():
 
 if __name__ == "__main__":
     fetch_data()
+
