@@ -1,2 +1,5 @@
-ΗΜΕΡΟΜΗΝΙΑ|12/05/2026|20:57 (GR)
-ΠΛΗΡΟΦΟΡΙΑ|Δεν βρέθηκαν διαθέσιμοι αγώνες στο API αυτή τη στιγμή.|-, -, -, -
+ΗΜΕΡΟΜΗΝΙΑ|12/05/2026|21:25 (GR)
+Primera Division|RC Celta de Vigo - Levante UD|Over 1.5 (78%), 1X (62%)
+Primera Division|Real Betis Balompié - Elche CF|Over 1.5 (78%), 1X (62%)
+Championship|Southampton FC - Middlesbrough FC|Over 1.5 (78%), 1X (62%)
+Primera Division|CA Osasuna - Club Atlético de Madrid|Over 1.5 (78%), 1X (62%)
