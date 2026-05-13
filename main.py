@@ -8,18 +8,17 @@ def fetch_data():
     url = "https://api.football-data.org/v4/matches"
     headers = { "X-Auth-Token": API_KEY }
 
-    # Λεξικό με Ελληνικά και Σημαίες
     leagues_info = {
-        "Premier League": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 ΠΡΕΜΙΕΡ ΛΙΓΚ",
-        "Championship": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 ΤΣΑΜΠΙΟΝΣΙΠ",
-        "UEFA Champions League": "🇪🇺 ΤΣΑΜΠΙΟΝΣ ΛΙΓΚ",
-        "Primera Division": "🇪🇸 ΛΑ ΛΙΓΚΑ",
-        "Serie A": "🇮🇹 ΣΕΡΙΕ Α",
-        "Bundesliga": "🇩🇪 ΜΠΟΥΝΤΕΣΛΙΓΚΑ",
-        "Ligue 1": "🇫🇷 ΛΙΓΚ 1",
-        "Eredivisie": "🇳🇱 ΟΛΛΑΝΔΙΑ",
-        "Primeira Liga": "🇵🇹 ΠΟΡΤΟΓΑΛΙΑ",
-        "Campeonato Brasileiro Série A": "🇧🇷 ΒΡΑΖΙΛΙΑ"
+        "Premier League": "ΠΡΕΜΙΕΡ ΛΙΓΚ",
+        "Championship": "ΤΣΑΜΠΙΟΝΣΙΠ",
+        "UEFA Champions League": "ΤΣΑΜΠΙΟΝΣ ΛΙΓΚ",
+        "Primera Division": "ΛΑ ΛΙΓΚΑ",
+        "Serie A": "ΣΕΡΙΕ Α",
+        "Bundesliga": "ΜΠΟΥΝΤΕΣΛΙΓΚΑ",
+        "Ligue 1": "ΛΙΓΚ 1",
+        "Eredivisie": "ΟΛΛΑΝΔΙΑ",
+        "Primeira Liga": "ΠΟΡΤΟΓΑΛΙΑ",
+        "Campeonato Brasileiro Série A": "CAMPEONATO BRASILEIRO SÉRIE A"
     }
 
     try:
@@ -33,7 +32,7 @@ def fetch_data():
         if "matches" in data:
             for match in data["matches"][:25]:
                 eng_league = match['competition']['name']
-                league = leagues_info.get(eng_league, f"⚽ {eng_league}").upper()
+                league = leagues_info.get(eng_league, eng_league).upper()
                 
                 home = match['homeTeam']['name']
                 away = match['awayTeam']['name']
@@ -45,24 +44,27 @@ def fetch_data():
                 if hour >= 24: hour -= 24
                 match_time = f"{hour:02d}:{dt_obj.minute:02d}"
                 
-                # Προσθήκη Emoji στα προγνωστικά για ομορφιά
-                tip = "✅ Over 1.5 (82%) | 🔥 GG (68%)"
+                # Δομή για τη φωτογραφία 1778658582267.jpeg:
+                # Πρωτάθλημα | Ομάδες | Ώρα | Κύρια Πρόβλεψη | Κάλυψη
+                main_tip = "1X & Over 1.5"
+                cover_tip = "Goal-Goal"
                 
-                # ΤΕΛΙΚΗ ΜΟΡΦΗ: Πρωτάθλημα|Ομάδες|Ώρα|Προγνωστικό
-                predictions.append(f"{league}|**{home} - {away}**|{match_time}|{tip}")
+                predictions.append(f"{league}|{home} - {away}|{match_time}|{main_tip}|{cover_tip}")
         
     except Exception as e:
         print(f"Error: {e}")
 
     with open("daily_predictions.txt", "w", encoding="utf-8") as f:
         now = datetime.now()
-        f.write(f"ΗΜΕΡΟΜΗΝΙΑ|{now.strftime('%d/%m/%Y')}|{now.strftime('%H:%M')} (GR)\n")
+        # Ημερομηνία και ώρα για τη χρυσή μπάρα
+        f.write(f"ΗΜΕΡΟΜΗΝΙΑ|{now.strftime('%d/%m/%Y')}|{now.strftime('%H:%M')}\n")
         
         if predictions:
             for p in predictions:
                 f.write(p + "\n")
         else:
-            f.write("ΠΛΗΡΟΦΟΡΙΑ|Αναμονή για αγώνες...|--:--|-, -, -, -\n")
+            f.write("INFO|Αναμονή για αγώνες...|--:--|--|--\n")
 
 if __name__ == "__main__":
     fetch_data()
+
