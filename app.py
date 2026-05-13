@@ -1,13 +1,25 @@
 import streamlit as st
-import pandas as pd
 
-# Ρύθμιση σελίδας για το Μαύρο/Χρυσό στυλ
+# Ρύθμιση σελίδας
 st.set_page_config(page_title="Marios Pro-Bet Pro", layout="centered")
 
 st.markdown("""
     <style>
     .main { background-color: #0e1117; }
-    .stMarkdown h1 { color: #f1c40f; text-align: center; font-size: 40px; text-shadow: 2px 2px #000; }
+    .stMarkdown h1 { color: #f1c40f; text-align: center; font-size: 38px; text-shadow: 2px 2px #000; font-weight: bold; }
+    
+    /* ΤΟ ΝΕΟ ΧΡΥΣΟ ΠΛΑΙΣΙΟ ΠΑΝΩ */
+    .info-container {
+        background-color: #1a1c23;
+        border: 2px solid #f1c40f;
+        border-radius: 12px;
+        padding: 15px;
+        text-align: center;
+        color: #f1c40f;
+        font-weight: bold;
+        margin-bottom: 25px;
+    }
+
     .prediction-card {
         background-color: #1a1c23;
         border: 1px solid #f1c40f;
@@ -20,14 +32,15 @@ st.markdown("""
     .time-badge {
         background-color: #e74c3c;
         color: white;
-        padding: 2px 10px;
-        border-radius: 5px;
+        padding: 4px 12px;
+        border-radius: 6px;
         float: right;
+        font-weight: bold;
     }
     .tip-box {
         display: inline-block;
-        padding: 8px 15px;
-        border-radius: 8px;
+        padding: 10px 18px;
+        border-radius: 10px;
         margin-top: 10px;
         font-weight: bold;
     }
@@ -44,7 +57,12 @@ try:
         
     if lines:
         header = lines[0].strip().split("|")
-        st.info(f"📅 {header[1]} | 🕒 Τελευταία Ενημέρωση: {header[2]}")
+        # Εφαρμογή του νέου χρυσού πλαισίου
+        st.markdown(f"""
+        <div class="info-container">
+            📅 {header[1]} | 🕒 Τελευταία Ενημέρωση: {header[2]}
+        </div>
+        """, unsafe_allow_html=True)
         
         for line in lines[1:]:
             parts = line.strip().split("|")
@@ -56,9 +74,9 @@ try:
                     <span class="time-badge">🕒 {m_time}</span>
                     <div class="league-title">🏆 {league}</div>
                     <div class="teams-title">{teams}</div>
-                    <div class="tip-box main-tip">🎯 Κύρια: {main_tip}</div>
-                    <div class="tip-box cover-tip">🛡️ Κάλυψη: {cover_tip}</div>
+                    <div class="tip-box main-tip">🎯 {main_tip}</div>
+                    <div class="tip-box cover-tip">🛡️ {cover_tip}</div>
                 </div>
                 """, unsafe_allow_html=True)
 except Exception as e:
-    st.error("Αναμονή για την επόμενη ενημέρωση δεδομένων...")
+    st.error("Αναμονή για δεδομένα...")
