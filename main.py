@@ -36,14 +36,14 @@ def fetch_data():
                 home = match['homeTeam']['name']
                 away = match['awayTeam']['name']
                 
-                # Ώρα Ελλάδος
+                # Ρύθμιση ώρας (Ελλάδα +3 ώρες από UTC)
                 raw_date = match['utcDate'] 
                 dt_obj = datetime.strptime(raw_date, "%Y-%m-%dT%H:%M:%SZ")
                 hour = dt_obj.hour + 3
                 if hour >= 24: hour -= 24
                 match_time = f"{hour:02d}:{dt_obj.minute:02d}"
                 
-                # ΠΡΟΣΟΧΗ: Αυτή η σειρά σώζει την εμφάνιση!
+                # Αυτή η σειρά δεδομένων είναι ΚΡΙΣΙΜΗ για την εμφάνιση:
                 # 1.Πρωτάθλημα | 2.Ομάδες | 3.Ώρα | 4.Κύρια Πρόβλεψη | 5.Κάλυψη
                 predictions.append(f"{league}|{home} - {away}|{match_time}|1X & Over 1.5|Goal-Goal")
         
@@ -52,7 +52,7 @@ def fetch_data():
 
     with open("daily_predictions.txt", "w", encoding="utf-8") as f:
         now = datetime.now()
-        # Η πρώτη γραμμή πρέπει να είναι έτσι για τη χρυσή μπάρα
+        # Η πρώτη γραμμή ελέγχει τη χρυσή μπάρα ημερομηνίας
         f.write(f"ΗΜΕΡΟΜΗΝΙΑ|{now.strftime('%d/%m/%Y')}|{now.strftime('%H:%M')}\n")
         
         for p in predictions:
