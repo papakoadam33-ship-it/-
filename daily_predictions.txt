@@ -1,8 +1,26 @@
-ΗΜΕΡΟΜΗΝΙΑ|13/05/2026|13:42
-🇫🇷 ΛΙΓΚ 1|Μπρεστ - Στρασβούργο|20:00|Goal-Goal (56%)|Over 1.5 (74%)
-🇪🇸 ΛΑ ΛΙΓΚΑ|Βιγιαρεάλ - Σεβίλλη|20:00|Over 2.5 (67%)|2-3 Goals (40%)
-🇪🇸 ΛΑ ΛΙΓΚΑ|Εσπανιόλ - Αθλέτικ Μπιλμπάο|20:00|Over 2.5 (62%)|2-3 Goals (42%)
-🇫🇷 ΛΙΓΚ 1|Racing Club de Lens - Παρί Σεν Ζερμέν|22:00|1X & Over 1.5 (79%)|Goal-Goal (54%)
-🏴󠁧󠁢󠁥󠁮󠁧󠁿 ΠΡΕΜΙΕΡ ΛΙΓΚ|Μάντσεστερ Σίτι - Crystal Palace FC|22:00|Goal-Goal (55%)|Over 1.5 (72%)
-🇪🇸 ΛΑ ΛΙΓΚΑ|Getafe CF - RCD Mallorca|22:30|Over 2.5 (71%)|2-3 Goals (37%)
-🇪🇸 ΛΑ ΛΙΓΚΑ|Deportivo Alavés - Μπαρτσελόνα|22:30|Over 2.5 (66%)|2-3 Goals (40%)
+--- ΠΡΟΓΝΩΣΤΙΚΑ 13/05/2026 14:14 ---
+ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΚΑΛΥΨΗ
+🏴󠁧󠁢󠁥󠁮󠁧󠁿 PREMIER LEAGUE|Manchester City FC - Crystal Palace FC|22:00|Over 2.5 (68%)|No GG
+🏴󠁧󠁢󠁥󠁮󠁧󠁿 PREMIER LEAGUE|Aston Villa FC - Liverpool FC|22:00|Over 2.5 (74%)|GG
+🏴󠁧󠁢󠁥󠁮󠁧󠁿 PREMIER LEAGUE|Manchester United FC - Nottingham Forest FC|14:30|2-3 Goals|GG
+🏴󠁧󠁢󠁥󠁮󠁧󠁿 PREMIER LEAGUE|Brentford FC - Crystal Palace FC|17:00|2-3 Goals|GG
+🏴󠁧󠁢󠁥󠁮󠁧󠁿 PREMIER LEAGUE|Everton FC - Sunderland AFC|17:00|Over 2.5 (72%)|GG
+🏴󠁧󠁢󠁥󠁮󠁧󠁿 PREMIER LEAGUE|Leeds United FC - Brighton & Hove Albion FC|17:00|Over 2.5 (64%)|GG
+🏴󠁧󠁢󠁥󠁮󠁧󠁿 PREMIER LEAGUE|Wolverhampton Wanderers FC - Fulham FC|17:00|Under 2.5 (87%)|No GG
+🏴󠁧󠁢󠁥󠁮󠁧󠁿 PREMIER LEAGUE|Newcastle United FC - West Ham United FC|19:30|2-3 Goals|No GG
+🇪🇸 LA LIGA|RCD Espanyol de Barcelona - Athletic Club|20:00|2-3 Goals|No GG
+🇪🇸 LA LIGA|Villarreal CF - Sevilla FC|20:00|2-3 Goals|GG
+🇪🇸 LA LIGA|Deportivo Alavés - FC Barcelona|22:30|Over 2.5 (79%)|No GG
+🇪🇸 LA LIGA|Getafe CF - RCD Mallorca|22:30|Under 2.5 (84%)|No GG
+🇪🇸 LA LIGA|Valencia CF - Rayo Vallecano de Madrid|20:00|Under 2.5 (66%)|No GG
+🇪🇸 LA LIGA|Girona FC - Real Sociedad de Fútbol|21:00|Over 2.5 (65%)|GG
+🇪🇸 LA LIGA|Real Madrid CF - Real Oviedo|22:30|Under 2.5 (63%)|No GG
+🇪🇸 LA LIGA|Athletic Club - RC Celta de Vigo|20:00|Over 2.5 (62%)|GG
+🇮🇹 SERIE A|AS Roma - SS Lazio|13:30|Over 2.5 (61%)|No GG
+🇮🇹 SERIE A|Genoa CFC - AC Milan|13:30|Under 2.5 (79%)|No GG
+🇮🇹 SERIE A|Como 1907 - Parma Calcio 1913|13:30|Under 2.5 (63%)|No GG
+🇮🇹 SERIE A|Juventus FC - ACF Fiorentina|13:30|Under 2.5 (88%)|No GG
+🇮🇹 SERIE A|AC Pisa 1909 - SSC Napoli|13:30|2-3 Goals|No GG
+🇮🇹 SERIE A|FC Internazionale Milano - Hellas Verona FC|16:00|2-3 Goals|No GG
+🇮🇹 SERIE A|Atalanta BC - Bologna FC 1909|19:00|Under 2.5 (62%)|No GG
+🇮🇹 SERIE A|Cagliari Calcio - Torino FC|21:45|Under 2.5 (63%)|No GG
