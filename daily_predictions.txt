@@ -1,8 +1,8 @@
-ΗΜΕΡΟΜΗΝΙΑ|13/05/2026|13:29
-🇪🇸 ΛΑ ΛΙΓΚΑ|RCD Espanyol de Barcelona - Athletic Club|20:00|Over 2.5 (55%)|2-3 Goals (45%)
-🇫🇷 ΛΙΓΚ 1|Stade Brestois 29 - RC Strasbourg Alsace|20:00|Over 2.5 (55%)|2-3 Goals (45%)
-🇪🇸 ΛΑ ΛΙΓΚΑ|Villarreal CF - Sevilla FC|20:00|Over 2.5 (55%)|2-3 Goals (45%)
-🇫🇷 ΛΙΓΚ 1|Racing Club de Lens - Paris Saint-Germain FC|22:00|Over 2.5 (55%)|2-3 Goals (45%)
-🏴󠁧󠁢󠁥󠁮󠁧󠁿 ΠΡΕΜΙΕΡ ΛΙΓΚ|Manchester City FC - Crystal Palace FC|22:00|Over 2.5 (55%)|2-3 Goals (45%)
-🇪🇸 ΛΑ ΛΙΓΚΑ|Deportivo Alavés - FC Barcelona|22:30|Over 2.5 (55%)|2-3 Goals (45%)
-🇪🇸 ΛΑ ΛΙΓΚΑ|Getafe CF - RCD Mallorca|22:30|Over 2.5 (55%)|2-3 Goals (45%)
+ΗΜΕΡΟΜΗΝΙΑ|13/05/2026|13:35
+🇪🇸 ΛΑ ΛΙΓΚΑ|RCD Espanyol de Barcelona - Athletic Club|20:00|1X & Over 1.5 (83%)|Goal-Goal (53%)
+🇪🇸 ΛΑ ΛΙΓΚΑ|Villarreal CF - Sevilla FC|20:00|1X & Over 1.5 (72%)|Goal-Goal (53%)
+🇫🇷 ΛΙΓΚ 1|Stade Brestois 29 - RC Strasbourg Alsace|20:00|1X & Over 1.5 (82%)|Goal-Goal (49%)
+🇫🇷 ΛΙΓΚ 1|Racing Club de Lens - Paris Saint-Germain FC|22:00|Goal-Goal (60%)|Over 1.5 (77%)
+🏴󠁧󠁢󠁥󠁮󠁧󠁿 ΠΡΕΜΙΕΡ ΛΙΓΚ|Manchester City FC - Crystal Palace FC|22:00|Goal-Goal (55%)|Over 1.5 (71%)
+🇪🇸 ΛΑ ΛΙΓΚΑ|Deportivo Alavés - FC Barcelona|22:30|1X & Over 1.5 (79%)|Goal-Goal (54%)
+🇪🇸 ΛΑ ΛΙΓΚΑ|Getafe CF - RCD Mallorca|22:30|1X & Over 1.5 (85%)|Goal-Goal (47%)
