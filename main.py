@@ -13,7 +13,11 @@ LEAGUES = {
     "PD": "LA LIGA",
     "SA": "SERIE A",
     "BL1": "BUNDESLIGA",
-    "FL1": "LIGUE 1"
+    "FL1": "LIGUE 1",
+    "CL": "CHAMPIONS LEAGUE",
+    "DED": "EREDIVISIE",
+    "PPL": "PRIMEIRA LIGA",
+    "ELC": "CHAMPIONSHIP"
 }
 
 def poisson_probability(lmbda, k):
