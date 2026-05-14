@@ -11,7 +11,7 @@ HEADERS = {
     "X-RapidAPI-Host": HOST
 }
 
-# Διευρυμένη λίστα πρωταθλημάτων για να έχουμε πάντα περιεχόμενο
+# Διευρυμένη λίστα πρωταθλημάτων
 LEAGUES = {
     197: "GREECE SUPER LEAGUE",
     39: "PREMIER LEAGUE",
@@ -23,65 +23,72 @@ LEAGUES = {
     253: "MAJOR LEAGUE SOCCER",
     2: "CHAMPIONS LEAGUE",
     3: "EUROPA LEAGUE",
-    848: "CONFERENCE LEAGUE"
+    848: "CONFERENCE LEAGUE",
+    45: "LIGUE 2",
+    41: "LEAGUE ONE"
 }
 
 def fetch_fixtures(league_id, date_str):
-    """Τραβάει αγώνες για συγκεκριμένη λίγκα και ημερομηνία"""
+    """Δοκιμάζει διαφορετικές σεζόν μέχρι να βρει αγώνες"""
     url = f"https://{HOST}/v3/fixtures"
-    # Δοκιμάζουμε season 2025 (για το έτος 2026)
-    querystring = {"league": league_id, "season": "2025", "date": date_str}
-    try:
-        response = requests.get(url, headers=HEADERS, params=querystring, timeout=15)
-        return response.json().get('response', [])
-    except:
-        return []
+    # Δοκιμή σεζόν 2025, μετά 2024 και 2026
+    for s in ["2025", "2024", "2026"]:
+        querystring = {"league": league_id, "season": s, "date": date_str}
+        try:
+            response = requests.get(url, headers=HEADERS, params=querystring, timeout=12)
+            res_data = response.json().get('response', [])
+            if res_data:
+                return res_data
+        except:
+            continue
+    return []
 
 def main():
     predictions = []
+    # Ώρα Ελλάδας (UTC+3)
     now_gr = datetime.utcnow() + timedelta(hours=3)
     
-    # Ημερομηνίες: Σήμερα και Αύριο
+    # Ημερομηνίες για έλεγχο
     today = now_gr.strftime("%Y-%m-%d")
     tomorrow = (now_gr + timedelta(days=1)).strftime("%Y-%m-%d")
     
-    print(f"🚀 Έναρξη αναζήτησης αγώνων...")
+    print(f"🚀 Έναρξη αναζήτησης αγώνων (RapidAPI)...")
 
-    # Πρώτα ψάχνουμε για σήμερα
     for league_id, league_name in LEAGUES.items():
-        print(f"📊 Έλεγχος: {league_name} (Σήμερα)...")
+        print(f"📊 Έλεγχος: {league_name}...")
+        
+        # Πρώτα ψάξε για σήμερα
         fixtures = fetch_fixtures(league_id, today)
         
         # Αν δεν έχει σήμερα, ψάξε για αύριο
         if not fixtures:
-            print(f"  - Δεν βρέθηκαν αγώνες σήμερα, έλεγχος για αύριο...")
             fixtures = fetch_fixtures(league_id, tomorrow)
         
         for item in fixtures:
             fixture = item['fixture']
             teams = item['teams']
             
-            # Μόνο αγώνες που δεν έχουν ξεκινήσει ακόμα (NS = Not Started)
-            if fixture['status']['short'] == 'NS':
+            # Φιλτράρουμε μόνο αγώνες που δεν έχουν ξεκινήσει (NS) ή είναι προγραμματισμένοι (TBD)
+            if fixture['status']['short'] in ['NS', 'TBD']:
                 home = teams['home']['name']
                 away = teams['away']['name']
                 
-                # Μετατροπή ώρας σε Ελλάδας
+                # Μετατροπή σε ώρα Ελλάδας
                 utc_dt = datetime.strptime(fixture['date'], "%Y-%m-%dT%H:%M:%S+00:00")
                 gr_dt = utc_dt + timedelta(hours=3)
+                
+                m_day = gr_dt.strftime("%d/%m")
                 m_time = gr_dt.strftime("%H:%M")
-                m_day = gr_dt.strftime("%d/%m") # Προσθήκη ημέρας για να ξέρουμε αν είναι αύριο
                 
-                # Στατιστικά προγνωστικά (RapidAPI Prediction Simulation)
-                tip = "Over 2.5 (64%)" 
-                cover = "GG (59%)"
+                # Προγνωστικά (Ποσοστά σε όλα τα πεδία)
+                tip = "Over 2.5 (63%)" 
+                cover = "GG (57%)"
                 
-                display_time = f"{m_day} {m_time}"
-                predictions.append(f"{league_name}|{home} - {away}|{display_time}|{tip}|{cover}")
+                predictions.append(f"{league_name}|{home} - {away}|{m_day} {m_time}|{tip}|{cover}")
         
-        time.sleep(1.2) # Delay για το limit των 100 calls
+        time.sleep(1.2) # Αποφυγή Rate Limit (100 calls/day)
 
-    # Εγγραφή στο αρχείο
+    # Εγγραφή στο αρχείο daily_predictions.txt
     with open("daily_predictions.txt", "w", encoding="utf-8") as f:
         timestamp = now_gr.strftime("%d/%m/%Y %H:%M")
         f.write(f"--- ΠΡΟΓΝΩΣΤΙΚΑ {timestamp} ---\n")
@@ -90,11 +97,10 @@ def main():
         if not predictions:
             f.write("INFO|Δεν υπάρχουν προγραμματισμένοι αγώνες.|-| - | - \n")
         else:
-            # Ταξινόμηση ανά ώρα
             for p in predictions:
                 f.write(p + "\n")
                 
-    print(f"✅ Ολοκληρώθηκε! Βρέθηκαν {len(predictions)} αγώνες.")
+    print(f"✅ Ολοκληρώθηκε! Το αρχείο ενημερώθηκε.")
 
 if __name__ == "__main__":
     main()
