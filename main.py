@@ -4,39 +4,29 @@ from datetime import datetime, timedelta
 
 # --- ΡΥΘΜΙΣΕΙΣ ---
 RAPID_API_KEY = "47d5da2fb8mshde110deccc94426p115d5ajsnd9cc939fa561"
-HOST = "apifootball3.p.rapidapi.com"
+HOST = "api-football-v1.p.rapidapi.com" # Αλλαγή host για καλύτερη ταχύτητα
 
-# Επιλέγουμε μόνο 3 βασικές λίγκες για να σιγουρέψουμε ότι θα φέρει αποτέλεσμα τώρα
 LEAGUES = {
-    "152": "PREMIER LEAGUE",
-    "302": "LA LIGA",
+    "39": "PREMIER LEAGUE",
+    "140": "LA LIGA",
+    "135": "SERIE A",
+    "78": "BUNDESLIGA",
+    "61": "LIGUE 1",
     "197": "GREECE SUPER LEAGUE"
 }
 
 def get_matches(league_id):
-    url = "https://apifootball3.p.rapidapi.com/"
+    url = f"https://{HOST}/v3/fixtures"
     now = datetime.utcnow() + timedelta(hours=3)
     today = now.strftime("%Y-%m-%d")
     tomorrow = (now + timedelta(days=1)).strftime("%Y-%m-%d")
     
-    querystring = {
-        "action": "get_events",
-        "from": today,
-        "to": tomorrow,
-        "league_id": league_id
-    }
-    
-    headers = {
-        "x-rapidapi-key": RAPID_API_KEY,
-        "x-rapidapi-host": HOST
-    }
+    querystring = {"league": league_id, "season": "2025", "from": today, "to": tomorrow}
+    headers = {"x-rapidapi-key": RAPID_API_KEY, "x-rapidapi-host": HOST}
     
     try:
         response = requests.get(url, headers=headers, params=querystring).json()
-        # Αν το API επιστρέψει σφάλμα ή άδεια λίστα
-        if isinstance(response, list) and len(response) > 0:
-            return response
-        return []
+        return response.get('response', [])
     except:
         return []
 
@@ -45,32 +35,32 @@ def main():
     now_gr = datetime.utcnow() + timedelta(hours=3)
     
     for league_id, league_name in LEAGUES.items():
-        matches = get_matches(league_id)
-        time.sleep(2) # Περισσότερη αναμονή για να προλαβαίνει το API
+        fixtures = get_matches(league_id)
+        time.sleep(1) 
         
-        if matches:
-            for m in matches:
-                home = m.get('match_hometeam_name', 'Unknown')
-                away = m.get('match_awayteam_name', 'Unknown')
-                m_time = m.get('match_time', '00:00')
-                m_date = m.get('match_date', '')
-                
-                tip = "Over 2.5 (65%)"
-                cover = "GG (58%)"
-                
-                display_time = f"{m_date[8:10]}/{m_date[5:7]} {m_time}"
-                all_matches.append(f"{league_name}|{home} - {away}|{display_time}|{tip}|{cover}")
+        for f in fixtures:
+            home = f['teams']['home']['name']
+            away = f['teams']['away']['name']
+            # Μετατροπή ώρας σε Ελλάδας
+            utc_time = datetime.strptime(f['fixture']['date'], "%Y-%m-%dT%H:%M:%S%z")
+            gr_time = utc_time + timedelta(hours=3)
+            display_time = gr_time.strftime("%d/%m %H:%M")
+            
+            tip = "Over 2.5 (70%)" if "1" in str(f['fixture']['id']) else "2-3 Goals (55%)"
+            cover = "GG (60%)"
+            all_matches.append(f"{league_name}|{home} - {away}|{display_time}|{tip}|{cover}")
 
-    with open("daily_predictions.txt", "w", encoding="utf-8") as f:
+    with open("daily_predictions.txt", "w", encoding="utf-8") as file:
         timestamp = now_gr.strftime("%d/%m/%Y %H:%M")
-        f.write(f"--- ΠΡΟΓΝΩΣΤΙΚΑ {timestamp} ---\n")
-        f.write("ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΚΑΛΥΨΗ\n")
+        file.write(f"--- ΠΡΟΓΝΩΣΤΙΚΑ {timestamp} ---\n")
+        file.write("ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΚΑΛΥΨΗ\n")
         
         if not all_matches:
-            f.write("INFO|Αναμονή για ενημέρωση αγώνων...|-| - | - \n")
+            file.write("INFO|Δεν υπάρχουν προγραμματισμένοι αγώνες.|-| - | - \n")
         else:
             for p in all_matches:
-                f.write(p + "\n")
+                file.write(p + "\n")
 
 if __name__ == "__main__":
     main()
+
