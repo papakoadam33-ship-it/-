@@ -1,7 +1,7 @@
 import requests
 import math
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # --- ΡΥΘΜΙΣΕΙΣ ---
 API_KEY = "a963742bcd5642afbe8c842d057f25ad"
@@ -81,7 +81,7 @@ def calculate_prediction(home, away, league_stats):
     elif prob_over < 40: tip = f"Under 2.5 ({int(100-prob_over)}%)"
     else: tip = f"2-3 Goals ({int(55)}%)"
 
-    # Κάλυψη (πάντα με ποσοστό)
+    # Κάλυψη
     cover_label = "GG" if prob_gg > 50 else "No GG"
     cover_pct = int(prob_gg) if prob_gg > 50 else int(100 - prob_gg)
     cover = f"{cover_label} ({cover_pct}%)"
@@ -90,40 +90,44 @@ def calculate_prediction(home, away, league_stats):
 
 def main():
     predictions = []
-    # Πάρε τη σημερινή ημερομηνία σε format 2026-05-13
-    today_str = datetime.now().strftime("%Y-%m-%d")
+    # Ώρα Ελλάδας τώρα
+    now_gr = datetime.utcnow() + timedelta(hours=3)
+    today_str = now_gr.strftime("%Y-%m-%d")
     
     for code, label in LEAGUES.items():
         l_stats = get_advanced_stats(code)
-        time.sleep(2) # Αποφυγή Rate Limit
+        time.sleep(2) 
 
         url = f"https://api.football-data.org/v4/competitions/{code}/matches?status=SCHEDULED"
         try:
             res = requests.get(url, headers=HEADERS).json()
             for m in res.get('matches', []):
-                # ΦΙΛΤΡΟ: Μόνο σημερινοί αγώνες
-                match_date = m['utcDate'].split("T")[0]
-                if match_date != today_str:
-                    continue
-
-                home, away = m['homeTeam']['name'], m['awayTeam']['name']
-                tip, cover = calculate_prediction(home, away, l_stats)
+                # Μετατροπή UTC σε Ελλάδα για το φιλτράρισμα
+                utc_dt = datetime.strptime(m['utcDate'], "%Y-%m-%dT%H:%M:%SZ")
+                gr_dt = utc_dt + timedelta(hours=3)
                 
-                dt = datetime.strptime(m['utcDate'], "%Y-%m-%dT%H:%M:%SZ")
-                m_time = f"{(dt.hour + 3) % 24:02d}:{dt.minute:02d}"
-                
-                predictions.append(f"{label}|{home} - {away}|{m_time}|{tip}|{cover}")
+                # ΦΙΛΤΡΟ: Μόνο για τη σημερινή ημερομηνία (βάσει ώρας Ελλάδας)
+                if gr_dt.strftime("%Y-%m-%d") == today_str:
+                    home, away = m['homeTeam']['name'], m['awayTeam']['name']
+                    tip, cover = calculate_prediction(home, away, l_stats)
+                    
+                    m_time = gr_dt.strftime("%H:%M")
+                    predictions.append(f"{label}|{home} - {away}|{m_time}|{tip}|{cover}")
         except:
             continue
         time.sleep(2)
 
-    # Εγγραφή στο αρχείο
+    # Εγγραφή στο αρχείο για το Streamlit
     with open("daily_predictions.txt", "w", encoding="utf-8") as f:
-        now = datetime.now().strftime("%d/%m/%Y %H:%M")
-        f.write(f"--- ΠΡΟΓΝΩΣΤΙΚΑ {now} ---\n")
+        timestamp = now_gr.strftime("%d/%m/%Y %H:%M")
+        f.write(f"--- ΠΡΟΓΝΩΣΤΙΚΑ {timestamp} ---\n")
         f.write("ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΚΑΛΥΨΗ\n")
-        for p in predictions:
-            f.write(p + "\n")
+        
+        if not predictions:
+            f.write("INFO|Δεν υπάρχουν αγώνες για σήμερα.|-| - | - \n")
+        else:
+            for p in predictions:
+                f.write(p + "\n")
 
 if __name__ == "__main__":
     main()
