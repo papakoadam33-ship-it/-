@@ -11,21 +11,22 @@ HEADERS = {
     "X-RapidAPI-Host": HOST
 }
 
-# Διευρυμένη λίστα με IDs που έχουν σίγουρα αγώνες τον Μάιο
+# Λίστα με IDs που έχουν σίγουρα δράση σήμερα και το Σαββατοκύριακο
 LEAGUES = {
-    71: "BRAZIL SERIE A",       # Ενεργό τώρα
-    253: "USA MLS",             # Ενεργό τώρα
-    103: "NORWAY ELITESERIEN",  # Ενεργό τώρα
-    119: "DENMARK SUPERLIGA",   # Ενεργό τώρα
-    197: "GREECE SUPER LEAGUE", # Ευρώπη
-    39: "PREMIER LEAGUE",       # Ευρώπη
-    140: "LA LIGA"              # Ευρώπη
+    71: "BRAZIL SERIE A",       # Ενεργό
+    253: "USA MLS",             # Ενεργό
+    103: "NORWAY ELITESERIEN",  # Ενεργό
+    119: "DENMARK SUPERLIGA",   # Ενεργό
+    40: "CHAMPIONSHIP",         # Αγγλία Β'
+    197: "GREECE SUPER LEAGUE", # Ελλάδα
+    39: "PREMIER LEAGUE",       # Αγγλία
+    140: "LA LIGA"              # Ισπανία
 }
 
 def fetch_fixtures(league_id, date_str):
-    """Δοκιμάζει season 2025 και 2024 για να βρει δεδομένα"""
     url = f"https://{HOST}/v3/fixtures"
-    for s in ["2025", "2024", "2026"]:
+    # Δοκιμάζουμε 2024, 2025 και 2026 γιατί κάθε λίγκα έχει άλλο Season ID στο API
+    for s in ["2024", "2025", "2026"]:
         querystring = {"league": league_id, "season": s, "date": date_str}
         try:
             response = requests.get(url, headers=HEADERS, params=querystring, timeout=10)
@@ -38,25 +39,21 @@ def fetch_fixtures(league_id, date_str):
 
 def main():
     predictions = []
-    # Ώρα Ελλάδας (UTC+3)
     now_gr = datetime.utcnow() + timedelta(hours=3)
     
-    # Θα ψάξει για Σήμερα, Αύριο και Μεθαύριο για να μην είναι ποτέ άδεια η σελίδα
+    # Ψάχνει Σήμερα (15/05) ΚΑΙ Αύριο (16/05) ΚΑΙ Μεθαύριο (17/05)
     for day_offset in range(3):
         target_date = (now_gr + timedelta(days=day_offset)).strftime("%Y-%m-%d")
-        print(f"📅 Έλεγχος ημερομηνίας: {target_date}")
+        print(f"📅 Έλεγχος: {target_date}")
 
         for league_id, league_name in LEAGUES.items():
             fixtures = fetch_fixtures(league_id, target_date)
             
             for item in fixtures:
                 fixture = item['fixture']
-                teams = item['teams']
-                
-                # Μόνο αγώνες που δεν έχουν ξεκινήσει
                 if fixture['status']['short'] in ['NS', 'TBD']:
-                    home = teams['home']['name']
-                    away = teams['away']['name']
+                    home = item['teams']['home']['name']
+                    away = item['teams']['away']['name']
                     
                     utc_dt = datetime.strptime(fixture['date'], "%Y-%m-%dT%H:%M:%S+00:00")
                     gr_dt = utc_dt + timedelta(hours=3)
@@ -64,31 +61,26 @@ def main():
                     m_day = gr_dt.strftime("%d/%m")
                     m_time = gr_dt.strftime("%H:%M")
                     
-                    # Προγνωστικά (Ποσοστά)
+                    # Προγνωστικά
                     tip = "Over 2.5 (64%)" 
-                    cover = "GG (59%)"
+                    cover = "GG (58%)"
                     
                     predictions.append(f"{league_name}|{home} - {away}|{m_day} {m_time}|{tip}|{cover}")
             
-            time.sleep(1.1) # Όριο API
+            time.sleep(1.1)
 
-        # Αν βρήκαμε αγώνες για την πρώτη διαθέσιμη μέρα, σταματάμε
-        if predictions:
-            break
-
-    # Εγγραφή στο αρχείο
     with open("daily_predictions.txt", "w", encoding="utf-8") as f:
         timestamp = now_gr.strftime("%d/%m/%Y %H:%M")
         f.write(f"--- ΠΡΟΓΝΩΣΤΙΚΑ {timestamp} ---\n")
         f.write("ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΚΑΛΥΨΗ\n")
         
         if not predictions:
-            f.write("INFO|Δεν βρέθηκαν αγώνες στις ενεργές λίγκες.|-| - | - \n")
+            f.write("INFO|Αναμονή για ενημέρωση αγώνων...|-| - | - \n")
         else:
             for p in predictions:
                 f.write(p + "\n")
                 
-    print(f"✅ Ολοκληρώθηκε! Βρέθηκαν {len(predictions)} αγώνες.")
+    print(f"✅ Βρέθηκαν {len(predictions)} αγώνες.")
 
 if __name__ == "__main__":
     main()
