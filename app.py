@@ -51,7 +51,6 @@ st.markdown("""
     .main-tip { background-color: #27ae60; color: white; margin-right: 10px; border: 1px solid #2ecc71; }
     .cover-tip { background-color: #d35400; color: white; border: 1px solid #e67e22; }
     
-    /* Responsive fixes */
     @media (max-width: 600px) {
         .time-badge { float: none; display: block; width: fit-content; margin-bottom: 10px; }
         .tip-box { display: block; margin-right: 0; width: 100%; margin-bottom: 5px; }
@@ -66,28 +65,26 @@ st.markdown("<h1>⚡ MARIOS PRO-BET PRO ⚡</h1>", unsafe_allow_html=True)
 FILE_NAME = "daily_predictions.txt"
 
 if not os.path.exists(FILE_NAME):
-    st.error(f"❌ Το αρχείο {FILE_NAME} δεν βρέθηκε στο repository.")
-    st.info("Σιγουρέψου ότι το GitHub Action έχει ολοκληρωθεί επιτυχώς.")
+    st.error(f"❌ Το αρχείο {FILE_NAME} δεν βρέθηκε.")
+    st.info("Περίμενε να ολοκληρωθεί το GitHub Action.")
 else:
     try:
         with open(FILE_NAME, "r", encoding="utf-8") as f:
             lines = [line.strip() for line in f.readlines() if line.strip()]
             
-        if len(lines) > 2:
-            # Η πρώτη γραμμή είναι ο τίτλος (π.χ. --- ΠΡΟΓΝΩΣΤΙΚΑ 13/05/2026 ---)
+        if len(lines) >= 3:
+            # Κεφαλίδα ημερομηνίας
             raw_header = lines[0].replace("-", "").strip()
+            st.markdown(f'<div class="info-container">📅 {raw_header}</div>', unsafe_allow_html=True)
             
-            st.markdown(f"""
-            <div class="info-container">
-                📅 {raw_header}
-            </div>
-            """, unsafe_allow_html=True)
-            
-            # Ξεκινάμε από την 3η γραμμή (index 2) για να προσπεράσουμε τον τίτλο και τα headers
+            # Επεξεργασία αγώνων
             for line in lines[2:]:
                 parts = line.split("|")
                 if len(parts) >= 5:
                     league, teams, m_time, main_tip, cover_tip = parts
+                    
+                    # Αν δεν υπάρχει κάλυψη (π.χ. "-"), μην δείχνεις το κουτί
+                    cover_html = f'<div class="tip-box cover-tip">🛡️ {cover_tip}</div>' if cover_tip != "-" else ""
                     
                     st.markdown(f"""
                     <div class="prediction-card">
@@ -95,14 +92,14 @@ else:
                         <div class="league-title">🏆 {league}</div>
                         <div class="teams-title">{teams}</div>
                         <div class="tip-box main-tip">🎯 {main_tip}</div>
-                        <div class="tip-box cover-tip">🛡️ {cover_tip}</div>
+                        {cover_html}
                     </div>
                     """, unsafe_allow_html=True)
         else:
-            st.warning("⚠️ Το αρχείο βρέθηκε αλλά δεν περιέχει ακόμα προγνωστικά.")
+            st.info("ℹ️ Δεν υπάρχουν προγραμματισμένοι αγώνες για σήμερα.")
             
     except Exception as e:
-        st.error(f"⚠️ Σφάλμα κατά την επεξεργασία: {e}")
+        st.error(f"⚠️ Σφάλμα: {e}")
 
 # --- 5. FOOTER ---
 st.markdown("<br><p style='text-align: center; color: gray; font-size: 12px;'>Powered by Python & Football-Data API</p>", unsafe_allow_html=True)
