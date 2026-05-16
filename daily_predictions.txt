@@ -1,3 +1,5 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 16/05/2026 08:52 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 16/05/2026 09:06 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΚΑΛΥΨΗ
-INFO|Δεν υπάρχουν αγώνες για σήμερα/αύριο.|-| - | - 
+PREMIER LEAGUE|Manchester United FC - Nottingham Forest FC|17/05 14:30|2-3 Goals (55%)|GG (57%)
+LA LIGA|Athletic Club - RC Celta de Vigo|17/05 20:00|2-3 Goals (55%)|GG (61%)
+LA LIGA|Club Atlético de Madrid - Girona FC|17/05 20:00|Over 2.5 (60%)|GG (56%)
