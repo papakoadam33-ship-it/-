@@ -19,7 +19,7 @@ st.markdown("""
     .info-box { background-color: #1E1E24; padding: 20px; border-radius: 15px; border: 2px solid #FFD700; text-align: center; margin-bottom: 15px; }
     .info-text { color: #FFFFFF; font-size: 22px; font-weight: bold; margin: 15px 0; }
     </style>
-""", unsafe_allow_code=html=True)
+""", unsafe_allow_html=True)
 
 st.markdown("<div class='title-text'>⚡ MARIOS PRO-BET PRO ⚡</div>", unsafe_allow_code=True)
 
@@ -32,7 +32,7 @@ if os.path.exists(filename):
     if lines:
         # Παίρνουμε την ημερομηνία από την πρώτη γραμμή
         timestamp = lines[0].replace("--- ΠΡΟΓΝΩΣΤΙΚΑ ", "").replace(" ---", "").strip()
-        st.markdown(f"<div class='time-banner'>📅 ΠΡΟΓΝΩΣΤΙΚΑ {timestamp}</div>", unsafe_allow_code=True)
+        st.markdown(f"<div class='time-banner'>📅 ΠΡΟΓΝΩΣΤΙΚΑ {timestamp}</div>", unsafe_allow_html=True)
         
         # Διαβάζουμε τους αγώνες (παρακάμπτοντας τις 2 πρώτες γραμμές επικεφαλίδας)
         match_lines = lines[2:]
@@ -45,7 +45,7 @@ if os.path.exists(filename):
                     <div class='info-text'>Αναμονή για ενημέρωση αγώνων...</div>
                     <div style='color: #888888;'>Το σύστημα ανανεώνει τις προβλέψεις αυτόματα κάθε 12 ώρες.</div>
                 </div>
-            """, unsafe_allow_code=True)
+            """, unsafe_allow_html=True)
         else:
             for line in match_lines:
                 if "|" in line:
@@ -61,9 +61,9 @@ if os.path.exists(filename):
                                 <div class='tip-box'>🎯 {tip}</div>
                                 <div class='cover-box'>🛡️ {cover}</div>
                             </div>
-                        """, unsafe_allow_code=True)
+                        """, unsafe_allow_html=True)
 else:
-    st.markdown("<div class='time-banner'>📅 ΠΡΟΓΝΩΣΤΙΚΑ --/--/---- --:--</div>", unsafe_allow_code=True)
+    st.markdown("<div class='time-banner'>📅 ΠΡΟΓΝΩΣΤΙΚΑ --/--/---- --:--</div>", unsafe_allow_html=True)
     st.info("Δεν έχει δημιουργηθεί ακόμα το αρχείο προβλέψεων. Παρακαλώ περιμένετε να τρέξει το GitHub Action.")
 
-st.markdown("<p style='text-align: center; color: #555555; font-size: 12px; margin-top: 5px;'>Powered by Python & Football-Data API</p>", unsafe_allow_code=True)
+st.markdown("<p style='text-align: center; color: #555555; font-size: 12px; margin-top: 5px;'>Powered by Python & Football-Data API</p>", unsafe_allow_html=True)
