@@ -8,7 +8,12 @@ st.set_page_config(page_title="Marios Pro-Bet Pro", page_icon="⚡", layout="cen
 st.markdown("""
     <style>
     .main { background-color: #121212; }
-    .title-text { text-align: center; color: #FFFFFF; font-size: 34px; font-weight: bold; margin-bottom: 5px; }
+    
+    /* Στυλ για τον τίτλο και το μοντέλο στην κεφαλίδα */
+    .header-container { text-align: center; margin-bottom: 25px; padding-top: 10px; }
+    .title-text { color: #FFFFFF; font-size: 32px; font-weight: bold; margin-bottom: 2px; letter-spacing: 1px; }
+    .model-text { color: #FFD700; font-size: 16px; font-weight: 500; font-style: italic; letter-spacing: 0.5px; margin-top: 0px; }
+    
     .time-banner { background-color: #1E1E24; padding: 10px; border-radius: 10px; border: 2px solid #FFD700; text-align: center; color: #FFD700; font-size: 16px; font-weight: bold; margin-bottom: 25px; }
     .match-box { background-color: #1E1E1E; padding: 15px; border-radius: 15px; border: 1px solid #333333; margin-bottom: 15px; box-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
     .league-title { color: #FFD700; font-size: 13px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
@@ -21,7 +26,13 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.markdown("<div class='title-text'>⚡ MARIOS PRO-BET PRO ⚡</div>", unsafe_allow_html=True)
+# Εμφάνιση του τίτλου και του μοντέλου κεντραρισμένα
+st.markdown("""
+    <div class='header-container'>
+        <div class='title-text'>⚡ MARIOS PRO-BET PRO ⚡</div>
+        <div class='model-text'>Poisson Distribution Model</div>
+    </div>
+""", unsafe_allow_html=True)
 
 filename = "daily_predictions.txt"
 
@@ -30,7 +41,6 @@ if os.path.exists(filename):
         lines = f.readlines()
     
     if lines and len(lines) > 1:
-        # Παίρνουμε την ημερομηνία ενημέρωσης
         timestamp = lines[0].replace("--- ΠΡΟΓΝΩΣΤΙΚΑ ", "").replace(" ---", "").strip()
         st.markdown(f"<div class='time-banner'>📅 ΠΡΟΓΝΩΣΤΙΚΑ {timestamp}</div>", unsafe_allow_html=True)
         
