@@ -1,106 +1,69 @@
 import streamlit as st
 import os
 
-# --- 1. ΡΥΘΜΙΣΗ ΣΕΛΙΔΑΣ ---
-st.set_page_config(page_title="Marios Pro-Bet Pro", layout="centered", page_icon="⚡")
+# Ρύθμιση της σελίδας
+st.set_page_config(page_title="Marios Pro-Bet Pro", page_icon="⚡", layout="centered")
 
-# --- 2. CSS STYLING ---
+# Στυλ για όμορφη εμφάνιση (Dark Mode)
 st.markdown("""
     <style>
-    .main { background-color: #0e1117; }
-    h1 { color: #f1c40f; text-align: center; font-size: 38px !important; text-shadow: 2px 2px #000; font-weight: bold; padding-bottom: 20px; }
-    
-    .info-container {
-        background-color: #1a1c23;
-        border: 2px solid #f1c40f;
-        border-radius: 12px;
-        padding: 15px;
-        text-align: center;
-        color: #f1c40f;
-        font-weight: bold;
-        margin-bottom: 25px;
-    }
-
-    .prediction-card {
-        background-color: #1a1c23;
-        border: 1px solid #f1c40f;
-        border-radius: 15px;
-        padding: 20px;
-        margin-bottom: 20px;
-        position: relative;
-    }
-    .league-title { color: #f1c40f; font-weight: bold; font-size: 16px; text-transform: uppercase; }
-    .teams-title { color: #ffffff; font-size: 22px; font-weight: bold; margin: 10px 0; }
-    .time-badge {
-        background-color: #e74c3c;
-        color: white;
-        padding: 4px 10px;
-        border-radius: 6px;
-        float: right;
-        font-weight: bold;
-        font-size: 14px;
-    }
-    .tip-box {
-        display: inline-block;
-        padding: 10px 15px;
-        border-radius: 10px;
-        margin-top: 10px;
-        font-weight: bold;
-        text-align: center;
-    }
-    .main-tip { background-color: #27ae60; color: white; margin-right: 10px; border: 1px solid #2ecc71; }
-    .cover-tip { background-color: #d35400; color: white; border: 1px solid #e67e22; }
-    
-    @media (max-width: 600px) {
-        .time-badge { float: none; display: block; width: fit-content; margin-bottom: 10px; }
-        .tip-box { display: block; margin-right: 0; width: 100%; margin-bottom: 5px; }
-    }
+    .main { background-color: #121212; }
+    .title-text { text-align: center; color: #FFFFFF; font-size: 36px; font-weight: bold; margin-bottom: 20px; }
+    .time-banner { background-color: #1E1E24; padding: 10px; border-radius: 10px; border: 2px solid #FFD700; text-align: center; color: #FFD700; font-size: 18px; font-weight: bold; margin-bottom: 25px; }
+    .match-box { background-color: #1E1E1E; padding: 15px; border-radius: 15px; border: 1px solid #333333; margin-bottom: 15px; box-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+    .league-title { color: #888888; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+    .teams-title { color: #FFFFFF; font-size: 20px; font-weight: bold; margin: 5px 0; }
+    .time-badge { background-color: #D9534F; color: white; padding: 3px 8px; border-radius: 5px; font-size: 12px; font-weight: bold; display: inline-block; }
+    .tip-box { background-color: #5CB85C; color: white; padding: 10px; border-radius: 8px; text-align: center; font-weight: bold; margin-top: 10px; font-size: 16px; }
+    .cover-box { background-color: #F0AD4E; color: white; padding: 10px; border-radius: 8px; text-align: center; font-weight: bold; margin-top: 5px; font-size: 15px; }
+    .info-box { background-color: #1E1E24; padding: 20px; border-radius: 15px; border: 2px solid #FFD700; text-align: center; margin-bottom: 15px; }
+    .info-text { color: #FFFFFF; font-size: 22px; font-weight: bold; margin: 15px 0; }
     </style>
-    """, unsafe_allow_html=True)
+""", unsafe_allow_code=html=True)
 
-# --- 3. ΤΙΤΛΟΣ ---
-st.markdown("<h1>⚡ MARIOS PRO-BET PRO ⚡</h1>", unsafe_allow_html=True)
+st.markdown("<div class='title-text'>⚡ MARIOS PRO-BET PRO ⚡</div>", unsafe_allow_code=True)
 
-# --- 4. ΑΝΑΓΝΩΣΗ ΔΕΔΟΜΕΝΩΝ ---
-FILE_NAME = "daily_predictions.txt"
+filename = "daily_predictions.txt"
 
-if not os.path.exists(FILE_NAME):
-    st.error(f"❌ Το αρχείο {FILE_NAME} δεν βρέθηκε.")
-    st.info("Περίμενε να ολοκληρωθεί το GitHub Action.")
-else:
-    try:
-        with open(FILE_NAME, "r", encoding="utf-8") as f:
-            lines = [line.strip() for line in f.readlines() if line.strip()]
-            
-        if len(lines) >= 3:
-            # Κεφαλίδα ημερομηνίας
-            raw_header = lines[0].replace("-", "").strip()
-            st.markdown(f'<div class="info-container">📅 {raw_header}</div>', unsafe_allow_html=True)
-            
-            # Επεξεργασία αγώνων
-            for line in lines[2:]:
-                parts = line.split("|")
-                if len(parts) >= 5:
-                    league, teams, m_time, main_tip, cover_tip = parts
-                    
-                    # Αν δεν υπάρχει κάλυψη (π.χ. "-"), μην δείχνεις το κουτί
-                    cover_html = f'<div class="tip-box cover-tip">🛡️ {cover_tip}</div>' if cover_tip != "-" else ""
-                    
-                    st.markdown(f"""
-                    <div class="prediction-card">
-                        <span class="time-badge">🕒 {m_time}</span>
-                        <div class="league-title">🏆 {league}</div>
-                        <div class="teams-title">{teams}</div>
-                        <div class="tip-box main-tip">🎯 {main_tip}</div>
-                        {cover_html}
-                    </div>
-                    """, unsafe_allow_html=True)
+if os.path.exists(filename):
+    with open(filename, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+    
+    if lines:
+        # Παίρνουμε την ημερομηνία από την πρώτη γραμμή
+        timestamp = lines[0].replace("--- ΠΡΟΓΝΩΣΤΙΚΑ ", "").replace(" ---", "").strip()
+        st.markdown(f"<div class='time-banner'>📅 ΠΡΟΓΝΩΣΤΙΚΑ {timestamp}</div>", unsafe_allow_code=True)
+        
+        # Διαβάζουμε τους αγώνες (παρακάμπτοντας τις 2 πρώτες γραμμές επικεφαλίδας)
+        match_lines = lines[2:]
+        
+        # Έλεγχος αν υπάρχει μήνυμα INFO ή αν είναι άδεια η λίστα
+        if not match_lines or "INFO" in match_lines[0]:
+            st.markdown("""
+                <div class='info-box'>
+                    <span style='font-size: 30px;'>⏰</span>
+                    <div class='info-text'>Αναμονή για ενημέρωση αγώνων...</div>
+                    <div style='color: #888888;'>Το σύστημα ανανεώνει τις προβλέψεις αυτόματα κάθε 12 ώρες.</div>
+                </div>
+            """, unsafe_allow_code=True)
         else:
-            st.info("ℹ️ Δεν υπάρχουν προγραμματισμένοι αγώνες για σήμερα.")
-            
-    except Exception as e:
-        st.error(f"⚠️ Σφάλμα: {e}")
+            for line in match_lines:
+                if "|" in line:
+                    parts = line.strip().split("|")
+                    if len(parts) >= 5:
+                        league, match_name, match_time, tip, cover = parts[0], parts[1], parts[2], parts[3], parts[4]
+                        
+                        st.markdown(f"""
+                            <div class='match-box'>
+                                <div class='league-title'>🏆 {league}</div>
+                                <div class='teams-title'>{match_name}</div>
+                                <div class='time-badge'>🕒 {match_time}</div>
+                                <div class='tip-box'>🎯 {tip}</div>
+                                <div class='cover-box'>🛡️ {cover}</div>
+                            </div>
+                        """, unsafe_allow_code=True)
+else:
+    st.markdown("<div class='time-banner'>📅 ΠΡΟΓΝΩΣΤΙΚΑ --/--/---- --:--</div>", unsafe_allow_code=True)
+    st.info("Δεν έχει δημιουργηθεί ακόμα το αρχείο προβλέψεων. Παρακαλώ περιμένετε να τρέξει το GitHub Action.")
 
-# --- 5. FOOTER ---
-st.markdown("<br><p style='text-align: center; color: gray; font-size: 12px;'>Powered by Python & Football-Data API</p>", unsafe_allow_html=True)
-
+st.markdown("<p style='text-align: center; color: #555555; font-size: 12px; margin-top: 5px;'>Powered by Python & Football-Data API</p>", unsafe_allow_code=True)
