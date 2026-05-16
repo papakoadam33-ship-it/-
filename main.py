@@ -7,13 +7,13 @@ from datetime import datetime, timedelta
 API_KEY = "a963742bcd5642afbe8c842d057f25ad"
 HEADERS = { "X-Auth-Token": API_KEY }
 
-# Εδώ προσθέσαμε και τα 5 βασικά πρωταθλήματα της Ευρώπης
+# Τα 5 βασικά πρωταθλήματα
 LEAGUES = {
-    "PL": "PREMIER LEAGUE",  # Αγγλία
-    "PD": "LA LIGA",        # Ισπανία
-    "SA": "SERIE A",        # Ιταλία
-    "BL1": "BUNDESLIGA",    # Γερμανία
-    "FL1": "LIGUE 1"        # Γαλλία
+    "PL": "PREMIER LEAGUE",
+    "PD": "LA LIGA",
+    "SA": "SERIE A",
+    "BL1": "BUNDESLIGA",
+    "FL1": "LIGUE 1"
 }
 
 def poisson_probability(lmbda, k):
@@ -26,6 +26,7 @@ def get_advanced_stats(league_code):
     matches_url = f"https://api.football-data.org/v4/competitions/{league_code}/matches?status=FINISHED"
 
     try:
+        # 1. Βαθμολογία
         st_res = requests.get(standings_url, headers=HEADERS, timeout=15)
         if st_res.status_code == 200:
             for team in st_res.json()['standings'][0]['table']:
@@ -37,8 +38,9 @@ def get_advanced_stats(league_code):
                     'recent_goals_conceded': []
                 }
 
-        time.sleep(3)
+        time.sleep(6)
 
+        # 2. Φόρμα
         m_res = requests.get(matches_url, headers=HEADERS, timeout=15)
         if m_res.status_code == 200:
             for match in reversed(m_res.json()['matches'][-60:]):
@@ -82,13 +84,13 @@ def calculate_prediction(home, away, league_stats):
 
 def main():
     predictions = []
+    # Ώρα Ελλάδας (UTC+3)
     now_gr = datetime.utcnow() + timedelta(hours=3)
     today_str = now_gr.strftime("%Y-%m-%d")
-    tomorrow_str = (now_gr + timedelta(days=1)).strftime("%Y-%m-%d")
     
     for code, label in LEAGUES.items():
         l_stats = get_advanced_stats(code)
-        time.sleep(3)
+        time.sleep(6)
 
         url = f"https://api.football-data.org/v4/competitions/{code}/matches"
         try:
@@ -99,14 +101,15 @@ def main():
                     gr_dt = utc_dt + timedelta(hours=3)
                     match_date_str = gr_dt.strftime("%Y-%m-%d")
                     
-                    if match_date_str == today_str or match_date_str == tomorrow_str:
+                    # Κρατάμε ΜΟΝΟ τους αγώνες που η ημερομηνία τους είναι η σημερινή
+                    if match_date_str == today_str:
                         home, away = m['homeTeam']['name'], m['awayTeam']['name']
                         tip, cover = calculate_prediction(home, away, l_stats)
                         m_time = gr_dt.strftime("%d/%m %H:%M")
                         predictions.append(f"{label}|{home} - {away}|{m_time}|{tip}|{cover}")
         except:
             continue
-        time.sleep(3)
+        time.sleep(6)
 
     with open("daily_predictions.txt", "w", encoding="utf-8") as f:
         timestamp = now_gr.strftime("%d/%m/%Y %H:%M")
@@ -114,11 +117,10 @@ def main():
         f.write("ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΚΑΛΥΨΗ\n")
         
         if not predictions:
-            f.write("INFO|Δεν υπάρχουν προγραμματισμένοι αγώνες για σήμερα/αύριο.|-| - | - \n")
+            f.write("INFO|Δεν υπάρχουν προγραμματισμένοι αγώνες για σήμερα.|-| - | - \n")
         else:
             for p in predictions:
                 f.write(p + "\n")
 
 if __name__ == "__main__":
     main()
-
