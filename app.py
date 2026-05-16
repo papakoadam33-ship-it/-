@@ -4,24 +4,28 @@ import os
 # Ρύθμιση της σελίδας
 st.set_page_config(page_title="Marios Pro-Bet Pro", page_icon="⚡", layout="centered")
 
-# Στυλ για την εντυπωσιακή εμφάνιση (Dark Mode)
+# Στυλ για την εντυπωσιακή εμφάνιση (Dark Mode + Μαύρο Πλαίσιο Τίτλου)
 st.markdown("""
     <style>
     .main { background-color: #121212; }
     
-    /* Σωστή και καθαρή σχεδίαση της κεφαλίδας */
+    /* Πανέμορφο μαύρο πλαίσιο για τον τίτλο */
     .header-container { 
         text-align: center; 
+        background-color: #1E1E1E; 
+        padding: 20px 10px; 
+        border-radius: 15px; 
+        border: 1px solid #333333;
         margin-top: 10px;
         margin-bottom: 25px; 
-        padding: 10px;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
     }
     .title-text { 
         color: #FFFFFF !important; 
         font-size: 30px !important; 
         font-weight: 800 !important; 
-        margin-bottom: 5px !important; 
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+        margin-bottom: 8px !important; 
+        letter-spacing: 1px;
     }
     .model-text { 
         color: #FFD700 !important; 
@@ -29,6 +33,7 @@ st.markdown("""
         font-weight: bold !important; 
         font-style: italic !important;
         margin-top: 0px !important; 
+        letter-spacing: 0.5px;
     }
     
     .time-banner { background-color: #1E1E24; padding: 10px; border-radius: 10px; border: 2px solid #FFD700; text-align: center; color: #FFD700; font-size: 16px; font-weight: bold; margin-bottom: 25px; }
@@ -43,8 +48,13 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Εμφάνιση του τίτλου και του μοντέλου με εγγυημένο τρόπο εμφάνισης
-st.markdown("<div class='header-container'><div class='title-text'>⚡ MARIOS PRO-BET PRO ⚡</div><div class='model-text'>Poisson Distribution Model</div></div>", unsafe_allow_html=True)
+# Εμφάνιση της κεφαλίδας μέσα στο μαύρο πλαίσιο
+st.markdown("""
+    <div class='header-container'>
+        <div class='title-text'>⚡ MARIOS PRO-BET PRO ⚡</div>
+        <div class='model-text'>Poisson Distribution Model</div>
+    </div>
+""", unsafe_allow_html=True)
 
 filename = "daily_predictions.txt"
 
@@ -90,3 +100,4 @@ else:
     st.info("Δεν βρέθηκε το αρχείο daily_predictions.txt. Εκτελέστε το GitHub Action.")
 
 st.markdown("<p style='text-align: center; color: #555555; font-size: 12px; margin-top: 20px;'>Powered by Python & Football-Data API</p>", unsafe_allow_html=True)
+
