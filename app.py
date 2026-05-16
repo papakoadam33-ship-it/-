@@ -9,10 +9,27 @@ st.markdown("""
     <style>
     .main { background-color: #121212; }
     
-    /* Στυλ για τον τίτλο και το μοντέλο στην κεφαλίδα */
-    .header-container { text-align: center; margin-bottom: 25px; padding-top: 10px; }
-    .title-text { color: #FFFFFF; font-size: 32px; font-weight: bold; margin-bottom: 2px; letter-spacing: 1px; }
-    .model-text { color: #FFD700; font-size: 16px; font-weight: 500; font-style: italic; letter-spacing: 0.5px; margin-top: 0px; }
+    /* Σωστή και καθαρή σχεδίαση της κεφαλίδας */
+    .header-container { 
+        text-align: center; 
+        margin-top: 10px;
+        margin-bottom: 25px; 
+        padding: 10px;
+    }
+    .title-text { 
+        color: #FFFFFF !important; 
+        font-size: 30px !important; 
+        font-weight: 800 !important; 
+        margin-bottom: 5px !important; 
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+    }
+    .model-text { 
+        color: #FFD700 !important; 
+        font-size: 16px !important; 
+        font-weight: bold !important; 
+        font-style: italic !important;
+        margin-top: 0px !important; 
+    }
     
     .time-banner { background-color: #1E1E24; padding: 10px; border-radius: 10px; border: 2px solid #FFD700; text-align: center; color: #FFD700; font-size: 16px; font-weight: bold; margin-bottom: 25px; }
     .match-box { background-color: #1E1E1E; padding: 15px; border-radius: 15px; border: 1px solid #333333; margin-bottom: 15px; box-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
@@ -26,13 +43,8 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Εμφάνιση του τίτλου και του μοντέλου κεντραρισμένα
-st.markdown("""
-    <div class='header-container'>
-        <div class='title-text'>⚡ MARIOS PRO-BET PRO ⚡</div>
-        <div class='model-text'>Poisson Distribution Model</div>
-    </div>
-""", unsafe_allow_html=True)
+# Εμφάνιση του τίτλου και του μοντέλου με εγγυημένο τρόπο εμφάνισης
+st.markdown("<div class='header-container'><div class='title-text'>⚡ MARIOS PRO-BET PRO ⚡</div><div class='model-text'>Poisson Distribution Model</div></div>", unsafe_allow_html=True)
 
 filename = "daily_predictions.txt"
 
