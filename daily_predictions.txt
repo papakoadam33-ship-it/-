@@ -1,11 +1,3 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 16/05/2026 12:47 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 16/05/2026 17:09 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΚΑΛΥΨΗ
-BUNDESLIGA|SV Werder Bremen - Borussia Dortmund|16/05 16:30|Over 2.5 (66%)|GG (58%)
-BUNDESLIGA|1. FC Heidenheim 1846 - 1. FSV Mainz 05|16/05 16:30|Over 2.5 (84%)|GG (77%)
-BUNDESLIGA|SC Freiburg - RB Leipzig|16/05 16:30|Over 2.5 (76%)|GG (68%)
-BUNDESLIGA|Eintracht Frankfurt - VfB Stuttgart|16/05 16:30|Over 2.5 (92%)|GG (83%)
-BUNDESLIGA|FC St. Pauli 1910 - VfL Wolfsburg|16/05 16:30|Under 2.5 (60%)|No GG (60%)
-BUNDESLIGA|1. FC Union Berlin - FC Augsburg|16/05 16:30|Over 2.5 (84%)|GG (75%)
-BUNDESLIGA|Borussia Mönchengladbach - TSG 1899 Hoffenheim|16/05 16:30|2-3 Goals (55%)|No GG (52%)
-BUNDESLIGA|FC Bayern München - 1. FC Köln|16/05 16:30|Over 2.5 (95%)|GG (81%)
-BUNDESLIGA|Bayer 04 Leverkusen - Hamburger SV|16/05 16:30|Over 2.5 (83%)|GG (72%)
+INFO|Δεν υπάρχουν προγραμματισμένοι αγώνες για σήμερα.|-| - | - 
