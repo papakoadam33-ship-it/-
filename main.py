@@ -133,5 +133,5 @@ def main():
             for p in predictions:
                 f.write(p + "\n")
 
-if __name__ == "__main__":
+if __name__ == "__main__": 
     main()
