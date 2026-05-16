@@ -21,7 +21,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.markdown("<div class='title-text'>⚡ MARIOS PRO-BET PRO ⚡</div>", unsafe_allow_code=True)
+st.markdown("<div class='title-text'>⚡ MARIOS PRO-BET PRO ⚡</div>", unsafe_allow_html=True)
 
 filename = "daily_predictions.txt"
 
