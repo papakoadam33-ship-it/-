@@ -72,7 +72,7 @@ if os.path.exists(filename):
             st.markdown("""
                 <div class='info-box'>
                     <span style='font-size: 30px;'>⏰</span>
-                    <div class='info-text'>Αναμονή για ενημέρωση αγώνων...</div>
+                    <div class='info-text'>Δεν υπάρχουν προγραμματισμένοι αγώνες για σήμερα.</div>
                     <div style='color: #888888;'>Το σύστημα ανανεώνει τις προβλέψεις αυτόματα.</div>
                 </div>
             """, unsafe_allow_html=True)
