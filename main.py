@@ -7,20 +7,14 @@ from datetime import datetime, timedelta
 API_KEY = "a963742bcd5642afbe8c842d057f25ad"
 HEADERS = { "X-Auth-Token": API_KEY }
 
-# ΟΛΑ τα διαθέσιμα πρωταθλήματα του Free Tier
+# Προσθέσαμε το FL2 για να πιάνει τη Ligue 2 (Σεντ Ετιέν)
 LEAGUES = {
     "PL": "PREMIER LEAGUE",
-    "ELC": "CHAMPIONSHIP",
     "PD": "LA LIGA",
     "SA": "SERIE A",
     "BL1": "BUNDESLIGA",
     "FL1": "LIGUE 1",
-    "FL2": "LIGUE 2",
-    "DED": "EREDIVISIE",
-    "PPL": "PRIMEIRA LIGA",
-    "BSA": "SERIE A BRAZIL",
-    "CL": "CHAMPIONS LEAGUE",
-    "WC": "WORLD CUP"
+    "FL2": "LIGUE 2" 
 }
 
 def poisson_probability(lmbda, k):
@@ -88,6 +82,7 @@ def calculate_prediction(home, away, league_stats):
 
 def main():
     predictions = []
+    # Ώρα Ελλάδας (UTC+3)
     now_gr = datetime.utcnow() + timedelta(hours=3)
     today_str = now_gr.strftime("%Y-%m-%d")
     
@@ -99,10 +94,11 @@ def main():
         try:
             res = requests.get(url, headers=HEADERS).json()
             for m in res.get('matches', []):
+                # Μετατροπή UTC σε Ελλάδα για το φιλτράρισμα ημερομηνίας
                 utc_dt = datetime.strptime(m['utcDate'], "%Y-%m-%dT%H:%M:%SZ")
                 gr_dt = utc_dt + timedelta(hours=3)
                 
-                # Φιλτράρισμα μόνο για σήμερα
+                # ΦΙΛΤΡΟ: Μόνο για σήμερα 15/05/2026
                 if gr_dt.strftime("%Y-%m-%d") == today_str:
                     home, away = m['homeTeam']['name'], m['awayTeam']['name']
                     tip, cover = calculate_prediction(home, away, l_stats)
@@ -126,4 +122,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
