@@ -4,19 +4,17 @@ import time
 from datetime import datetime, timedelta
 
 # --- ΡΥΘΜΙΣΕΙΣ ---
-# Το κλειδί σου από το RapidAPI
-RAPID_API_KEY = "47d5da2fb8mshde110deccc94426p115d5ajsnd9cc939fa561"
-HOST = "api-football-v1.p.rapidapi.com"
+# Το αρχικό σου κλειδί για το Football-Data API
+API_KEY = "a963742bcd5642afbe8c842d057f25ad"
+HEADERS = { "X-Auth-Token": API_KEY }
 
-# Τα σωστά ID πρωταθλημάτων για το API-Football (Μαζί με Ελλάδα και Ligue 2!)
+# Λίστα με τα μεγάλα πρωταθλήματα που υποστηρίζει το δωρεάν πακέτο
 LEAGUES = {
-    "197": "GREECE SUPER LEAGUE",
-    "62": "LIGUE 2 (FRANCE)",
-    "39": "PREMIER LEAGUE",
-    "140": "LA LIGA",
-    "135": "SERIE A",
-    "78": "BUNDESLIGA",
-    "61": "LIGUE 1"
+    "PL": "PREMIER LEAGUE",
+    "PD": "LA LIGA",
+    "SA": "SERIE A",
+    "BL1": "BUNDESLIGA",
+    "FL1": "LIGUE 1"
 }
 
 def poisson_probability(lmbda, k):
@@ -24,40 +22,56 @@ def poisson_probability(lmbda, k):
     if lmbda <= 0: return 0
     return (math.exp(-lmbda) * (lmbda**k)) / math.factorial(k)
 
-def get_advanced_stats(league_id):
-    """Φέρνει στατιστικά για τις ομάδες από το API-Football v3"""
+def get_advanced_stats(league_code):
+    """Φέρνει στατιστικά βαθμολογίας και πρόσφατης φόρμας"""
     stats = {}
-    url = f"https://{HOST}/v3/standings"
-    querystring = {"league": league_id, "season": "2025"}
-    headers = {"x-rapidapi-key": RAPID_API_KEY, "x-rapidapi-host": HOST}
-    
+    standings_url = f"https://api.football-data.org/v4/competitions/{league_code}/standings"
+    matches_url = f"https://api.football-data.org/v4/competitions/{league_code}/matches?status=FINISHED"
+
     try:
-        res = requests.get(url, headers=headers, params=querystring, timeout=15).json()
-        standings = res['response'][0]['league']['standings'][0]
-        
-        for row in standings:
-            team_name = row['team']['name']
-            played = row['all']['played']
-            if played > 0:
-                stats[team_name] = {
-                    'overall_avg_scored': row['all']['goals']['for'] / played,
-                    'overall_avg_conceded': row['all']['goals']['against'] / played
+        # 1. Βαθμολογία για γενικούς μέσους όρους
+        st_res = requests.get(standings_url, headers=HEADERS, timeout=15)
+        if st_res.status_code == 200:
+            for team in st_res.json()['standings'][0]['table']:
+                name = team['team']['name']
+                stats[name] = {
+                    'overall_avg_scored': team['goalsFor'] / team['playedGames'],
+                    'overall_avg_conceded': team['goalsAgainst'] / team['playedGames'],
+                    'recent_goals_scored': [],
+                    'recent_goals_conceded': []
                 }
+
+        # 2. Φόρμα τελευταίων αγώνων
+        m_res = requests.get(matches_url, headers=HEADERS, timeout=15)
+        if m_res.status_code == 200:
+            for match in reversed(m_res.json()['matches'][-100:]):
+                h_team, a_team = match['homeTeam']['name'], match['awayTeam']['name']
+                h_score, a_score = match['score']['fullTime']['home'], match['score']['fullTime']['away']
+
+                if h_team in stats and len(stats[h_team]['recent_goals_scored']) < 5:
+                    stats[h_team]['recent_goals_scored'].append(h_score)
+                    stats[h_team]['recent_goals_conceded'].append(a_score)
+                if a_team in stats and len(stats[a_team]['recent_goals_scored']) < 5:
+                    stats[a_team]['recent_goals_scored'].append(a_score)
+                    stats[a_team]['recent_goals_conceded'].append(h_score)
         return stats
     except:
         return {}
 
 def calculate_prediction(home, away, league_stats):
-    """Υπολογίζει Over 2.5 και GG με την κατανομή Poisson"""
+    """Υπολογίζει το Over 2.5 και το GG βασισμένο σε στατιστικά"""
     if home not in league_stats or away not in league_stats:
         return "2-3 Goals (55%)", "GG (58%)"
 
-    h_s = league_stats[home]
-    a_s = league_stats[away]
+    h_s, a_s = league_stats[home], league_stats[away]
+    
+    def get_val(recent, overall):
+        r_avg = sum(recent)/len(recent) if recent else overall
+        return (r_avg * 0.7) + (overall * 0.3)
 
-    # Υπολογισμός αναμενόμενων γκολ (Lambda)
-    l_h = h_s['overall_avg_scored'] * (a_s['overall_avg_conceded'] / 1.2)
-    l_a = a_s['overall_avg_scored'] * (h_s['overall_avg_conceded'] / 1.2)
+    # Εκτίμηση γκολ (Λάμδα)
+    l_h = get_val(h_s['recent_goals_scored'], h_s['overall_avg_scored']) * (get_val(a_s['recent_goals_conceded'], a_s['overall_avg_conceded']) / 1.3)
+    l_a = get_val(a_s['recent_goals_scored'], a_s['overall_avg_scored']) * (get_val(h_s['recent_goals_conceded'], h_s['overall_avg_conceded']) / 1.3)
     l_total = l_h + l_a
 
     # Πιθανότητα Over 2.5
@@ -77,37 +91,37 @@ def calculate_prediction(home, away, league_stats):
 
 def main():
     predictions = []
+    # Ώρα Ελλάδας (UTC+3)
     now_gr = datetime.utcnow() + timedelta(hours=3)
-    today = now_gr.strftime("%Y-%m-%d")
-    tomorrow = (now_gr + timedelta(days=1)).strftime("%Y-%m-%d")
+    today_str = now_gr.strftime("%Y-%m-%d")
+    tomorrow_str = (now_gr + timedelta(days=1)).strftime("%Y-%m-%d")
     
-    for league_id, label in LEAGUES.items():
-        l_stats = get_advanced_stats(league_id)
-        time.sleep(1.5) # Καθυστέρηση για να μην μας μπλοκάρει το API
-        
-        url = f"https://{HOST}/v3/fixtures"
-        querystring = {"league": league_id, "season": "2025", "from": today, "to": tomorrow}
-        headers = {"x-rapidapi-key": RAPID_API_KEY, "x-rapidapi-host": HOST}
-        
+    for code, label in LEAGUES.items():
+        l_stats = get_advanced_stats(code)
+        time.sleep(2) # Σεβασμός στο Rate Limit του API
+
+        # Ψάχνουμε τους αγώνες
+        url = f"https://api.football-data.org/v4/competitions/{code}/matches"
         try:
-            res = requests.get(url, headers=headers, params=querystring).json()
-            for m in res.get('response', []):
-                home = m['teams']['home']['name']
-                away = m['teams']['away']['name']
-                
-                # Μετατροπή ώρας σε Ελλάδας
-                utc_dt = datetime.fromisoformat(m['fixture']['date'].replace('Z', '+00:00'))
-                gr_dt = utc_dt + timedelta(hours=3)
-                
-                tip, cover = calculate_prediction(home, away, l_stats)
-                display_time = gr_dt.strftime("%d/%m %H:%M")
-                
-                predictions.append(f"{label}|{home} - {away}|{display_time}|{tip}|{cover}")
+            res = requests.get(url, headers=HEADERS).json()
+            for m in res.get('matches', []):
+                # Φιλτράρουμε μόνο SCHEDULED αγώνες για σήμερα και αύριο
+                if m['status'] == 'SCHEDULED':
+                    utc_dt = datetime.strptime(m['utcDate'], "%Y-%m-%dT%H:%M:%SZ")
+                    gr_dt = utc_dt + timedelta(hours=3)
+                    match_date_str = gr_dt.strftime("%Y-%m-%d")
+                    
+                    if match_date_str == today_str or match_date_str == tomorrow_str:
+                        home, away = m['homeTeam']['name'], m['awayTeam']['name']
+                        tip, cover = calculate_prediction(home, away, l_stats)
+                        
+                        m_time = gr_dt.strftime("%d/%m %H:%M")
+                        predictions.append(f"{label}|{home} - {away}|{m_time}|{tip}|{cover}")
         except:
             continue
-        time.sleep(1.5)
+        time.sleep(2)
 
-    # Εγγραφή στο αρχείο daily_predictions.txt
+    # Εγγραφή στο αρχείο που διαβάζει το Streamlit
     with open("daily_predictions.txt", "w", encoding="utf-8") as f:
         timestamp = now_gr.strftime("%d/%m/%Y %H:%M")
         f.write(f"--- ΠΡΟΓΝΩΣΤΙΚΑ {timestamp} ---\n")
@@ -121,4 +135,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
