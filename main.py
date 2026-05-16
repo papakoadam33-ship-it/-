@@ -7,11 +7,13 @@ from datetime import datetime, timedelta
 API_KEY = "a963742bcd5642afbe8c842d057f25ad"
 HEADERS = { "X-Auth-Token": API_KEY }
 
-# Χρησιμοποιούμε τις 3 πιο δυνατές λίγκες για να είμαστε 100% σίγουροι ότι δεν θα φάμε μπλοκάρισμα
+# Εδώ προσθέσαμε και τα 5 βασικά πρωταθλήματα της Ευρώπης
 LEAGUES = {
-    "PL": "PREMIER LEAGUE",
-    "PD": "LA LIGA",
-    "SA": "SERIE A"
+    "PL": "PREMIER LEAGUE",  # Αγγλία
+    "PD": "LA LIGA",        # Ισπανία
+    "SA": "SERIE A",        # Ιταλία
+    "BL1": "BUNDESLIGA",    # Γερμανία
+    "FL1": "LIGUE 1"        # Γαλλία
 }
 
 def poisson_probability(lmbda, k):
@@ -24,7 +26,6 @@ def get_advanced_stats(league_code):
     matches_url = f"https://api.football-data.org/v4/competitions/{league_code}/matches?status=FINISHED"
 
     try:
-        # 1. Βαθμολογία
         st_res = requests.get(standings_url, headers=HEADERS, timeout=15)
         if st_res.status_code == 200:
             for team in st_res.json()['standings'][0]['table']:
@@ -36,9 +37,8 @@ def get_advanced_stats(league_code):
                     'recent_goals_conceded': []
                 }
 
-        time.sleep(3) # Περισσότερη αναμονή για να μην κολλάει το API
+        time.sleep(3)
 
-        # 2. Φόρμα
         m_res = requests.get(matches_url, headers=HEADERS, timeout=15)
         if m_res.status_code == 200:
             for match in reversed(m_res.json()['matches'][-60:]):
@@ -77,7 +77,7 @@ def calculate_prediction(home, away, league_stats):
     elif prob_over < 40: tip = f"Under 2.5 ({int(100-prob_over)}%)"
     else: tip = f"2-3 Goals (55%)"
 
-    cover = f"GG ({int(prob_gg)}%)" if prob_gg > 50 else f"No GG ({int(100-gg)}%)"
+    cover = f"GG ({int(prob_gg)}%)" if prob_gg > 50 else f"No GG ({int(100-prob_gg)}%)"
     return tip, cover
 
 def main():
@@ -88,7 +88,7 @@ def main():
     
     for code, label in LEAGUES.items():
         l_stats = get_advanced_stats(code)
-        time.sleep(3) # Καθυστέρηση ασφαλείας
+        time.sleep(3)
 
         url = f"https://api.football-data.org/v4/competitions/{code}/matches"
         try:
@@ -114,7 +114,7 @@ def main():
         f.write("ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΚΑΛΥΨΗ\n")
         
         if not predictions:
-            f.write("INFO|Δεν υπάρχουν προγραμματισμένοι αγώνες.|-| - | - \n")
+            f.write("INFO|Δεν υπάρχουν προγραμματισμένοι αγώνες για σήμερα/αύριο.|-| - | - \n")
         else:
             for p in predictions:
                 f.write(p + "\n")
