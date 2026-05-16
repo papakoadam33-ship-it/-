@@ -4,11 +4,11 @@ import time
 from datetime import datetime, timedelta
 
 # --- ΡΥΘΜΙΣΕΙΣ ---
-# Το νέο σου κλειδί από το RapidAPI
+# Το κλειδί σου από το RapidAPI
 RAPID_API_KEY = "47d5da2fb8mshde110deccc94426p115d5ajsnd9cc939fa561"
 HOST = "api-football-v1.p.rapidapi.com"
 
-# Εδώ βάλαμε τα ID των πρωταθλημάτων για το API-Football (Μαζί με Ελλάδα και Ligue 2!)
+# Τα σωστά ID πρωταθλημάτων για το API-Football (Μαζί με Ελλάδα και Ligue 2!)
 LEAGUES = {
     "197": "GREECE SUPER LEAGUE",
     "62": "LIGUE 2 (FRANCE)",
@@ -25,7 +25,7 @@ def poisson_probability(lmbda, k):
     return (math.exp(-lmbda) * (lmbda**k)) / math.factorial(k)
 
 def get_advanced_stats(league_id):
-    """Φέρνει στατιστικά για τις ομάδες από το API-Football"""
+    """Φέρνει στατιστικά για τις ομάδες από το API-Football v3"""
     stats = {}
     url = f"https://{HOST}/v3/standings"
     querystring = {"league": league_id, "season": "2025"}
@@ -79,12 +79,11 @@ def main():
     predictions = []
     now_gr = datetime.utcnow() + timedelta(hours=3)
     today = now_gr.strftime("%Y-%m-%d")
-    # Κοιτάμε σήμερα και αύριο για να μην είναι άδεια η σελίδα
     tomorrow = (now_gr + timedelta(days=1)).strftime("%Y-%m-%d")
     
     for league_id, label in LEAGUES.items():
         l_stats = get_advanced_stats(league_id)
-        time.sleep(1)
+        time.sleep(1.5) # Καθυστέρηση για να μην μας μπλοκάρει το API
         
         url = f"https://{HOST}/v3/fixtures"
         querystring = {"league": league_id, "season": "2025", "from": today, "to": tomorrow}
@@ -106,9 +105,9 @@ def main():
                 predictions.append(f"{label}|{home} - {away}|{display_time}|{tip}|{cover}")
         except:
             continue
-        time.sleep(1)
+        time.sleep(1.5)
 
-    # Εγγραφή στο αρχείο
+    # Εγγραφή στο αρχείο daily_predictions.txt
     with open("daily_predictions.txt", "w", encoding="utf-8") as f:
         timestamp = now_gr.strftime("%d/%m/%Y %H:%M")
         f.write(f"--- ΠΡΟΓΝΩΣΤΙΚΑ {timestamp} ---\n")
@@ -122,3 +121,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
