@@ -4,29 +4,32 @@ import time
 from datetime import datetime, timedelta
 
 # --- ΡΥΘΜΙΣΕΙΣ ---
+# Το κλειδί σου για το Football-Data API
 API_KEY = "a963742bcd5642afbe8c842d057f25ad"
 HEADERS = { "X-Auth-Token": API_KEY }
 
-# Προσθέσαμε το FL2 για να πιάνει τη Ligue 2 (Σεντ Ετιέν)
+# Λίστα με τα πρωταθλήματα που υποστηρίζει το δωρεάν πακέτο
 LEAGUES = {
     "PL": "PREMIER LEAGUE",
     "PD": "LA LIGA",
     "SA": "SERIE A",
     "BL1": "BUNDESLIGA",
-    "FL1": "LIGUE 1",
-    "FL2": "LIGUE 2" 
+    "FL1": "LIGUE 1"
 }
 
 def poisson_probability(lmbda, k):
+    """Υπολογισμός πιθανότητας με κατανομή Poisson"""
     if lmbda <= 0: return 0
     return (math.exp(-lmbda) * (lmbda**k)) / math.factorial(k)
 
 def get_advanced_stats(league_code):
+    """Φέρνει στατιστικά βαθμολογίας και πρόσφατης φόρμας"""
     stats = {}
     standings_url = f"https://api.football-data.org/v4/competitions/{league_code}/standings"
     matches_url = f"https://api.football-data.org/v4/competitions/{league_code}/matches?status=FINISHED"
 
     try:
+        # 1. Βαθμολογία για γενικούς μέσους όρους
         st_res = requests.get(standings_url, headers=HEADERS, timeout=15)
         if st_res.status_code == 200:
             for team in st_res.json()['standings'][0]['table']:
@@ -38,6 +41,7 @@ def get_advanced_stats(league_code):
                     'recent_goals_conceded': []
                 }
 
+        # 2. Φόρμα τελευταίων αγώνων
         m_res = requests.get(matches_url, headers=HEADERS, timeout=15)
         if m_res.status_code == 200:
             for match in reversed(m_res.json()['matches'][-100:]):
@@ -55,6 +59,7 @@ def get_advanced_stats(league_code):
         return {}
 
 def calculate_prediction(home, away, league_stats):
+    """Υπολογίζει το Over 2.5 και το GG βασισμένο σε στατιστικά"""
     if home not in league_stats or away not in league_stats:
         return "2-3 Goals (55%)", "GG (58%)"
 
@@ -64,12 +69,16 @@ def calculate_prediction(home, away, league_stats):
         r_avg = sum(recent)/len(recent) if recent else overall
         return (r_avg * 0.7) + (overall * 0.3)
 
+    # Εκτίμηση γκολ (Λάμδα)
     l_h = get_val(h_s['recent_goals_scored'], h_s['overall_avg_scored']) * (get_val(a_s['recent_goals_conceded'], a_s['overall_avg_conceded']) / 1.3)
     l_a = get_val(a_s['recent_goals_scored'], a_s['overall_avg_scored']) * (get_val(h_s['recent_goals_conceded'], h_s['overall_avg_conceded']) / 1.3)
     l_total = l_h + l_a
 
+    # Πιθανότητα Over 2.5
     prob_under_2_5 = sum(poisson_probability(l_total, k) for k in range(3))
     prob_over = (1 - prob_under_2_5) * 100
+    
+    # Πιθανότητα GG
     prob_gg = (1 - poisson_probability(l_h, 0)) * (1 - poisson_probability(l_a, 0)) * 100
 
     if prob_over > 60: tip = f"Over 2.5 ({int(prob_over)}%)"
@@ -88,7 +97,7 @@ def main():
     
     for code, label in LEAGUES.items():
         l_stats = get_advanced_stats(code)
-        time.sleep(2) 
+        time.sleep(2) # Σεβασμός στο Rate Limit του API
 
         url = f"https://api.football-data.org/v4/competitions/{code}/matches?status=SCHEDULED"
         try:
@@ -98,7 +107,6 @@ def main():
                 utc_dt = datetime.strptime(m['utcDate'], "%Y-%m-%dT%H:%M:%SZ")
                 gr_dt = utc_dt + timedelta(hours=3)
                 
-                # ΦΙΛΤΡΟ: Μόνο για σήμερα 15/05/2026
                 if gr_dt.strftime("%Y-%m-%d") == today_str:
                     home, away = m['homeTeam']['name'], m['awayTeam']['name']
                     tip, cover = calculate_prediction(home, away, l_stats)
@@ -109,6 +117,7 @@ def main():
             continue
         time.sleep(2)
 
+    # Εγγραφή στο αρχείο που διαβάζει το Streamlit
     with open("daily_predictions.txt", "w", encoding="utf-8") as f:
         timestamp = now_gr.strftime("%d/%m/%Y %H:%M")
         f.write(f"--- ΠΡΟΓΝΩΣΤΙΚΑ {timestamp} ---\n")
