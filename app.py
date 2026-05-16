@@ -103,3 +103,4 @@ else:
 
 # --- 5. FOOTER ---
 st.markdown("<br><p style='text-align: center; color: gray; font-size: 12px;'>Powered by Python & Football-Data API</p>", unsafe_allow_html=True)
+
