@@ -1,136 +1,136 @@
-import streamlit as st
-import os
+import requests
+import math
+import time
+from datetime import datetime, timedelta
 
-# Ρύθμιση της σελίδας με το νέο εικονίδιο Μπάλας Ποδοσφαίρου
-st.set_page_config(page_title="Marios Pro-Bet Pro", page_icon="https://img.icons8.com/emoji/96/soccer-ball-emoji.png", layout="centered")
+# --- ΡΥΘΜΙΣΕΙΣ ---
+API_KEY = "a963742bcd5642afbe8c842d057f25ad"
+HEADERS = { "X-Auth-Token": API_KEY }
 
-# Έξυπνο HTML κόλπο για να εξαναγκάσουμε τα κινητά να δουν τη μπάλα ποδοσφαίρου ως εικονίδιο συντόμευσης
-st.markdown("""
-    <head>
-        <link rel="icon" type="image/png" href="https://img.icons8.com/emoji/96/soccer-ball-emoji.png">
-        <link rel="apple-touch-icon" href="https://img.icons8.com/emoji/96/soccer-ball-emoji.png">
-    </head>
-""", unsafe_allow_html=True)
+LEAGUES = {
+    "PL": "PREMIER LEAGUE",
+    "PD": "LA LIGA",
+    "SA": "SERIE A",
+    "BL1": "BUNDESLIGA",
+    "FL1": "LIGUE 1",
+    "WC": "WORLD CUP"
+}
 
-# Επιβολή μόνιμου Dark Mode και στυλ της εφαρμογής
-st.markdown("""
-    <style>
-    /* Κλείδωμα μαύρου φόντου παντού */
-    html, body, [data-testid="stAppViewContainer"], [data-testid="stHeader"], [data-testid="stCanvasBackground"] {
-        background-color: #121212 !important;
-    }
-    
-    /* Πανέμορφο μαύρο πλαίσιο για τον τίτλο */
-    .custom-header { 
-        text-align: center; 
-        background-color: #1E1E1E !important; 
-        padding: 20px 10px !important; 
-        border-radius: 15px !important; 
-        border: 1px solid #333333 !important;
-        margin-top: 10px !important;
-        margin-bottom: 25px !important; 
-        box-shadow: 2px 2px 10px rgba(0,0,0,0.5) !important;
-    }
-    .title-text { color: #FFFFFF !important; font-size: 30px !important; font-weight: 800 !important; margin-bottom: 8px !important; letter-spacing: 1px !important; }
-    .model-text { color: #FFD700 !important; font-size: 16px !important; font-weight: bold !important; font-style: italic !important; margin-top: 0px !important; letter-spacing: 0.5px !important; }
-    
-    /* Διαχωριστικοί Τίτλοι για Κατηγορίες */
-    .section-title { color: #FFD700 !important; font-size: 20px !important; font-weight: bold !important; margin: 25px 0 15px 0 !important; border-left: 4px solid #FFD700 !important; padding-left: 10px !important; text-transform: uppercase !important; }
-    .section-title-vip { color: #FF4D4D !important; font-size: 22px !important; font-weight: bold !important; margin: 25px 0 15px 0 !important; border-left: 4px solid #FF4D4D !important; padding-left: 10px !important; text-transform: uppercase !important; }
+def poisson_probability(lmbda, k):
+    if lmbda <= 0: return 0
+    return (math.exp(-lmbda) * (lmbda**k)) / math.factorial(k)
 
-    .time-banner { background-color: #1E1E24 !important; padding: 10px !important; border-radius: 10px !important; border: 2px solid #FFD700 !important; text-align: center !important; color: #FFD700 !important; font-size: 16px !important; font-weight: bold !important; margin-bottom: 25px !important; }
-    
-    /* Κουτιά Αγώνων */
-    .match-box { background-color: #1E1E1E !important; padding: 15px !important; border-radius: 15px !important; border: 1px solid #333333 !important; margin-bottom: 15px !important; box-shadow: 2px 2px 10px rgba(0,0,0,0.5) !important; }
-    .match-box-vip { background-color: #221A00 !important; padding: 15px !important; border-radius: 15px !important; border: 2px solid #FFD700 !important; margin-bottom: 15px !important; box-shadow: 0px 0px 15px rgba(255, 215, 0, 0.3) !important; }
-    
-    .league-title { color: #FFD700 !important; font-size: 13px !important; font-weight: bold !important; text-transform: uppercase !important; letter-spacing: 1px !important; }
-    .teams-title { color: #FFFFFF !important; font-size: 22px !important; font-weight: bold !important; margin: 5px 0 !important; }
-    .time-badge { background-color: #D9534F !important; color: white !important; padding: 3px 8px !important; border-radius: 5px !important; font-size: 13px !important; font-weight: bold !important; display: inline-block !important; margin-bottom: 10px !important; }
-    
-    .tip-box { background-color: #5CB85C !important; color: white !important; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; margin-top: 10px; font-size: 17px; }
-    .tip-box-vip { background-color: #D4AF37 !important; color: black !important; padding: 12px; border-radius: 8px; text-align: center; font-weight: 900; margin-top: 10px; font-size: 18px; text-transform: uppercase; box-shadow: 0px 4px 6px rgba(0,0,0,0.2); }
-    
-    .cover-box { background-color: #E67E22 !important; color: white !important; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; margin-top: 8px; font-size: 16px; }
-    .info-box { background-color: #1E1E1E !important; padding: 20px; border-radius: 15px; border: 1px solid #333333; text-align: center; margin-bottom: 15px; }
-    .info-text { color: #FFFFFF !important; font-size: 20px; font-weight: bold; margin: 15px 0; }
-    </style>
-""", unsafe_allow_html=True)
+def get_advanced_stats(league_code):
+    stats = {}
+    standings_url = f"https://api.football-data.org/v4/competitions/{league_code}/standings"
+    matches_url = f"https://api.football-data.org/v4/competitions/{league_code}/matches?status=FINISHED"
 
-# Κεφαλίδα της εφαρμογής
-st.markdown("""
-    <div class="custom-header">
-        <div class="title-text">⚡ MARIOS PRO-BET PRO ⚡</div>
-        <div class="model-text">Poisson Distribution Model</div>
-    </div>
-""", unsafe_allow_html=True)
+    try:
+        st_res = requests.get(standings_url, headers=HEADERS, timeout=15)
+        if st_res.status_code == 200:
+            data = st_res.json()
+            for standing in data.get('standings', []):
+                for team in standing.get('table', []):
+                    name = team['team']['name']
+                    stats[name] = {
+                        'overall_avg_scored': team['goalsFor'] / team['playedGames'] if team['playedGames'] > 0 else 1.0,
+                        'overall_avg_conceded': team['goalsAgainst'] / team['playedGames'] if team['playedGames'] > 0 else 1.0,
+                        'recent_goals_scored': [],
+                        'recent_goals_conceded': []
+                    }
 
-filename = "daily_predictions.txt"
+        time.sleep(6)
 
-if os.path.exists(filename):
-    with open(filename, "r", encoding="utf-8") as f:
-        lines = f.readlines()
+        m_res = requests.get(matches_url, headers=HEADERS, timeout=15)
+        if m_res.status_code == 200:
+            for match in reversed(m_res.json().get('matches', [])[-60:]):
+                h_team, a_team = match['homeTeam']['name'], match['awayTeam']['name']
+                if match['score']['fullTime']['home'] is not None:
+                    h_score = match['score']['fullTime']['home']
+                    a_score = match['score']['fullTime']['away']
+
+                    if h_team in stats and len(stats[h_team]['recent_goals_scored']) < 5:
+                        stats[h_team]['recent_goals_scored'].append(h_score)
+                        stats[h_team]['recent_goals_conceded'].append(a_score)
+                    if a_team in stats and len(stats[a_team]['recent_goals_scored']) < 5:
+                        stats[a_team]['recent_goals_scored'].append(a_score)
+                        stats[a_team]['recent_goals_conceded'].append(h_score)
+        return stats
+    except:
+        return {}
+
+def calculate_prediction(home, away, league_stats):
+    if home not in league_stats or away not in league_stats:
+        return "2-3 Goals", 55, "GG (58%)"
+
+    h_s, a_s = league_stats[home], league_stats[away]
     
-    if lines and len(lines) > 1:
-        timestamp = lines[0].replace("--- ΠΡΟΓΝΩΣΤΙΚΑ ", "").replace(" ---", "").strip()
-        st.markdown(f"<div class='time-banner'>📅 ΠΡΟΓΝΩΣΤΙΚΑ {timestamp}</div>", unsafe_allow_html=True)
-        
-        match_lines = lines[2:]
-        
-        if not match_lines or "INFO" in match_lines[0]:
-            st.markdown("""
-                <div class='info-box'>
-                    <span style='font-size: 30px;'>⏰</span>
-                    <div class='info-text'>Δεν υπάρχουν προγραμματισμένοι αγώνες για σήμερα.</div>
-                    <div style='color: #888888;'>Το σύστημα ανανεώνει τις προβλέψεις αυτόματα.</div>
-                </div>
-            """, unsafe_allow_html=True)
-        else:
-            vip_picks = []
-            normal_picks = []
-            
-            for line in match_lines:
-                if "|" in line:
-                    parts = line.strip().split("|")
-                    if len(parts) >= 6:
-                        league, match_name, match_time, tip, pct, cover = parts[0], parts[1], parts[2], parts[3], int(parts[4]), parts[5]
-                        item = (league, match_name, match_time, tip, pct, cover)
-                        
-                        if pct >= 65:
-                            vip_picks.append(item)
-                        else:
-                            normal_picks.append(item)
-            
-            # 1. VIP PICKS
-            if vip_picks:
-                st.markdown("<div class='section-title-vip'>🔥 VIP PICKS (ΥΨΗΛΟ ΠΟΣΟΣΤΟ >=65%)</div>", unsafe_allow_html=True)
-                for league, match_name, match_time, tip, pct, cover in vip_picks:
-                    st.markdown(f"""
-                        <div class='match-box-vip'>
-                            <div class='league-title'>🏆 {league} [VIP]</div>
-                            <div class='teams-title'>{match_name}</div>
-                            <div class='time-badge'>🕒 {match_time}</div>
-                            <div class='tip-box-vip'>👑 {tip} ({pct}%)</div>
-                            <div class='cover-box'>🛡️ {cover}</div>
-                        </div>
-                    """, unsafe_allow_html=True)
-            
-            # 2. ΥΠΟΛΟΙΠΟΙ ΑΓΩΝΕΣ
-            if normal_picks:
-                st.markdown("<div class='section-title'>⚽ ΥΠΟΛΟΙΠΟΙ ΣΗΜΕΡΙΝΟΙ ΑΓΩΝΕΣ</div>", unsafe_allow_html=True)
-                for league, match_name, match_time, tip, pct, cover in normal_picks:
-                    st.markdown(f"""
-                        <div class='match-box'>
-                            <div class='league-title'>🏆 {league}</div>
-                            <div class='teams-title'>{match_name}</div>
-                            <div class='time-badge'>🕒 {match_time}</div>
-                            <div class='tip-box'>🎯 {tip} ({pct}%)</div>
-                            <div class='cover-box'>🛡️ {cover}</div>
-                        </div>
-                    """, unsafe_allow_html=True)
+    def get_val(recent, overall):
+        r_avg = sum(recent)/len(recent) if recent else overall
+        return (r_avg * 0.7) + (overall * 0.3)
+
+    l_h = get_val(h_s['recent_goals_scored'], h_s['overall_avg_scored']) * (get_val(a_s['recent_goals_conceded'], a_s['overall_avg_conceded']) / 1.3)
+    l_a = get_val(a_s['recent_goals_scored'], a_s['overall_avg_scored']) * (get_val(h_s['recent_goals_conceded'], h_s['overall_avg_conceded']) / 1.3)
+    l_total = l_h + l_a
+
+    prob_under_2_5 = sum(poisson_probability(l_total, k) for k in range(3))
+    prob_over = (1 - prob_under_2_5) * 100
+    prob_2_3 = (poisson_probability(l_total, 2) + poisson_probability(l_total, 3)) * 100
+    prob_gg = (1 - poisson_probability(l_h, 0)) * (1 - poisson_probability(l_a, 0)) * 100
+
+    # Δυναμική επιλογή σημείου με βάση το μεγαλύτερο ποσοστό
+    if prob_over > 60:
+        tip = "Over 2.5"
+        pct = int(prob_over)
+    elif prob_over < 40:
+        tip = "Under 2.5"
+        pct = int(100 - prob_over)
     else:
-        st.markdown("<div class='time-banner'>📅 ΠΡΟΓΝΩΣΤΙΚΑ ΑΝΑΜΟΝΗ</div>", unsafe_allow_html=True)
-else:
-    st.markdown("<div class='time-banner'>📅 ΠΡΟΓΝΩΣΤΙΚΑ --/--/----</div>", unsafe_allow_html=True)
+        tip = "2-3 Goals"
+        pct = int(prob_2_3 if prob_2_3 > 45 else 55)
 
-st.markdown("<p style='text-align: center; color: #555555; font-size: 12px; margin-top: 20px;'>Powered by Python & Football-Data API</p>", unsafe_allow_html=True)
+    cover = f"GG ({int(prob_gg)}%)" if prob_gg > 50 else f"No GG ({int(100-prob_gg)}%)"
+    return tip, pct, cover
+
+def main():
+    predictions = []
+    now_gr = datetime.utcnow() + timedelta(hours=3)
+    today_str = now_gr.strftime("%Y-%m-%d")
+    
+    for code, label in LEAGUES.items():
+        l_stats = get_advanced_stats(code)
+        time.sleep(6)
+
+        url = f"https://api.football-data.org/v4/competitions/{code}/matches"
+        try:
+            res = requests.get(url, headers=HEADERS).json()
+            for m in res.get('matches', []):
+                if m['status'] in ['SCHEDULED', 'TIMED']:
+                    utc_dt = datetime.strptime(m['utcDate'], "%Y-%m-%dT%H:%M:%SZ")
+                    gr_dt = utc_dt + timedelta(hours=3)
+                    match_date_str = gr_dt.strftime("%Y-%m-%d")
+                    
+                    if match_date_str == today_str:
+                        home, away = m['homeTeam']['name'], m['awayTeam']['name']
+                        tip, pct, cover = calculate_prediction(home, away, l_stats)
+                        m_time = gr_dt.strftime("%d/%m %H:%M")
+                        # Αποθηκεύουμε και το ποσοστό (pct) ξεχωριστά
+                        predictions.append(f"{label}|{home} - {away}|{m_time}|{tip}|{pct}|{cover}")
+        except:
+            continue
+        time.sleep(6)
+
+    with open("daily_predictions.txt", "w", encoding="utf-8") as f:
+        timestamp = now_gr.strftime("%d/%m/%Y %H:%M")
+        f.write(f"--- ΠΡΟΓΝΩΣΤΙΚΑ {timestamp} ---\n")
+        f.write("ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ\n")
+        
+        if not predictions:
+            f.write("INFO|Δεν υπάρχουν σημερινοί αγώνες.|-| - | 0 | - \n")
+        else:
+            for p in predictions:
+                f.write(p + "\n")
+
+if __name__ == "__main__":
+    main()
+
