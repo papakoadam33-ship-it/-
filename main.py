@@ -4,6 +4,14 @@ import os
 # Ρύθμιση της σελίδας με το νέο εικονίδιο Μπάλας Ποδοσφαίρου
 st.set_page_config(page_title="Marios Pro-Bet Pro", page_icon="https://img.icons8.com/emoji/96/soccer-ball-emoji.png", layout="centered")
 
+# Έξυπνο HTML κόλπο για να εξαναγκάσουμε τα κινητά να δουν τη μπάλα ποδοσφαίρου ως εικονίδιο συντόμευσης
+st.markdown("""
+    <head>
+        <link rel="icon" type="image/png" href="https://img.icons8.com/emoji/96/soccer-ball-emoji.png">
+        <link rel="apple-touch-icon" href="https://img.icons8.com/emoji/96/soccer-ball-emoji.png">
+    </head>
+""", unsafe_allow_html=True)
+
 # Επιβολή μόνιμου Dark Mode και στυλ της εφαρμογής
 st.markdown("""
     <style>
