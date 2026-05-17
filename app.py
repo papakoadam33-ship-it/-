@@ -4,49 +4,57 @@ import os
 # Ρύθμιση της σελίδας
 st.set_page_config(page_title="Marios Pro-Bet Pro", page_icon="⚡", layout="centered")
 
-# Στυλ για την εντυπωσιακή εμφάνιση και αναγκαστικό Dark Mode σε όλη τη σελίδα
+# Επιβολή μόνιμου Dark Mode και στυλ της εφαρμογής
 st.markdown("""
     <style>
-    /* Επιβολή μαύρου φόντου σε όλο το Streamlit app */
-    html, body, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
+    /* Κλείδωμα μαύρου φόντου παντού */
+    html, body, [data-testid="stAppViewContainer"], [data-testid="stHeader"], [data-testid="stCanvasBackground"] {
         background-color: #121212 !important;
     }
     
     /* Πανέμορφο μαύρο πλαίσιο για τον τίτλο */
-    .header-container { 
+    .custom-header { 
         text-align: center; 
         background-color: #1E1E1E !important; 
-        padding: 20px 10px; 
-        border-radius: 15px; 
-        border: 1px solid #333333;
-        margin-top: 10px;
-        margin-bottom: 25px; 
-        box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        padding: 20px 10px !important; 
+        border-radius: 15px !important; 
+        border: 1px solid #333333 !important;
+        margin-top: 10px !important;
+        margin-bottom: 25px !important; 
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.5) !important;
     }
-    .title-text { color: #FFFFFF !important; font-size: 30px !important; font-weight: 800 !important; margin-bottom: 8px !important; letter-spacing: 1px; }
-    .model-text { color: #FFD700 !important; font-size: 16px !important; font-weight: bold !important; font-style: italic !important; margin-top: 0px !important; letter-spacing: 0.5px; }
+    .title-text { color: #FFFFFF !important; font-size: 30px !important; font-weight: 800 !important; margin-bottom: 8px !important; letter-spacing: 1px !important; }
+    .model-text { color: #FFD700 !important; font-size: 16px !important; font-weight: bold !important; font-style: italic !important; margin-top: 0px !important; letter-spacing: 0.5px !important; }
     
     /* Διαχωριστικοί Τίτλοι για Κατηγορίες */
-    .section-title { color: #FFD700 !important; font-size: 20px !important; font-weight: bold !important; margin: 25px 0 15px 0 !important; border-left: 4px solid #FFD700; padding-left: 10px; text-transform: uppercase; }
-    .section-title-vip { color: #FF4D4D !important; font-size: 22px !important; font-weight: bold !important; margin: 25px 0 15px 0 !important; border-left: 4px solid #FF4D4D; padding-left: 10px; text-transform: uppercase; }
+    .section-title { color: #FFD700 !important; font-size: 20px !important; font-weight: bold !important; margin: 25px 0 15px 0 !important; border-left: 4px solid #FFD700 !important; padding-left: 10px !important; text-transform: uppercase !important; }
+    .section-title-vip { color: #FF4D4D !important; font-size: 22px !important; font-weight: bold !important; margin: 25px 0 15px 0 !important; border-left: 4px solid #FF4D4D !important; padding-left: 10px !important; text-transform: uppercase !important; }
 
-    .time-banner { background-color: #1E1E24 !important; padding: 10px; border-radius: 10px; border: 2px solid #FFD700; text-align: center; color: #FFD700 !important; font-size: 16px; font-weight: bold; margin-bottom: 25px; }
+    .time-banner { background-color: #1E1E24 !important; padding: 10px !important; border-radius: 10px !important; border: 2px solid #FFD700 !important; text-align: center !important; color: #FFD700 !important; font-size: 16px !important; font-weight: bold !important; margin-bottom: 25px !important; }
     
     /* Κουτιά Αγώνων */
-    .match-box { background-color: #1E1E1E !important; padding: 15px; border-radius: 15px; border: 1px solid #333333; margin-bottom: 15px; box-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
-    .match-box-vip { background-color: #221A00 !important; padding: 15px; border-radius: 15px; border: 2px solid #FFD700; margin-bottom: 15px; box-shadow: 0px 0px 15px rgba(255, 215, 0, 0.3); }
+    .match-box { background-color: #1E1E1E !important; padding: 15px !important; border-radius: 15px !important; border: 1px solid #333333 !important; margin-bottom: 15px !important; box-shadow: 2px 2px 10px rgba(0,0,0,0.5) !important; }
+    .match-box-vip { background-color: #221A00 !important; padding: 15px !important; border-radius: 15px !important; border: 2px solid #FFD700 !important; margin-bottom: 15px !important; box-shadow: 0px 0px 15px rgba(255, 215, 0, 0.3) !important; }
     
-    .league-title { color: #FFD700 !important; font-size: 13px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
-    .teams-title { color: #FFFFFF !important; font-size: 22px; font-weight: bold; margin: 5px 0; }
-    .time-badge { background-color: #D9534F !important; color: white !important; padding: 3px 8px; border-radius: 5px; font-size: 13px; font-weight: bold; display: inline-block; margin-bottom: 10px; }
+    .league-title { color: #FFD700 !important; font-size: 13px !important; font-weight: bold !important; text-transform: uppercase !important; letter-spacing: 1px !important; }
+    .teams-title { color: #FFFFFF !important; font-size: 22px !important; font-weight: bold !important; margin: 5px 0 !important; }
+    .time-badge { background-color: #D9534F !important; color: white !important; padding: 3px 8px !important; border-radius: 5px !important; font-size: 13px !important; font-weight: bold !important; display: inline-block !important; margin-bottom: 10px !important; }
     
-    .tip-box { background-color: #5CB85C !important; color: white !important; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; margin-top: 10px; font-size: 17px; }
-    .tip-box-vip { background-color: #D4AF37 !important; color: black !important; padding: 12px; border-radius: 8px; text-align: center; font-weight: 900; margin-top: 10px; font-size: 18px; text-transform: uppercase; box-shadow: 0px 4px 6px rgba(0,0,0,0.2); }
+    .tip-box { background-color: #5CB85C !important; color: white !important; padding: 12px !important; border-radius: 8px !important; text-align: center !important; font-weight: bold !important; margin-top: 10px !important; font-size: 17px !important; }
+    .tip-box-vip { background-color: #D4AF37 !important; color: black !important; padding: 12px !important; border-radius: 8px !important; text-align: center !important; font-weight: 900 !important; margin-top: 10px !important; font-size: 18px !important; text-transform: uppercase !important; box-shadow: 0px 4px 6px rgba(0,0,0,0.2) !important; }
     
-    .cover-box { background-color: #E67E22 !important; color: white !important; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; margin-top: 8px; font-size: 16px; }
-    .info-box { background-color: #1E1E1E !important; padding: 20px; border-radius: 15px; border: 1px solid #333333; text-align: center; margin-bottom: 15px; }
-    .info-text { color: #FFFFFF !important; font-size: 20px; font-weight: bold; margin: 15px 0; }
+    .cover-box { background-color: #E67E22 !important; color: white !important; padding: 12px !important; border-radius: 8px !important; text-align: center !important; font-weight: bold !important; margin-top: 8px !important; font-size: 16px !important; }
+    .info-box { background-color: #1E1E1E !important; padding: 20px !important; border-radius: 15px !important; border: 1px solid #333333 !important; text-align: center !important; margin-bottom: 15px !important; }
+    .info-text { color: #FFFFFF !important; font-size: 20px !important; font-weight: bold !important; margin: 15px 0 !important; }
     </style>
+""", unsafe_allow_html=True)
+
+# Καθαρή εμφάνιση της κεφαλίδας με st.components ή st.markdown εκτός block
+st.markdown("""
+    <div class="custom-header">
+        <div class="title-text">⚡ MARIOS PRO-BET PRO ⚡</div>
+        <div class="model-text">Poisson Distribution Model</div>
+    </div>
 """, unsafe_allow_html=True)
 
 filename = "daily_predictions.txt"
@@ -85,7 +93,7 @@ if os.path.exists(filename):
                         else:
                             normal_picks.append(item)
             
-            # 1. ΕΜΦΑΝΙΣΗ VIP PICKS
+            # 1. VIP PICKS
             if vip_picks:
                 st.markdown("<div class='section-title-vip'>🔥 VIP PICKS (ΥΨΗΛΟ ΠΟΣΟΣΤΟ >=65%)</div>", unsafe_allow_html=True)
                 for league, match_name, match_time, tip, pct, cover in vip_picks:
@@ -99,7 +107,7 @@ if os.path.exists(filename):
                         </div>
                     """, unsafe_allow_html=True)
             
-            # 2. ΕΜΦΑΝΙΣΗ ΥΠΟΛΟΙΠΩΝ ΑΓΩΝΩΝ
+            # 2. ΥΠΟΛΟΙΠΟΙ ΑΓΩΝΕΣ
             if normal_picks:
                 st.markdown("<div class='section-title'>⚽ ΥΠΟΛΟΙΠΟΙ ΣΗΜΕΡΙΝΟΙ ΑΓΩΝΕΣ</div>", unsafe_allow_html=True)
                 for league, match_name, match_time, tip, pct, cover in normal_picks:
@@ -114,8 +122,8 @@ if os.path.exists(filename):
                     """, unsafe_allow_html=True)
     else:
         st.markdown("<div class='time-banner'>📅 ΠΡΟΓΝΩΣΤΙΚΑ ΑΝΑΜΟΝΗ</div>", unsafe_allow_html=True)
-        st.info("Το αρχείο δεδομένων ανανεώνεται...")
 else:
     st.markdown("<div class='time-banner'>📅 ΠΡΟΓΝΩΣΤΙΚΑ --/--/----</div>", unsafe_allow_html=True)
 
 st.markdown("<p style='text-align: center; color: #555555; font-size: 12px; margin-top: 20px;'>Powered by Python & Football-Data API</p>", unsafe_allow_html=True)
+
