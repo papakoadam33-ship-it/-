@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 19/05/2026 16:48 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 19/05/2026 16:52 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 PREMIER LEAGUE|AFC Bournemouth - Manchester City FC|19/05 21:30|2-3 Goals|45|GG (57%)
 PREMIER LEAGUE|Chelsea FC - Tottenham Hotspur FC|19/05 22:15|2-3 Goals|47|No GG (59%)
