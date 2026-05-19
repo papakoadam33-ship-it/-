@@ -3,20 +3,17 @@ import os
 from datetime import datetime
 
 # ==========================================
-# ΕΠΙΣΗΜΕΣ ΔΩΡΕΑΝ ΛΙΓΚΕΣ (Με Βραζιλία, Ολλανδία, Πορτογαλία)
+# ΟΙ 5 ΕΓΚΕΚΡΙΜΕΝΕΣ ΔΩΡΕΑΝ ΛΙΓΚΕΣ ΣΟΥ
 # ==========================================
 API_URL = "https://api.football-data.org/v4/matches"
 API_KEY = os.getenv("FOOTBALL_DATA_API_KEY")
 
 LEAGUES = {
-    'PL': 'Premier League',
-    'PD': 'La Liga',
-    'SA': 'Serie A',
-    'FL1': 'Ligue 1',
-    'BL1': 'Bundesliga',
-    'BSA': 'Brazil Serie A',       # <--- ΝΕΟ: Βραζιλία!
-    'DED': 'Netherlands Eredivisie', # <--- ΝΕΟ: Ολλανδία!
-    'PPL': 'Portugal Primeira Liga' # <--- ΝΕΟ: Πορτογαλία!
+    'PL': 'Premier League',   # Αγγλία
+    'PD': 'La Liga',          # Ισπανία
+    'SA': 'Serie A',          # Ιταλία
+    'FL1': 'Ligue 1',         # Γαλλία
+    'BL1': 'Bundesliga'       # Γερμανία
 }
 
 def fetch_matches():
@@ -41,7 +38,7 @@ def calculate_poisson_tips(matches):
     """Μοντέλο Poisson για υπολογισμό σημείων"""
     predictions = []
     
-    # Φιλτράρουμε μόνο τις εγκεκριμένες λίγκες
+    # Φιλτράρουμε μόνο τις 5 συγκεκριμένες λίγκες
     valid_matches = [m for m in matches if m.get("competition", {}).get("code") in LEAGUES]
     
     for match in valid_matches:
@@ -95,7 +92,7 @@ def main():
         else:
             f.write("INFO|Δεν υπάρχουν προγραμματισμένοι αγώνες για σήμερα στις επιλεγμένες λίγκες.")
             
-    print(f"Το αρχείο ενημερώθηκε επιτυχώς!")
+    print("Το αρχείο ενημερώθηκε επιτυχώς!")
 
 if __name__ == "__main__":
     main()
