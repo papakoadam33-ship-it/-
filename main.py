@@ -3,7 +3,7 @@ import math
 import time
 from datetime import datetime, timezone, timedelta
 
-# --- ΡΥΘΜΙΣΕΙΣ (Όλες οι επίσημες δωρεάν λίγκες του API σου) ---
+# --- ΡΥΘΜΙΣΕΙΣ (Προστέθηκε η Βραζιλία BSA) ---
 API_KEY = "a963742bcd5642afbe8c842d057f25ad"
 HEADERS = { "X-Auth-Token": API_KEY }
 
@@ -13,9 +13,10 @@ LEAGUES = {
     "SA": "SERIE A",
     "BL1": "BUNDESLIGA",
     "FL1": "LIGUE 1",
-    "DED": "EREDIVISIE",       # Ολλανδία (Νέο)
-    "PPL": "PRIMEIRA LIGA",     # Πορτογαλία (Νέο)
-    "ELC": "CHAMPIONSHIP"       # Β' Αγγλίας (Νέο)
+    "DED": "EREDIVISIE",
+    "PPL": "PRIMEIRA LIGA",
+    "ELC": "CHAMPIONSHIP",
+    "BSA": "CAMPEONATO BRASILEIRO SÉRIE A" # <--- Μπήκε η Βραζιλία!
 }
 
 def poisson_probability(lmbda, k):
@@ -97,7 +98,6 @@ def calculate_prediction(home, away, league_stats):
         return "N/A", 0, "N/A"
 
     h_s, a_s = league_stats[home], league_stats[away]
-    
     lg_home_avg = h_s['league_home_avg']
     lg_away_avg = h_s['league_away_avg']
     
@@ -107,7 +107,6 @@ def calculate_prediction(home, away, league_stats):
 
     home_attack = get_weighted_val(h_s['recent_goals_scored'], h_s['home_avg_scored'])
     away_defense = get_weighted_val(a_s['recent_goals_conceded'], a_s['away_avg_conceded'])
-    
     away_attack = get_weighted_val(a_s['recent_goals_scored'], a_s['away_avg_scored'])
     home_defense = get_weighted_val(h_s['recent_goals_conceded'], h_s['home_avg_conceded'])
 
@@ -115,31 +114,63 @@ def calculate_prediction(home, away, league_stats):
     l_a = (away_attack / lg_away_avg) * (home_defense / lg_home_avg) * lg_away_avg
     l_total = l_h + l_a
 
+    # --- ΥΠΟΛΟΓΙΣΜΟΣ ΠΙΘΑΝΟΤΗΤΩΝ 1X2 (Πίνακας Σκορ 0-5) ---
+    prob_1, prob_x, prob_2 = 0, 0, 0
+    prob_over_1_5 = 0
+    
+    for h_goals in range(6):
+        for a_goals in range(6):
+            p_score = poisson_probability(l_h, h_goals) * poisson_probability(l_a, a_goals)
+            
+            if h_goals > a_goals:
+                prob_1 += p_score
+            elif h_goals == a_goals:
+                prob_x += p_score
+            else:
+                prob_2 += p_score
+                
+            if (h_goals + a_goals) > 1:
+                prob_over_1_5 += p_score
+
+    # Μετατροπή σε ποσοστά %
+    p_1 = prob_1 * 100
+    p_x = prob_x * 100
+    p_2 = prob_2 * 100
+    p_o15 = prob_over_1_5 * 100
+
     prob_under_2_5 = sum(poisson_probability(l_total, k) for k in range(3))
-    prob_over = (1 - prob_under_2_5) * 100
-    prob_2_3 = (poisson_probability(l_total, 2) + poisson_probability(l_total, 3)) * 100
+    prob_over_2_5 = (1 - prob_under_2_5) * 100
     prob_gg = (1 - poisson_probability(l_h, 0)) * (1 - poisson_probability(l_a, 0)) * 100
 
-    if prob_over > 60:
+    # --- ΕΞΥΠΝΗ ΛΟΓΙΚΗ ΓΙΑ ΤΟ COMPOSITE TIP (Όπως στο UI σου) ---
+    if p_1 > 45 and p_o15 > 65:
+        tip = "1 & Over 1.5"
+        pct = int((p_1 + p_o15) / 2)
+    elif p_2 > 45 and p_o15 > 65:
+        tip = "2 & Over 1.5"
+        pct = int((p_2 + p_o15) / 2)
+    elif (p_1 + p_x) > 65 and p_o15 > 65:
+        tip = "1X & Over 1.5"
+        pct = int(((p_1 + p_x) + p_o15) / 2)
+    elif (p_2 + p_x) > 65 and p_o15 > 65:
+        tip = "X2 & Over 1.5"
+        pct = int(((p_2 + p_x) + p_o15) / 2)
+    elif prob_over_2_5 > 55:
         tip = "Over 2.5"
-        pct = int(prob_over)
-    elif prob_over < 40:
-        tip = "Under 2.5"
-        pct = int(100 - prob_over)
+        pct = int(prob_over_2_5)
     else:
-        tip = "2-3 Goals"
-        pct = int(prob_2_3 if prob_2_3 > 45 else 55)
+        tip = "Under 2.5"
+        pct = int(100 - prob_over_2_5)
 
-    cover = f"GG ({int(prob_gg)}%)" if prob_gg > 50 else f"No GG ({int(100-prob_gg)}%)"
+    cover = f"Goal-Goal ({int(prob_gg)}%)" if prob_gg > 50 else f"No GG ({int(100-prob_gg)}%)"
     return tip, pct, cover
 
 def main():
     predictions = []
-    # Ώρα Ελλάδας (UTC+3)
     now_gr = datetime.now(timezone.utc) + timedelta(hours=3)
     today_str = now_gr.strftime("%Y-%m-%d")
     
-    print(f"Starting advanced predictions for: {today_str}")
+    print(f"Starting Pro-Bet Engine for: {today_str}")
     
     for code, label in LEAGUES.items():
         print(f"Processing {label}...")
@@ -152,7 +183,8 @@ def main():
         try:
             res = requests.get(url, headers=HEADERS).json()
             for m in res.get('matches', []):
-                if m['status'] in ['SCHEDULED', 'TIMED']:
+                # Κρατάμε SCHEDULED αλλά και LIVE ματς για να μην αδειάζει η οθόνη
+                if m['status'] in ['SCHEDULED', 'TIMED', 'LIVE', 'IN_PLAY']:
                     utc_dt = datetime.strptime(m['utcDate'], "%Y-%m-%dT%H:%M:%SZ")
                     gr_dt = utc_dt.replace(tzinfo=timezone.utc).astimezone(timezone(timedelta(hours=3)))
                     match_date_str = gr_dt.strftime("%Y-%m-%d")
