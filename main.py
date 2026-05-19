@@ -1,98 +1,135 @@
 import requests
-import os
-from datetime import datetime
+import math
+import time
+from datetime import datetime, timedelta
 
-# ==========================================
-# ΟΙ 5 ΕΓΚΕΚΡΙΜΕΝΕΣ ΔΩΡΕΑΝ ΛΙΓΚΕΣ ΣΟΥ
-# ==========================================
-API_URL = "https://api.football-data.org/v4/matches"
-API_KEY = os.getenv("FOOTBALL_DATA_API_KEY")
+# --- ΡΥΘΜΙΣΕΙΣ ---
+API_KEY = "a963742bcd5642afbe8c842d057f25ad"
+HEADERS = { "X-Auth-Token": API_KEY }
 
 LEAGUES = {
-    'PL': 'Premier League',   # Αγγλία
-    'PD': 'La Liga',          # Ισπανία
-    'SA': 'Serie A',          # Ιταλία
-    'FL1': 'Ligue 1',         # Γαλλία
-    'BL1': 'Bundesliga'       # Γερμανία
+    "PL": "PREMIER LEAGUE",
+    "PD": "LA LIGA",
+    "SA": "SERIE A",
+    "BL1": "BUNDESLIGA",
+    "FL1": "LIGUE 1",
+    "WC": "WORLD CUP"
 }
 
-def fetch_matches():
-    """Κατεβάζει τους σημερινούς αγώνες από το API"""
-    if not API_KEY:
-        print("ERROR: Δεν βρέθηκε το API Key στα Secrets!")
-        return []
-        
-    headers = {"X-Auth-Token": API_KEY}
-    try:
-        response = requests.get(API_URL, headers=headers)
-        if response.status_code == 200:
-            return response.json().get("matches", [])
-        else:
-            print(f"API Error: {response.status_code}")
-            return []
-    except Exception as e:
-        print(f"Σφάλμα σύνδεσης: {e}")
-        return []
+def poisson_probability(lmbda, k):
+    if lmbda <= 0: return 0
+    return (math.exp(-lmbda) * (lmbda**k)) / math.factorial(k)
 
-def calculate_poisson_tips(matches):
-    """Μοντέλο Poisson για υπολογισμό σημείων"""
-    predictions = []
+def get_advanced_stats(league_code):
+    stats = {}
+    standings_url = f"https://api.football-data.org/v4/competitions/{league_code}/standings"
+    matches_url = f"https://api.football-data.org/v4/competitions/{league_code}/matches?status=FINISHED"
+
+    try:
+        st_res = requests.get(standings_url, headers=HEADERS, timeout=15)
+        if st_res.status_code == 200:
+            data = st_res.json()
+            for standing in data.get('standings', []):
+                for team in standing.get('table', []):
+                    name = team['team']['name']
+                    stats[name] = {
+                        'overall_avg_scored': team['goalsFor'] / team['playedGames'] if team['playedGames'] > 0 else 1.0,
+                        'overall_avg_conceded': team['goalsAgainst'] / team['playedGames'] if team['playedGames'] > 0 else 1.0,
+                        'recent_goals_scored': [],
+                        'recent_goals_conceded': []
+                    }
+
+        time.sleep(6)
+
+        m_res = requests.get(matches_url, headers=HEADERS, timeout=15)
+        if m_res.status_code == 200:
+            for match in reversed(m_res.json().get('matches', [])[-60:]):
+                h_team, a_team = match['homeTeam']['name'], match['awayTeam']['name']
+                if match['score']['fullTime']['home'] is not None:
+                    h_score = match['score']['fullTime']['home']
+                    a_score = match['score']['fullTime']['away']
+
+                    if h_team in stats and len(stats[h_team]['recent_goals_scored']) < 5:
+                        stats[h_team]['recent_goals_scored'].append(h_score)
+                        stats[h_team]['recent_goals_conceded'].append(a_score)
+                    if a_team in stats and len(stats[a_team]['recent_goals_scored']) < 5:
+                        stats[a_team]['recent_goals_scored'].append(a_score)
+                        stats[a_team]['recent_goals_conceded'].append(h_score)
+        return stats
+    except:
+        return {}
+
+def calculate_prediction(home, away, league_stats):
+    if home not in league_stats or away not in league_stats:
+        return "2-3 Goals", 55, "GG (58%)"
+
+    h_s, a_s = league_stats[home], league_stats[away]
     
-    # Φιλτράρουμε μόνο τις 5 συγκεκριμένες λίγκες
-    valid_matches = [m for m in matches if m.get("competition", {}).get("code") in LEAGUES]
-    
-    for match in valid_matches:
-        league_code = match["competition"]["code"]
-        league_name = LEAGUES[league_code]
-        home_team = match["homeTeam"]["name"]
-        away_team = match["awayTeam"]["name"]
-        match_name = f"{home_team} - {away_team}"
-        
-        utc_time = match.get("utcDate", "")
-        if utc_time:
-            dt = datetime.strptime(utc_time, "%Y-%m-%dT%H:%M:%SZ")
-            match_time = dt.strftime("%H:%M")
-        else:
-            match_time = "--:--"
-            
-        match_id = match.get("id", 1)
-        base_pct = 55 + (match_id % 25)
-        
-        if match_id % 2 == 0:
-            tip = "Over 2.5"
-            cover = "🛡️ Κάλυψη: 2-3 Γκολ"
-        else:
-            tip = "Goal / Goal"
-            cover = "🛡️ Κάλυψη: 1-1 Anytime Score"
-            
-        predictions.append(f"{league_name}|{match_name}|{match_time}|{tip}|{base_pct}|{cover}")
-        
-    return predictions
+    def get_val(recent, overall):
+        r_avg = sum(recent)/len(recent) if recent else overall
+        return (r_avg * 0.7) + (overall * 0.3)
+
+    l_h = get_val(h_s['recent_goals_scored'], h_s['overall_avg_scored']) * (get_val(a_s['recent_goals_conceded'], a_s['overall_avg_conceded']) / 1.3)
+    l_a = get_val(a_s['recent_goals_scored'], a_s['overall_avg_scored']) * (get_val(h_s['recent_goals_conceded'], h_s['overall_avg_conceded']) / 1.3)
+    l_total = l_h + l_a
+
+    prob_under_2_5 = sum(poisson_probability(l_total, k) for k in range(3))
+    prob_over = (1 - prob_under_2_5) * 100
+    prob_2_3 = (poisson_probability(l_total, 2) + poisson_probability(l_total, 3)) * 100
+    prob_gg = (1 - poisson_probability(l_h, 0)) * (1 - poisson_probability(l_a, 0)) * 100
+
+    # Δυναμική επιλογή σημείου με βάση το μεγαλύτερο ποσοστό
+    if prob_over > 60:
+        tip = "Over 2.5"
+        pct = int(prob_over)
+    elif prob_over < 40:
+        tip = "Under 2.5"
+        pct = int(100 - prob_over)
+    else:
+        tip = "2-3 Goals"
+        pct = int(prob_2_3 if prob_2_3 > 45 else 55)
+
+    cover = f"GG ({int(prob_gg)}%)" if prob_gg > 50 else f"No GG ({int(100-prob_gg)}%)"
+    return tip, pct, cover
 
 def main():
-    print("Έναρξη συλλογής αγώνων...")
-    matches = fetch_matches()
+    predictions = []
+    now_gr = datetime.utcnow() + timedelta(hours=3)
+    today_str = now_gr.strftime("%Y-%m-%d")
     
-    now_str = datetime.now().strftime("%d/%m/%Y %H:%M")
-    filename = "daily_predictions.txt"
-    
-    if not matches:
-        with open(filename, "w", encoding="utf-8") as f:
-            f.write(f"--- ΠΡΟΓΝΩΣΤΙΚΑ {now_str} ---\n\n")
-            f.write("INFO|Δεν υπάρχουν προγραμματισμένοι αγώνες για σήμερα.")
-        return
+    for code, label in LEAGUES.items():
+        l_stats = get_advanced_stats(code)
+        time.sleep(6)
 
-    predictions = calculate_poisson_tips(matches)
-    
-    with open(filename, "w", encoding="utf-8") as f:
-        f.write(f"--- ΠΡΟΓΝΩΣΤΙΚΑ {now_str} ---\n\n")
-        if predictions:
-            for pred in predictions:
-                f.write(f"{pred}\n")
+        url = f"https://api.football-data.org/v4/competitions/{code}/matches"
+        try:
+            res = requests.get(url, headers=HEADERS).json()
+            for m in res.get('matches', []):
+                if m['status'] in ['SCHEDULED', 'TIMED']:
+                    utc_dt = datetime.strptime(m['utcDate'], "%Y-%m-%dT%H:%M:%SZ")
+                    gr_dt = utc_dt + timedelta(hours=3)
+                    match_date_str = gr_dt.strftime("%Y-%m-%d")
+                    
+                    if match_date_str == today_str:
+                        home, away = m['homeTeam']['name'], m['awayTeam']['name']
+                        tip, pct, cover = calculate_prediction(home, away, l_stats)
+                        m_time = gr_dt.strftime("%d/%m %H:%M")
+                        # Αποθηκεύουμε και το ποσοστό (pct) ξεχωριστά
+                        predictions.append(f"{label}|{home} - {away}|{m_time}|{tip}|{pct}|{cover}")
+        except:
+            continue
+        time.sleep(6)
+
+    with open("daily_predictions.txt", "w", encoding="utf-8") as f:
+        timestamp = now_gr.strftime("%d/%m/%Y %H:%M")
+        f.write(f"--- ΠΡΟΓΝΩΣΤΙΚΑ {timestamp} ---\n")
+        f.write("ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ\n")
+        
+        if not predictions:
+            f.write("INFO|Δεν υπάρχουν σημερινοί αγώνες.|-| - | 0 | - \n")
         else:
-            f.write("INFO|Δεν υπάρχουν προγραμματισμένοι αγώνες για σήμερα στις επιλεγμένες λίγκες.")
-            
-    print("Το αρχείο ενημερώθηκε επιτυχώς!")
+            for p in predictions:
+                f.write(p + "\n")
 
 if __name__ == "__main__":
     main()
