@@ -1,35 +1,35 @@
-name: Daily Betting Tips
+name: Update Predictions Daily
 
 on:
   schedule:
-    - cron: '0 8 * * *'
-  workflow_dispatch:
+    # Θα τρέχει αυτόματα κάθε μέρα στις 05:00 το πρωί και στις 13:00 το μεσημέρι (Ώρα Ελλάδας)
+    - cron: '0 3,11 * * *'
+  workflow_dispatch: # Σου επιτρέπει να το τρέχεις χειροκίνητα όποτε θες εσύ
 
 jobs:
-  build:
+  update_data:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/python-v3@v4
         with:
-          python-version: '3.9'
+          python-version: '3.x'
 
       - name: Install dependencies
-        run: pip install requests
+        run: |
+          pip install requests
 
-      - name: Run prediction script
+      - name: Run prediction model
+        env:
+          FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
         run: python main.py
 
       - name: Commit and Push changes
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --global user.name "GitHub Action"
+          git config --global user.email "actions@github.com"
           git add daily_predictions.txt
-          git commit -m "Update predictions $(date)" || exit 0
-          git push
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update predictions" && git push)
