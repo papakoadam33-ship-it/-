@@ -1,4 +1,3 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 19/05/2026 23:26 ---
-ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
-PREMIER LEAGUE|AFC Bournemouth - Manchester City FC|19/05 21:30|1X & Over 1.5|66|No GG (52%)
-PREMIER LEAGUE|Chelsea FC - Tottenham Hotspur FC|19/05 22:15|Under 2.5|70|No GG (71%)
+ΗΜΕΡΟΜΗΝΙΑ|20/05/2026|10:29
+🏆 COPA LIBERTADORES|CA Boca Juniors - Cruzeiro EC|03:30|Under 2.5 (60%)|No GG (53%)
+🏆 COPA LIBERTADORES|CAR Independiente del Valle - Club Libertad Asuncion|05:00|1 & Over 1.5 (62%)|Goal-Goal (56%)
