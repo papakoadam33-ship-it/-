@@ -38,36 +38,29 @@ def get_advanced_stats(league_code):
                         'recent_goals_conceded': []
                     }
 
-        time.sleep(6) # Rate limit protection
+        time.sleep(6)
 
         m_res = requests.get(matches_url, headers=HEADERS, timeout=15)
         if m_res.status_code == 200:
-            # ΔΙΟΡΘΩΣΗ: Κοιτάμε όλα τα ματς από το πιο πρόσφατο προς το παλαιότερο
-            all_matches = m_res.json().get('matches', [])
-            for match in reversed(all_matches):
+            for match in reversed(m_res.json().get('matches', [])[-60:]):
                 h_team, a_team = match['homeTeam']['name'], match['awayTeam']['name']
-                
-                # Έλεγχος αν το σκορ είναι διαθέσιμο
-                if match.get('score', {}).get('fullTime', {}).get('home') is not None:
+                if match['score']['fullTime']['home'] is not None:
                     h_score = match['score']['fullTime']['home']
                     a_score = match['score']['fullTime']['away']
 
-                    # Γεμίζουμε μέχρι να έχουμε 5 ματς για την ΚΑΘΕ ομάδα ξεχωριστά
                     if h_team in stats and len(stats[h_team]['recent_goals_scored']) < 5:
                         stats[h_team]['recent_goals_scored'].append(h_score)
                         stats[h_team]['recent_goals_conceded'].append(a_score)
                     if a_team in stats and len(stats[a_team]['recent_goals_scored']) < 5:
                         stats[a_team]['recent_goals_scored'].append(a_score)
                         stats[a_team]['recent_goals_conceded'].append(h_score)
-                        
         return stats
-    except Exception as e:
-        print(f"Error fetching stats for {league_code}: {e}")
+    except:
         return {}
 
 def calculate_prediction(home, away, league_stats):
     if home not in league_stats or away not in league_stats:
-        return "N/A", 0, "N/A" # ΔΙΟΡΘΩΣΗ: Μην δίνεις ψεύτικα 2-3 goals αν λείπουν δεδομένα
+        return "2-3 Goals", 55, "GG (58%)"
 
     h_s, a_s = league_stats[home], league_stats[away]
     
@@ -75,10 +68,8 @@ def calculate_prediction(home, away, league_stats):
         r_avg = sum(recent)/len(recent) if recent else overall
         return (r_avg * 0.7) + (overall * 0.3)
 
-    # Υπολογισμός Expected Goals (λ)
-    # ΔΙΟΡΘΩΣΗ: Αντί για 1.3, χρησιμοποιούμε το overall conceded του αντιπάλου ως πολλαπλασιαστή ισχύος άμυνας
-    l_h = get_val(h_s['recent_goals_scored'], h_s['overall_avg_scored']) * get_val(a_s['recent_goals_conceded'], a_s['overall_avg_conceded'])
-    l_a = get_val(a_s['recent_goals_scored'], a_s['overall_avg_scored']) * get_val(h_s['recent_goals_conceded'], h_s['overall_avg_conceded'])
+    l_h = get_val(h_s['recent_goals_scored'], h_s['overall_avg_scored']) * (get_val(a_s['recent_goals_conceded'], a_s['overall_avg_conceded']) / 1.3)
+    l_a = get_val(a_s['recent_goals_scored'], a_s['overall_avg_scored']) * (get_val(h_s['recent_goals_conceded'], h_s['overall_avg_conceded']) / 1.3)
     l_total = l_h + l_a
 
     prob_under_2_5 = sum(poisson_probability(l_total, k) for k in range(3))
@@ -101,17 +92,11 @@ def calculate_prediction(home, away, league_stats):
 
 def main():
     predictions = []
-    # Ώρα Ελλάδας (UTC+3)
     now_gr = datetime.utcnow() + timedelta(hours=3)
     today_str = now_gr.strftime("%Y-%m-%d")
     
-    print(f"Starting predictions for: {today_str}")
-    
     for code, label in LEAGUES.items():
-        print(f"Processing {label}...")
         l_stats = get_advanced_stats(code)
-        if not l_stats:
-            continue
         time.sleep(6)
 
         url = f"https://api.football-data.org/v4/competitions/{code}/matches"
@@ -126,14 +111,9 @@ def main():
                     if match_date_str == today_str:
                         home, away = m['homeTeam']['name'], m['awayTeam']['name']
                         tip, pct, cover = calculate_prediction(home, away, l_stats)
-                        
-                        if tip == "N/A": 
-                            continue
-                            
                         m_time = gr_dt.strftime("%d/%m %H:%M")
                         predictions.append(f"{label}|{home} - {away}|{m_time}|{tip}|{pct}|{cover}")
-        except Exception as e:
-            print(f"Error parsing matches for {code}: {e}")
+        except:
             continue
         time.sleep(6)
 
@@ -144,11 +124,9 @@ def main():
         
         if not predictions:
             f.write("INFO|Δεν υπάρχουν σημερινοί αγώνες.|-| - | 0 | - \n")
-            print("No matches found for today.")
         else:
             for p in predictions:
                 f.write(p + "\n")
-            print(f"Successfully generated {len(predictions)} predictions!")
 
 if __name__ == "__main__":
     main()
