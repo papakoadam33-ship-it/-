@@ -3,7 +3,7 @@ import math
 import time
 from datetime import datetime, timedelta
 
-# --- ΡΥΘΜΙΣΕΙΣ (Οι 5 επίσημες δωρεάν λίγκες σου) ---
+# --- ΡΥΘΜΙΣΕΙΣ ---
 API_KEY = "a963742bcd5642afbe8c842d057f25ad"
 HEADERS = { "X-Auth-Token": API_KEY }
 
@@ -12,7 +12,8 @@ LEAGUES = {
     "PD": "LA LIGA",
     "SA": "SERIE A",
     "BL1": "BUNDESLIGA",
-    "FL1": "LIGUE 1"
+    "FL1": "LIGUE 1",
+    "WC": "WORLD CUP"
 }
 
 def poisson_probability(lmbda, k):
@@ -77,6 +78,7 @@ def calculate_prediction(home, away, league_stats):
     prob_2_3 = (poisson_probability(l_total, 2) + poisson_probability(l_total, 3)) * 100
     prob_gg = (1 - poisson_probability(l_h, 0)) * (1 - poisson_probability(l_a, 0)) * 100
 
+    # Δυναμική επιλογή σημείου με βάση το μεγαλύτερο ποσοστό
     if prob_over > 60:
         tip = "Over 2.5"
         pct = int(prob_over)
@@ -112,6 +114,7 @@ def main():
                         home, away = m['homeTeam']['name'], m['awayTeam']['name']
                         tip, pct, cover = calculate_prediction(home, away, l_stats)
                         m_time = gr_dt.strftime("%d/%m %H:%M")
+                        # Αποθηκεύουμε και το ποσοστό (pct) ξεχωριστά
                         predictions.append(f"{label}|{home} - {away}|{m_time}|{tip}|{pct}|{cover}")
         except:
             continue
@@ -130,4 +133,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
