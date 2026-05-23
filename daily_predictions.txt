@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 23/05/2026 09:00 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 23/05/2026 14:55 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 LA LIGA|Deportivo Alavés - Rayo Vallecano de Madrid|23/05 22:00|2-3 Goals|46|GG (51%)
 LA LIGA|Real Betis Balompié - Levante UD|23/05 22:00|Over 2.5|76|GG (73%)
