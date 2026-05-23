@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 23/05/2026 14:55 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 23/05/2026 19:46 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 LA LIGA|Deportivo Alavés - Rayo Vallecano de Madrid|23/05 22:00|2-3 Goals|46|GG (51%)
 LA LIGA|Real Betis Balompié - Levante UD|23/05 22:00|Over 2.5|76|GG (73%)
@@ -9,5 +9,4 @@ LA LIGA|RCD Mallorca - Real Oviedo|23/05 22:00|Under 2.5|79|No GG (76%)
 LA LIGA|Real Madrid CF - Athletic Club|23/05 22:00|2-3 Goals|46|No GG (57%)
 LA LIGA|Valencia CF - FC Barcelona|23/05 22:00|2-3 Goals|55|No GG (51%)
 LA LIGA|Girona FC - Elche CF|23/05 22:00|Under 2.5|67|No GG (61%)
-SERIE A|Bologna FC 1909 - FC Internazionale Milano|23/05 19:00|2-3 Goals|46|No GG (66%)
 SERIE A|SS Lazio - AC Pisa 1909|23/05 21:45|2-3 Goals|46|No GG (61%)
