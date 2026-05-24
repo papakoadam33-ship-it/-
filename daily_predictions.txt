@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 24/05/2026 09:51 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 24/05/2026 09:54 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 PREMIER LEAGUE|Sunderland AFC - Chelsea FC|24/05 18:00|Over 2.5|61|GG (63%)
 PREMIER LEAGUE|Brighton & Hove Albion FC - Manchester United FC|24/05 18:00|2-3 Goals|55|GG (61%)
@@ -11,10 +11,10 @@ PREMIER LEAGUE|Nottingham Forest FC - AFC Bournemouth|24/05 18:00|Over 2.5|68|GG
 PREMIER LEAGUE|Tottenham Hotspur FC - Everton FC|24/05 18:00|Over 2.5|71|GG (68%)
 PREMIER LEAGUE|West Ham United FC - Leeds United FC|24/05 18:00|2-3 Goals|45|No GG (60%)
 LA LIGA|Villarreal CF - Club Atlético de Madrid|24/05 22:00|Over 2.5|61|GG (61%)
-SERIE A|Parma Calcio 1913 - US Sassuolo Calcio|24/05 16:00|Under 2.5|63|No GG (58%)
+SERIE A|Parma Calcio 1913 - US Sassuolo Calcio|24/05 16:00|Under 2.5|67|No GG (62%)
 SERIE A|SSC Napoli - Udinese Calcio|24/05 19:00|2-3 Goals|47|No GG (51%)
 SERIE A|AC Milan - Cagliari Calcio|24/05 21:45|Under 2.5|62|No GG (57%)
 SERIE A|Torino FC - Juventus FC|24/05 21:45|Under 2.5|75|No GG (70%)
 SERIE A|Hellas Verona FC - AS Roma|24/05 21:45|Under 2.5|68|No GG (81%)
-SERIE A|US Cremonese - Como 1907|24/05 21:45|Under 2.5|77|No GG (74%)
+SERIE A|US Cremonese - Como 1907|24/05 21:45|Under 2.5|79|No GG (78%)
 SERIE A|US Lecce - Genoa CFC|24/05 21:45|Under 2.5|79|No GG (71%)
