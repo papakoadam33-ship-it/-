@@ -1,158 +1,151 @@
-import requests
-import math
-import time
-from datetime import datetime, timedelta
+import streamlit as st
+import os
 
-# --- ΡΥΘΜΙΣΕΙΣ ---
-API_KEY = "a963742bcd5642afbe8c842d057f25ad"
-HEADERS = { "X-Auth-Token": API_KEY }
+# Ρύθμιση σελίδας
+st.set_page_config(page_title="MARIOS PRO-BET PRO", page_icon="⚡", layout="centered")
 
-# Κρατάμε τις 5 βασικές ενεργές λίγκες για εξοικονόμηση API Requests
-LEAGUES = {
-    "PL": "PREMIER LEAGUE",
-    "PD": "LA LIGA",
-    "SA": "SERIE A",
-    "BL1": "BUNDESLIGA",
-    "FL1": "LIGUE 1"
-}
-
-def poisson_probability(lmbda, k):
-    if lmbda <= 0: return 0
-    return (math.exp(-lmbda) * (lmbda**k)) / math.factorial(k)
-
-def get_advanced_stats(league_code):
-    stats = {}
-    standings_url = f"https://api.football-data.org/v4/competitions/{league_code}/standings"
-    matches_url = f"https://api.football-data.org/v4/competitions/{league_code}/matches?status=FINISHED"
-
-    try:
-        # 1. Λήψη Βαθμολογίας
-        st_res = requests.get(standings_url, headers=HEADERS, timeout=15)
-        if st_res.status_code == 200:
-            data = st_res.json()
-            for standing in data.get('standings', []):
-                for team in standing.get('table', []):
-                    name = team['team']['name']
-                    stats[name] = {
-                        'overall_avg_scored': team['goalsFor'] / team['playedGames'] if team['playedGames'] > 0 else 1.0,
-                        'overall_avg_conceded': team['goalsAgainst'] / team['playedGames'] if team['playedGames'] > 0 else 1.0,
-                        'recent_goals_scored': [],
-                        'recent_goals_conceded': []
-                    }
-        else:
-            print(f"Σφάλμα Standings {league_code}: Status {st_res.status_code}")
-
-        # Μεγάλο sleep για να προλάβει να μηδενίσει το Rate Limit του API (Max 10 ανά λεπτό)
-        time.sleep(7)
-
-        # 2. Λήψη Πρόσφατων Αγώνων (Αυξάνουμε σε 80 για να σιγουρέψουμε το 5/5 όλων των ομάδων)
-        m_res = requests.get(matches_url, headers=HEADERS, timeout=15)
-        if m_res.status_code == 200:
-            all_matches = m_res.json().get('matches', [])
-            for match in reversed(all_matches[-80:]):
-                h_team = match['homeTeam']['name']
-                a_team = match['awayTeam']['name']
-                
-                if match.get('score', {}).get('fullTime', {}).get('home') is not None:
-                    h_score = match['score']['fullTime']['home']
-                    a_score = match['score']['fullTime']['away']
-
-                    if h_team in stats and len(stats[h_team]['recent_goals_scored']) < 5:
-                        stats[h_team]['recent_goals_scored'].append(h_score)
-                        stats[h_team]['recent_goals_conceded'].append(a_score)
-                    if a_team in stats and len(stats[a_team]['recent_goals_scored']) < 5:
-                        stats[a_team]['recent_goals_scored'].append(a_score)
-                        stats[a_team]['recent_goals_conceded'].append(h_score)
-        else:
-            print(f"Σφάλμα Finished Matches {league_code}: Status {m_res.status_code}")
-            
-        return stats
-    except Exception as e:
-        print(f"Γενικό Σφάλμα στο get_advanced_stats για {league_code}: {e}")
-        return {}
-
-def calculate_prediction(home, away, league_stats):
-    if home not in league_stats or away not in league_stats:
-        return "2-3 Goals", 55, "GG (58%)"
-
-    h_s, a_s = league_stats[home], league_stats[away]
+# --- PREMIUM DARK CSS DESIGN ---
+st.markdown("""
+    <style>
+    .stApp { background-color: #121212; color: #FFFFFF; }
     
-    def get_val(recent, overall):
-        r_avg = sum(recent)/len(recent) if recent else overall
-        return (r_avg * 0.7) + (overall * 0.3)
-
-    # Υπολογισμός αναμενόμενων γκολ (λ) με βάση την επίθεση του ενός και την άμυνα του άλλου
-    l_h = get_val(h_s['recent_goals_scored'], h_s['overall_avg_scored']) * (get_val(a_s['recent_goals_conceded'], a_s['overall_avg_conceded']) / 1.3)
-    l_a = get_val(a_s['recent_goals_scored'], a_s['overall_avg_scored']) * (get_val(h_s['recent_goals_conceded'], h_s['overall_avg_conceded']) / 1.3)
-    l_total = l_h + l_a
-
-    prob_under_2_5 = sum(poisson_probability(l_total, k) for k in range(3))
-    prob_over = (1 - prob_under_2_5) * 100
-    prob_2_3 = (poisson_probability(l_total, 2) + poisson_probability(l_total, 3)) * 100
-    prob_gg = (1 - poisson_probability(l_h, 0)) * (1 - poisson_probability(l_a, 0)) * 100
-
-    if prob_over > 60:
-        tip = "Over 2.5"
-        pct = int(prob_over)
-    elif prob_over < 40:
-        tip = "Under 2.5"
-        pct = int(100 - prob_over)
-    else:
-        tip = "2-3 Goals"
-        pct = int(prob_2_3 if prob_2_3 > 45 else 55)
-
-    cover = f"GG ({int(prob_gg)}%)" if prob_gg > 50 else f"No GG ({int(100-prob_gg)}%)"
-    return tip, pct, cover
-
-def main():
-    predictions = []
-    # Χρήση timezone-aware ή σωστού offset (UTC+3 για Ελλάδα)
-    now_gr = datetime.utcnow() + timedelta(hours=3)
-    today_str = now_gr.strftime("%Y-%m-%d")
+    .header-box {
+        background-color: #1E1E1E;
+        padding: 25px;
+        border-radius: 15px;
+        text-align: center;
+        border: 2px solid #FFD700;
+        margin-bottom: 20px;
+        box-shadow: 0px 4px 15px rgba(255, 215, 0, 0.2);
+    }
+    .header-title { font-size: 28px; font-weight: 900; color: #FFFFFF; letter-spacing: 1px; margin: 0; }
+    .header-subtitle { font-size: 16px; font-style: italic; color: #FFD700; margin-top: 10px; }
     
-    for code, label in LEAGUES.items():
-        print(f"Σκανάρισμα στατιστικών για: {label}...")
-        l_stats = get_advanced_stats(code)
-        time.sleep(7) # Απαραίτητο κενό ανάμεσα στις λίγκες
+    .date-badge {
+        background-color: #1E1E1E;
+        color: #FFD700;
+        padding: 10px;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 15px;
+        border: 1px solid #FFD700;
+        margin-bottom: 25px;
+    }
+    
+    .vip-section-title {
+        color: #F87171;
+        font-size: 22px;
+        font-weight: bold;
+        margin-top: 20px;
+        margin-bottom: 15px;
+    }
+    
+    .match-card {
+        background-color: #1A1A10;
+        border: 2px solid #FFD700;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    .league-label { color: #FCD34D; font-size: 14px; font-weight: bold; text-transform: uppercase; margin-bottom: 8px; }
+    .teams-label { color: #FFFFFF; font-size: 22px; font-weight: bold; margin-bottom: 12px; }
+    
+    .time-badge {
+        background-color: #EF4444;
+        color: #FFFFFF;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: bold;
+        display: inline-block;
+        margin-bottom: 15px;
+    }
+    
+    .tip-main {
+        background-color: #CCA43B;
+        color: #000000;
+        padding: 12px;
+        border-radius: 10px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+    .tip-cover {
+        background-color: #D97706;
+        color: #FFFFFF;
+        padding: 12px;
+        border-radius: 10px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 17px;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
-        url = f"https://api.football-data.org/v4/competitions/{code}/matches"
+# --- ΚΕΦΑΛΙΔΑ MARIOS PRO-BET PRO ---
+st.markdown("""
+    <div class="header-box">
+        <div class="header-title">⚡ MARIOS PRO-BET PRO ⚡</div>
+        <div class="header-subtitle">Poisson Distribution Model</div>
+    </div>
+""", unsafe_allow_html=True)
+
+filename = "daily_predictions.txt"
+
+if os.path.exists(filename):
+    with open(filename, "r", encoding="utf-8") as file:
+        lines = file.readlines()
+        
+    if lines:
         try:
-            res = requests.get(url, headers=HEADERS, timeout=15)
-            if res.status_code == 200:
-                matches_data = res.json()
-                for m in matches_data.get('matches', []):
-                    if m['status'] in ['SCHEDULED', 'TIMED']:
-                        utc_dt = datetime.strptime(m['utcDate'], "%Y-%m-%dT%H:%M:%SZ")
-                        gr_dt = utc_dt + timedelta(hours=3)
-                        match_date_str = gr_dt.strftime("%Y-%m-%d")
+            # Ασφαλής εξαγωγή ημερομηνίας
+            first_line = lines[0].strip()
+            timestamp = first_line.replace("--- ΠΡΟΓΝΩΣΤΙΚΑ ", "").replace(" ---", "")
+            st.markdown(f'<div class="date-badge">📅 ΠΡΟΓΝΩΣΤΙΚΑ {timestamp}</div>', unsafe_allow_html=True)
+        except:
+            st.markdown('<div class="date-badge">📅 ΠΡΟΓΝΩΣΤΙΚΑ (Live Ανανέωση)</div>', unsafe_allow_html=True)
+            
+        st.markdown('<div class="vip-section-title">🔥 VIP PICKS (ΥΨΗΛΟ ΠΟΣΟΣΤΟ >=65%)</div>', unsafe_allow_html=True)
+        
+        match_found = False
+        
+        # Διαβάζουμε όλες τις γραμμές
+        for line in lines:
+            # Αν είναι η γραμμή τίτλων ή η κεφαλίδα, προσπέρνα την
+            if line.startswith("---") or line.startswith("ΛΙΓΚΑ"):
+                continue
+                
+            parts = line.strip().split("|")
+            if len(parts) >= 5:
+                try:
+                    league = parts[0]
+                    teams = parts[1]
+                    match_time = parts[2]
+                    tip = parts[3]
+                    pct = parts[4]
+                    cover = parts[5] if len(parts) > 5 else "-"
+                    
+                    if league == "INFO" or "Δεν υπάρχουν" in teams:
+                        continue
                         
-                        if match_date_str == today_str:
-                            home = m['homeTeam']['name']
-                            away = m['awayTeam']['name']
-                            tip, pct, cover = calculate_prediction(home, away, l_stats)
-                            m_time = gr_dt.strftime("%H:%M")
-                            predictions.append(f"{label}|{home} - {away}|{m_time}|{tip}|{pct}|{cover}")
-            else:
-                print(f"Σφάλμα Scheduled Matches {label}: Status {res.status_code}")
-        except Exception as e:
-            print(f"Αποτυχία λήψης αγώνων για {label}: {e}")
-            continue
-        
-        time.sleep(7)
-
-    # Αποθήκευση στο daily_predictions.txt
-    with open("daily_predictions.txt", "w", encoding="utf-8") as f:
-        timestamp = now_gr.strftime("%d/%m/%Y %H:%M")
-        f.write(f"--- ΠΡΟΓΝΩΣΤΙΚΑ {timestamp} ---\n")
-        f.write("ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ\n")
-        
-        if not predictions:
-            f.write("INFO|Δεν υπάρχουν σημερινοί αγώνες.|-| - | 0 | - \n")
-        else:
-            for p in predictions:
-                f.write(p + "\n")
-    print("Το αρχείο daily_predictions.txt ενημερώθηκε επιτυχώς!")
-
-if __name__ == "__main__":
-    main()
+                    match_found = True
+                    
+                    st.markdown(f"""
+                        <div class="match-card">
+                            <div class="league-label">🏆 {league} [VIP]</div>
+                            <div class="teams-label">{teams}</div>
+                            <div class="time-badge">🕒 {match_time}</div>
+                            <div class="tip-main">👑 {tip} ({pct}%)</div>
+                            <div class="tip-cover">🛡️ {cover}</div>
+                        </div>
+                    """, unsafe_allow_html=True)
+                except:
+                    continue
+                    
+        if not match_found:
+            st.info("ℹ️ Δεν υπάρχουν προγνωστικά διαθέσιμα για τις επιλεγμένες λίγκες αυτή τη στιγμή.")
+else:
+    st.warning("⏳ Το αρχείο δεδομένων Poisson δημιουργείται αυτή τη στιγμή. Παρακαλώ περιμένετε 1 λεπτό και κάντε ανανέωση!")
 
