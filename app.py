@@ -36,6 +36,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+# Κεντρικός VIP Τίτλος
 st.markdown("""
     <div class="header-box">
         <div class="header-title">⚡ MARIOS PRO-BET PRO ⚡</div>
@@ -45,19 +46,22 @@ st.markdown("""
 
 filename = "daily_predictions.txt"
 match_found = False
+timestamp = "Live"
+matches_to_render = []
 
+# 1. Πρώτα διαβάζουμε και αναλύουμε τα δεδομένα
 if os.path.exists(filename):
     try:
         with open(filename, "r", encoding="utf-8") as file:
             lines = file.readlines()
             
         if lines:
-            # Ασφαλές διάβασμα ημερομηνίας
+            # Ασφαλές διάβασμα της ημερομηνίας από την 1η γραμμή
             first_line = lines[0].strip()
-            timestamp = first_line.replace("--- ΠΡΟΓΝΩΣΤΙΚΑ ", "").replace(" ---", "") if "---" in first_line else "Live"
-            st.markdown(f'<div class="date-badge">📅 ΠΡΟΓΝΩΣΤΙΚΑ {timestamp}</div>', unsafe_allow_html=True)
-            st.markdown('<div class="vip-section-title">🔥 VIP PICKS (ΥΨΗΛΟ ΠΟΣΟΣΤΟ)</div>', unsafe_allow_html=True)
+            if "--- ΠΡΟΓΝΩΣΤΙΚΑ " in first_line:
+                timestamp = first_line.replace("--- ΠΡΟΓΝΩΣΤΙΚΑ ", "").replace(" ---", "")
             
+            # Φιλτράρισμα των αγώνων
             for line in lines:
                 if line.startswith("---") or line.startswith("ΛΙΓΚΑ") or not line.strip():
                     continue
@@ -65,32 +69,40 @@ if os.path.exists(filename):
                 parts = line.strip().split("|")
                 if len(parts) >= 5:
                     league_raw = parts[0]
-                    teams = parts[1]
-                    match_time = parts[2]
-                    tip = parts[3]
-                    pct = parts[4]
-                    cover = parts[5] if len(parts) > 5 else "-"
-                    
                     if league_raw == "INFO":
                         continue
-                        
-                    match_found = True
-                    greek_league = LEAGUE_TRANSLATIONS.get(league_raw, league_raw)
                     
-                    st.markdown(f"""
-                        <div class="match-card">
-                            <div class="league-label">🏆 {greek_league} [VIP]</div>
-                            <div class="teams-label">{teams}</div>
-                            <div class="time-badge">🕒 {match_time}</div>
-                            <div class="tip-main">👑 {tip} ({pct}%)</div>
-                            <div class="tip-cover">🛡️ {cover}</div>
-                        </div>
-                    """, unsafe_allow_html=True)
+                    matches_to_render.append(parts)
+                    match_found = True
     except Exception as e:
-        st.error(f"Σφάλμα ανάγνωσης αρχείου: {e}")
+        pass
 
-if not match_found:
-    st.markdown('<div class="date-badge">📅 ΠΡΟΓΝΩΣΤΙΚΑ (Σήμερα)</div>', unsafe_allow_html=True)
-    st.markdown('<div class="vip-section-title">🔥 VIP PICKS (ΥΨΗΛΟ ΠΟΣΟΣΤΟ)</div>', unsafe_allow_html=True)
+# 2. Τώρα σχεδιάζουμε το Interface ΜΙΑ ΦΟΡΑ με τα σωστά στοιχεία
+st.markdown(f'<div class="date-badge">📅 ΠΡΟΓΝΩΣΤΙΚΑ {timestamp}</div>', unsafe_allow_html=True)
+st.markdown('<div class="vip-section-title">🔥 VIP PICKS (ΥΨΗΛΟ ΠΟΣΟΣΤΟ)</div>', unsafe_allow_html=True)
+
+if match_found:
+    # Σχεδίαση των καρτών αν βρέθηκαν αγώνες
+    for parts in matches_to_render:
+        league_raw = parts[0]
+        teams = parts[1]
+        match_time = parts[2]
+        tip = parts[3]
+        pct = parts[4]
+        cover = parts[5] if len(parts) > 5 else "-"
+        
+        greek_league = LEAGUE_TRANSLATIONS.get(league_raw, league_raw)
+        
+        st.markdown(f"""
+            <div class="match-card">
+                <div class="league-label">🏆 {greek_league} [VIP]</div>
+                <div class="teams-label">{teams}</div>
+                <div class="time-badge">🕒 {match_time}</div>
+                <div class="tip-main">👑 {tip} ({pct}%)</div>
+                <div class="tip-cover">🛡️ {cover}</div>
+            </div>
+        """, unsafe_allow_html=True)
+else:
+    # Καθαρό μήνυμα χωρίς διπλότυπα αν είναι καθημερινή και δεν έχει ματς
     st.info("ℹ️ Δεν υπάρχουν προγνωστικά διαθέσιμα για τις 5 μεγάλες λίγκες αυτή τη στιγμή (Καθημερινή).")
 
