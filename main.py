@@ -7,13 +7,17 @@ from datetime import datetime, timedelta
 API_KEY = "a963742bcd5642afbe8c842d057f25ad"
 HEADERS = { "X-Auth-Token": API_KEY }
 
-# Κρατάμε τις 5 βασικές ενεργές λίγκες για εξοικονόμηση API Requests
+# Οι επίσημες ονομασίες του API για να μην υπάρχει μπέρδεμα
 LEAGUES = {
-    "PL": "PREMIER LEAGUE",
-    "PD": "LA LIGA",
-    "SA": "SERIE A",
-    "BL1": "BUNDESLIGA",
-    "FL1": "LIGUE 1"
+    "PL": "Premier League",
+    "ELC": "Championship",
+    "PD": "La Liga",
+    "SA": "Serie A",
+    "BL1": "Bundesliga",
+    "FL1": "Ligue 1",
+    "DED": "Eredivisie",
+    "PPL": "Primeira Liga",
+    "BSA": "Campeonato Brasileiro Série A"
 }
 
 def poisson_probability(lmbda, k):
@@ -26,7 +30,6 @@ def get_advanced_stats(league_code):
     matches_url = f"https://api.football-data.org/v4/competitions/{league_code}/matches?status=FINISHED"
 
     try:
-        # 1. Λήψη Βαθμολογίας
         st_res = requests.get(standings_url, headers=HEADERS, timeout=15)
         if st_res.status_code == 200:
             data = st_res.json()
@@ -39,13 +42,9 @@ def get_advanced_stats(league_code):
                         'recent_goals_scored': [],
                         'recent_goals_conceded': []
                     }
-        else:
-            print(f"Σφάλμα Standings {league_code}: Status {st_res.status_code}")
-
-        # Μεγάλο sleep για να προλάβει να μηδενίσει το Rate Limit του API (Max 10 ανά λεπτό)
+        
         time.sleep(7)
 
-        # 2. Λήψη Πρόσφατων Αγώνων (Αυξάνουμε σε 80 για να σιγουρέψουμε το 5/5 όλων των ομάδων)
         m_res = requests.get(matches_url, headers=HEADERS, timeout=15)
         if m_res.status_code == 200:
             all_matches = m_res.json().get('matches', [])
@@ -63,12 +62,10 @@ def get_advanced_stats(league_code):
                     if a_team in stats and len(stats[a_team]['recent_goals_scored']) < 5:
                         stats[a_team]['recent_goals_scored'].append(a_score)
                         stats[a_team]['recent_goals_conceded'].append(h_score)
-        else:
-            print(f"Σφάλμα Finished Matches {league_code}: Status {m_res.status_code}")
-            
+                        
         return stats
     except Exception as e:
-        print(f"Γενικό Σφάλμα στο get_advanced_stats για {league_code}: {e}")
+        print(f"Σφάλμα στατιστικών {league_code}: {e}")
         return {}
 
 def calculate_prediction(home, away, league_stats):
@@ -81,7 +78,6 @@ def calculate_prediction(home, away, league_stats):
         r_avg = sum(recent)/len(recent) if recent else overall
         return (r_avg * 0.7) + (overall * 0.3)
 
-    # Υπολογισμός αναμενόμενων γκολ (λ) με βάση την επίθεση του ενός και την άμυνα του άλλου
     l_h = get_val(h_s['recent_goals_scored'], h_s['overall_avg_scored']) * (get_val(a_s['recent_goals_conceded'], a_s['overall_avg_conceded']) / 1.3)
     l_a = get_val(a_s['recent_goals_scored'], a_s['overall_avg_scored']) * (get_val(h_s['recent_goals_conceded'], h_s['overall_avg_conceded']) / 1.3)
     l_total = l_h + l_a
@@ -91,10 +87,10 @@ def calculate_prediction(home, away, league_stats):
     prob_2_3 = (poisson_probability(l_total, 2) + poisson_probability(l_total, 3)) * 100
     prob_gg = (1 - poisson_probability(l_h, 0)) * (1 - poisson_probability(l_a, 0)) * 100
 
-    if prob_over > 60:
+    if prob_over > 58:
         tip = "Over 2.5"
         pct = int(prob_over)
-    elif prob_over < 40:
+    elif prob_over < 42:
         tip = "Under 2.5"
         pct = int(100 - prob_over)
     else:
@@ -106,14 +102,12 @@ def calculate_prediction(home, away, league_stats):
 
 def main():
     predictions = []
-    # Χρήση timezone-aware ή σωστού offset (UTC+3 για Ελλάδα)
     now_gr = datetime.utcnow() + timedelta(hours=3)
     today_str = now_gr.strftime("%Y-%m-%d")
     
     for code, label in LEAGUES.items():
-        print(f"Σκανάρισμα στατιστικών για: {label}...")
         l_stats = get_advanced_stats(code)
-        time.sleep(7) # Απαραίτητο κενό ανάμεσα στις λίγκες
+        time.sleep(7)
 
         url = f"https://api.football-data.org/v4/competitions/{code}/matches"
         try:
@@ -132,15 +126,11 @@ def main():
                             tip, pct, cover = calculate_prediction(home, away, l_stats)
                             m_time = gr_dt.strftime("%H:%M")
                             predictions.append(f"{label}|{home} - {away}|{m_time}|{tip}|{pct}|{cover}")
-            else:
-                print(f"Σφάλμα Scheduled Matches {label}: Status {res.status_code}")
         except Exception as e:
-            print(f"Αποτυχία λήψης αγώνων για {label}: {e}")
             continue
         
         time.sleep(7)
 
-    # Αποθήκευση στο daily_predictions.txt
     with open("daily_predictions.txt", "w", encoding="utf-8") as f:
         timestamp = now_gr.strftime("%d/%m/%Y %H:%M")
         f.write(f"--- ΠΡΟΓΝΩΣΤΙΚΑ {timestamp} ---\n")
@@ -151,8 +141,6 @@ def main():
         else:
             for p in predictions:
                 f.write(p + "\n")
-    print("Το αρχείο daily_predictions.txt ενημερώθηκε επιτυχώς!")
 
 if __name__ == "__main__":
     main()
-
