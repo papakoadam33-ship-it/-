@@ -7,13 +7,16 @@ from datetime import datetime, timedelta
 API_KEY = "a963742bcd5642afbe8c842d057f25ad"
 HEADERS = { "X-Auth-Token": API_KEY }
 
-# Οι 5 επίσημες λίγκες που επιτρέπει το ΔΩΡΕΑΝ πακέτο σου
+# Προστέθηκαν το Ευρωπαϊκό Πρωτάθλημα (EC) και το Παγκόσμιο Κύπελλο (WC)
 LEAGUES = {
     "PL": "Premier League",
     "PD": "La Liga",
     "SA": "Serie A",
     "BL1": "Bundesliga",
-    "FL1": "Ligue 1"
+    "FL1": "Ligue 1",
+    "CL": "Champions League",
+    "EC": "Euro",           # Εθνικές Ομάδες Ευρώπης
+    "WC": "World Cup"       # Εθνικές Ομάδες Παγκοσμίως
 }
 
 def poisson_probability(lmbda, k):
@@ -127,7 +130,6 @@ def main():
         
         time.sleep(7)
 
-    # Γράφουμε ΠΑΝΤΑ το αρχείο, ακόμα και άδειο, για να μην κρασάρει το App
     with open("daily_predictions.txt", "w", encoding="utf-8") as f:
         timestamp = now_gr.strftime("%d/%m/%Y %H:%M")
         f.write(f"--- ΠΡΟΓΝΩΣΤΙΚΑ {timestamp} ---\n")
