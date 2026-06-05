@@ -3,12 +3,16 @@ import os
 
 st.set_page_config(page_title="MARIOS PRO-BET PRO", page_icon="⚡", layout="centered")
 
+# --- ΟΛΟΚΛΗΡΩΜΕΝΟ ΛΕΞΙΚΟ ΜΕΤΑΦΡΑΣΕΩΝ (ΠΡΩΤΑΘΛΗΜΑΤΑ & ΕΘΝΙΚΕΣ) ---
 LEAGUE_TRANSLATIONS = {
     "Premier League": "Πρωτάθλημα Αγγλίας (Premier League)",
     "La Liga": "Πρωτάθλημα Ισπανίας (La Liga)",
     "Serie A": "Πρωτάθλημα Ιταλίας (Serie A)",
     "Bundesliga": "Πρωτάθλημα Γερμανίας (Bundesliga)",
-    "Ligue 1": "Πρωτάθλημα Γαλλίας (Ligue 1)"
+    "Ligue 1": "Πρωτάθλημα Γαλλίας (Ligue 1)",
+    "Champions League": "Champions League 🏆",
+    "Euro": "Ευρωπαϊκό Πρωτάθλημα (Euro) 🇪🇺",
+    "World Cup": "Παγκόσμιο Κύπελλο (Μουντιάλ) 🌍"
 }
 
 # --- PREMIUM DARK CSS DESIGN ---
@@ -91,6 +95,7 @@ if match_found:
         pct = parts[4]
         cover = parts[5] if len(parts) > 5 else "-"
         
+        # Αντιστοίχιση με την ελληνική μετάφραση
         greek_league = LEAGUE_TRANSLATIONS.get(league_raw, league_raw)
         
         st.markdown(f"""
@@ -103,6 +108,6 @@ if match_found:
             </div>
         """, unsafe_allow_html=True)
 else:
-    # Καθαρό μήνυμα χωρίς διπλότυπα αν είναι καθημερινή και δεν έχει ματς
-    st.info("ℹ️ Δεν υπάρχουν προγνωστικά διαθέσιμα για τις 5 μεγάλες λίγκες αυτή τη στιγμή (Καθημερινή).")
+    # Καθαρό μήνυμα χωρίς συντακτικά λάθη αν δεν υπάρχουν αγώνες
+    st.info("ℹ️ Δεν υπάρχουν προγνωστικά διαθέσιμα για τις επιλεγμένες λίγκες αυτή τη στιγμή.")
 
