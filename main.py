@@ -5,13 +5,14 @@ import time
 import sqlite3
 from datetime import datetime, timedelta
 
-# --- API KEYS (Από GitHub Secrets ή τοπικά) ---
+# --- API KEYS (Διαβάζονται αυτόματα από τα GitHub Secrets) ---
 FOOTBALL_KEY = os.environ.get("FOOTBALL_API_KEY", "a963742bcd5642afbe8c842d057f25ad")
-ODDS_KEY = os.environ.get("ODDS_API_KEY", "ba7b6e1475e3deaf847ca17f0fb0fded")
+ODDS_KEY = os.environ.get("ba7b6e1475e3deaf847ca17f0fb0fded")
 
 HEADERS_FOOTBALL = { "X-Auth-Token": FOOTBALL_KEY }
-BANKROLL = 1000.0
+BANKROLL = 1000.0  # Το κεφάλαιό σου για το Kelly Criterion
 
+# Λίγκες και τα αντίστοιχα IDs τους για το Odds API
 LEAGUES = {
     "PL": {"name": "Premier League", "odds_market": "soccer_epl"},
     "PD": {"name": "La Liga", "odds_market": "soccer_spain_la_liga"},
@@ -37,7 +38,6 @@ def init_database():
 
 # --- FETCH REAL ODDS (The Odds API) ---
 def get_real_odds(odds_market):
-    """ Φέρνει τις αποδόσεις για Over/Under 2.5 από γνωστούς μπουκ """
     odds_dict = {}
     if not ODDS_KEY or "YOUR_ODDS" in ODDS_KEY:
         return odds_dict
@@ -46,7 +46,7 @@ def get_real_odds(odds_market):
     params = {
         'apiKey': ODDS_KEY,
         'regions': 'eu',         # Ευρωπαϊκοί Μπουκ (Stoiximan, Bet365, κλπ)
-        'markets': 'totals',     # Over/Under
+        'markets': 'totals',     # Over/Under 2.5
         'oddsFormat': 'decimal'
     }
     try:
@@ -58,13 +58,12 @@ def get_real_odds(odds_market):
                 away = match['away_team']
                 match_key = f"{home}-{away}"
                 
-                # Παίρνουμε ενδεικτικά τον πρώτο διαθέσιμο μπουκ (π.χ. Bet365/Stoiximan)
+                # Επιλογή του πρώτου διαθέσιμου Bookmaker
                 if match.get('bookmakers'):
                     bookmaker = match['bookmakers'][0] 
                     for market in bookmaker.get('markets', []):
                         if market['key'] == 'totals':
                             for outcome in market['outcomes']:
-                                # Ψάχνουμε το standard line του Over 2.5
                                 if outcome.get('point') == 2.5:
                                     if match_key not in odds_dict:
                                         odds_dict[match_key] = {}
@@ -100,7 +99,7 @@ def kelly_stake(bankroll, probability, odds):
     q = 1 - p
     if b <= 0: return 0.0
     kelly = ((b * p) - q) / b
-    # 10% Fractional Kelly για ασφάλεια
+    # 10% Fractional Kelly για απόλυτη ασφάλεια κάβας
     return round(bankroll * max(0, kelly) * 0.1, 2)
 
 # --- ΣΤΑΤΙΣΤΙΚΑ FOOTBALL-DATA.ORG ---
@@ -110,7 +109,7 @@ def get_advanced_stats(league_code):
     matches_url = f"https://api.football-data.org/v4/competitions/{league_code}/matches?status=FINISHED"
 
     try:
-        st_res = requests.get(standings_url, headers={ "X-Auth-Token": FOOTBALL_KEY }, timeout=15)
+        st_res = requests.get(standings_url, headers=HEADERS_FOOTBALL, timeout=15)
         if st_res.status_code == 200:
             data = st_res.json()
             for standing in data.get('standings', []):
@@ -122,8 +121,8 @@ def get_advanced_stats(league_code):
                             'overall_avg_conceded': team['goalsAgainst'] / team['playedGames'] if team['playedGames'] > 0 else 1.0,
                             'recent_goals_scored': [], 'recent_goals_conceded': []
                         }
-        time.sleep(2)
-        m_res = requests.get(matches_url, headers={ "X-Auth-Token": FOOTBALL_KEY }, timeout=15)
+        time.sleep(7)
+        m_res = requests.get(matches_url, headers=HEADERS_FOOTBALL, timeout=15)
         if m_res.status_code == 200:
             all_matches = m_res.json().get('matches', [])
             for match in reversed(all_matches[-100:]):
@@ -175,7 +174,7 @@ def calculate_prediction(home, away, league_stats, real_odds_dict):
     stars = confidence_stars(pct)
     top_scores = exact_score_prediction(l_h, l_a)
 
-    # Αντιστοίχιση πραγματικής απόδοσης (αν υπάρχει στο Odds API)
+    # Σύνδεση με πραγματικές αποδόσεις
     chosen_odds = 1.90
     match_key = f"{home}-{away}"
     if match_key in real_odds_dict:
@@ -191,17 +190,24 @@ def calculate_prediction(home, away, league_stats, real_odds_dict):
 def main():
     init_database()
     predictions = []
+    
+    # Ώρα Ελλάδας (UTC+3)
     now_gr = datetime.utcnow() + timedelta(hours=3)
-    today_str = now_gr.strftime("%Y-%m-%d")
+    today = now_gr.date()
+    tomorrow = today + timedelta(days=1)
+    day_after = today + timedelta(days=2)
+    
+    # Φίλτρο 48ώρου για να εμφανίζονται πάντα αγώνες
+    allowed_dates = [today.strftime("%Y-%m-%d"), tomorrow.strftime("%Y-%m-%d"), day_after.strftime("%Y-%m-%d")]
     
     conn = sqlite3.connect("betting_history.db")
     cursor = conn.cursor()
 
     for code, info in LEAGUES.items():
-        print(f"Ανάλυση & Αποδόσεις για: {info['name']}...")
+        print(f"Ανάλυση & Λήψη αποδόσεων για: {info['name']}...")
         l_stats = get_advanced_stats(code)
         real_odds = get_real_odds(info['odds_market'])
-        time.sleep(5)
+        time.sleep(7)
 
         url = f"https://api.football-data.org/v4/competitions/{code}/matches"
         try:
@@ -210,30 +216,37 @@ def main():
                 for m in res.json().get('matches', []):
                     if m['status'] in ['SCHEDULED', 'TIMED']:
                         gr_dt = datetime.strptime(m['utcDate'], "%Y-%m-%dT%H:%M:%SZ") + timedelta(hours=3)
-                        if gr_dt.strftime("%Y-%m-%d") == today_str:
+                        match_date_str = gr_dt.strftime("%Y-%m-%d")
+                        
+                        if match_date_str in allowed_dates:
                             home, away = m['homeTeam']['name'], m['awayTeam']['name']
                             
                             tip, pct, cover, stars, top_scores, odds, stake = calculate_prediction(home, away, l_stats, real_odds)
                             m_time = gr_dt.strftime("%H:%M")
                             
-                            predictions.append(f"{info['name']}|{home} - {away}|{m_time}|{tip} ({pct}%)|{stars}|Απόδοση: {odds}|Ποντάρισμα: {stake}€|Σκορ: {top_scores}")
+                            # Προσθήκη ημερομηνίας/ώρας στο format του αρχείου
+                            m_date_display = gr_dt.strftime("%d/%m")
+                            predictions.append(f"{info['name']}|{home} - {away}|{m_date_display} {m_time}|{tip} ({pct}%)|{stars}|Απόδοση: {odds}|Ποντάρισμα: {stake}€|Σκορ: {top_scores}")
                             
                             cursor.execute('''
                                 INSERT INTO predictions (date, league, home_team, away_team, prediction, confidence, exact_scores, odds, stake)
                                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                            ''', (today_str, info['name'], home, away, tip, stars, top_scores, odds, stake))
+                            ''', (match_date_str, info['name'], home, away, tip, stars, top_scores, odds, stake))
         except Exception as e:
             print(f"Σφάλμα στη λίγκα {info['name']}: {e}")
-        time.sleep(5)
+        time.sleep(7)
 
     conn.commit()
     conn.close()
 
+    # Εγγραφή στο αρχείο TXT
     with open("daily_predictions.txt", "w", encoding="utf-8") as f:
         f.write(f"--- ΥΒΡΙΔΙΚΑ ΠΡΟΓΝΩΣΤΙΚΑ V3 ({now_gr.strftime('%d/%m/%Y %H:%M')}) ---\n")
-        f.write("ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΕΜΠΙΣΤΟΣΥΝΗ|ΑΠΟΔΟΣΗ|KELLY STAKE|ΠΙΘΑΝΑ ΣΚΟΡ\n")
-        for p in predictions: f.write(p + "\n")
-    print("✅ Το V3 Script ολοκληρώθηκε με επιτυχία!")
+        f.write("ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ/ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΕΜΠΙΣΤΟΣΥΝΗ|ΑΠΟΔΟΣΗ|KELLY STAKE|ΠΙΘΑΝΑ ΣΚΟΡ\n")
+        for p in predictions: 
+            f.write(p + "\n")
+            
+    print("✅ Το V3 Script ολοκληρώθηκε επιτυχώς! Το 'daily_predictions.txt' ενημερώθηκε.")
 
 if __name__ == "__main__":
     main()
