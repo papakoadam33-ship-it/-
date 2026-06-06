@@ -5,9 +5,9 @@ import time
 import sqlite3
 from datetime import datetime, timedelta
 
-# --- API KEYS (Διαβάζονται αυτόματα από τα GitHub Secrets) ---
+# --- API KEYS (Διαβάζονται αυτόματα από τα GitHub Secrets ή χρησιμοποιούν το fallback) ---
 FOOTBALL_KEY = os.environ.get("FOOTBALL_API_KEY", "a963742bcd5642afbe8c842d057f25ad")
-ODDS_KEY = os.environ.get("ba7b6e1475e3deaf847ca17f0fb0fded")
+ODDS_KEY = os.environ.get("ODDS_API_KEY", "ba7b6e1475e3deaf847ca17f0fb0fded")
 
 HEADERS_FOOTBALL = { "X-Auth-Token": FOOTBALL_KEY }
 BANKROLL = 1000.0  # Το κεφάλαιό σου για το Kelly Criterion
