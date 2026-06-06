@@ -14,6 +14,7 @@ BANKROLL = 1000.0  # Το κεφάλαιό σου για το Kelly Criterion
 
 # Λίγκες και τα αντίστοιχα IDs τους για το Odds API
 LEAGUES = {
+    "BSA": {"name": "Campeonato Brasileiro", "odds_market": "soccer_brazil_campeonato"},
     "PL": {"name": "Premier League", "odds_market": "soccer_epl"},
     "PD": {"name": "La Liga", "odds_market": "soccer_spain_la_liga"},
     "SA": {"name": "Serie A", "odds_market": "soccer_italy_serie_a"},
@@ -45,7 +46,7 @@ def get_real_odds(odds_market):
     url = f"https://api.the-odds-api.com/v4/sports/{odds_market}/odds/"
     params = {
         'apiKey': ODDS_KEY,
-        'regions': 'eu',         # Ευρωπαϊκοί Μπουκ (Stoiximan, Bet365, κλπ)
+        'regions': 'eu',         # Ευρωπαϊκοί Μπουκ
         'markets': 'totals',     # Over/Under 2.5
         'oddsFormat': 'decimal'
     }
@@ -58,7 +59,6 @@ def get_real_odds(odds_market):
                 away = match['away_team']
                 match_key = f"{home}-{away}"
                 
-                # Επιλογή του πρώτου διαθέσιμου Bookmaker
                 if match.get('bookmakers'):
                     bookmaker = match['bookmakers'][0] 
                     for market in bookmaker.get('markets', []):
@@ -99,7 +99,6 @@ def kelly_stake(bankroll, probability, odds):
     q = 1 - p
     if b <= 0: return 0.0
     kelly = ((b * p) - q) / b
-    # 10% Fractional Kelly για απόλυτη ασφάλεια κάβας
     return round(bankroll * max(0, kelly) * 0.1, 2)
 
 # --- ΣΤΑΤΙΣΤΙΚΑ FOOTBALL-DATA.ORG ---
@@ -174,7 +173,6 @@ def calculate_prediction(home, away, league_stats, real_odds_dict):
     stars = confidence_stars(pct)
     top_scores = exact_score_prediction(l_h, l_a)
 
-    # Σύνδεση με πραγματικές αποδόσεις
     chosen_odds = 1.90
     match_key = f"{home}-{away}"
     if match_key in real_odds_dict:
@@ -191,13 +189,11 @@ def main():
     init_database()
     predictions = []
     
-    # Ώρα Ελλάδας (UTC+3)
     now_gr = datetime.utcnow() + timedelta(hours=3)
     today = now_gr.date()
     tomorrow = today + timedelta(days=1)
     day_after = today + timedelta(days=2)
     
-    # Φίλτρο 48ώρου για να εμφανίζονται πάντα αγώνες
     allowed_dates = [today.strftime("%Y-%m-%d"), tomorrow.strftime("%Y-%m-%d"), day_after.strftime("%Y-%m-%d")]
     
     conn = sqlite3.connect("betting_history.db")
@@ -223,9 +219,8 @@ def main():
                             
                             tip, pct, cover, stars, top_scores, odds, stake = calculate_prediction(home, away, l_stats, real_odds)
                             m_time = gr_dt.strftime("%H:%M")
-                            
-                            # Προσθήκη ημερομηνίας/ώρας στο format του αρχείου
                             m_date_display = gr_dt.strftime("%d/%m")
+                            
                             predictions.append(f"{info['name']}|{home} - {away}|{m_date_display} {m_time}|{tip} ({pct}%)|{stars}|Απόδοση: {odds}|Ποντάρισμα: {stake}€|Σκορ: {top_scores}")
                             
                             cursor.execute('''
@@ -239,15 +234,13 @@ def main():
     conn.commit()
     conn.close()
 
-    # Εγγραφή στο αρχείο TXT
     with open("daily_predictions.txt", "w", encoding="utf-8") as f:
         f.write(f"--- ΥΒΡΙΔΙΚΑ ΠΡΟΓΝΩΣΤΙΚΑ V3 ({now_gr.strftime('%d/%m/%Y %H:%M')}) ---\n")
         f.write("ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ/ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΕΜΠΙΣΤΟΣΥΝΗ|ΑΠΟΔΟΣΗ|KELLY STAKE|ΠΙΘΑΝΑ ΣΚΟΡ\n")
         for p in predictions: 
             f.write(p + "\n")
             
-    print("✅ Το V3 Script ολοκληρώθηκε επιτυχώς! Το 'daily_predictions.txt' ενημερώθηκε.")
+    print("✅ Το V3 Script ολοκληρώθηκε επιτυχώς!")
 
 if __name__ == "__main__":
     main()
-
