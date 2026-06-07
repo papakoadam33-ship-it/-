@@ -6,7 +6,7 @@ st.set_page_config(page_title="MARIOS PRO-BET PRO", page_icon="⚡", layout="cen
 # --- ΟΛΟΚΛΗΡΩΜΕΝΟ ΛΕΞΙΚΟ ΜΕΤΑΦΡΑΣΕΩΝ ΓΙΑ ΤΟ V3 ---
 LEAGUE_TRANSLATIONS = {
     "Campeonato Brasileiro": "Πρωτάθλημα Βραζιλίας (Brasileirao) 🇧🇷",
-    "Premier League": "Πρωτάθλημα Αγγλίας (Premier League) 🏴󠁧󠁢󠁧󠁥󠁮󠁧󠁿",
+    "Premier League": "Πρωτάθλημα Αγγλίας (Premier League) 🏴󠁧󠁢Acceptance",
     "La Liga": "Πρωτάθλημα Ισπανίας (La Liga) 🇪🇸",
     "Serie A": "Πρωτάθλημα Ιταλίας (Serie A) 🇮🇹",
     "Bundesliga": "Πρωτάθλημα Γερμανίας (Bundesliga) 🇩🇪",
@@ -31,7 +31,7 @@ st.markdown("""
     }
     .vip-section-title { color: #F87171; font-size: 22px; font-weight: bold; margin-top: 20px; margin-bottom: 15px; }
     
-    /* Αναβαθμισμένη Κάρτα Αγώνα */
+    /* Κάρτα Αγώνα */
     .match-card { background-color: #1A1A1A; border: 1px solid #333333; border-left: 5px solid #FFD700; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
     .league-label { color: #FCD34D; font-size: 13px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; }
     .teams-label { color: #FFFFFF; font-size: 20px; font-weight: bold; margin-bottom: 5px; }
@@ -60,31 +60,31 @@ match_found = False
 timestamp = "Live"
 matches_to_render = []
 
-# 1. Ανάγνωση και σωστό Parsing των V3 δεδομένων
+# 1. Ανάγνωση με ασφαλέστερο φιλτράρισμα
 if os.path.exists(filename):
     try:
         with open(filename, "r", encoding="utf-8") as file:
             lines = file.readlines()
             
         if lines:
-            # Διάβασμα της νέας επικεφαλίδας του V3
             first_line = lines[0].strip()
-            if "--- ΥΒΡΙΔΙΚΑ ΠΡΟΓΝΩΣΤΙΚΑ V3" in first_line:
+            if "--- " in first_line:
                 timestamp = first_line.replace("--- ΥΒΡΙΔΙΚΑ ΠΡΟΓΝΩΣΤΙΚΑ V3 (", "").replace(") ---", "")
             
             for line in lines:
-                if line.startswith("---") or line.startswith("ΛΙΓΚΑ") or not line.strip():
+                clean_line = line.strip()
+                if clean_line.startswith("---") or clean_line.startswith("ΛΙΓΚΑ") or not clean_line:
                     continue
                     
-                parts = line.strip().split("|")
-                # Ο V3 Scraper παράγει ακριβώς 8 στήλες διαχωρισμένες με |
-                if len(parts) == 8:
+                parts = clean_line.split("|")
+                # Πιο ελαστικός έλεγχος: Αν έχει τουλάχιστον τις βασικές στήλες, το δείχνουμε
+                if len(parts) >= 4:
                     matches_to_render.append(parts)
                     match_found = True
     except Exception as e:
         pass
 
-# 2. Σχεδιασμός του Interface με τα νέα δεδομένα
+# 2. Σχεδιασμός του Interface
 st.markdown(f'<div class="date-badge">📅 ΕΝΗΜΕΡΩΣΗ: {timestamp}</div>', unsafe_allow_html=True)
 st.markdown('<div class="vip-section-title">🔥 VIP PICKS & KELLY STAKES</div>', unsafe_allow_html=True)
 
@@ -94,15 +94,17 @@ if match_found:
         teams = parts[1]
         match_time = parts[2]
         tip_with_pct = parts[3]
-        stars = parts[4]
-        odds_str = parts[5]
-        stake_str = parts[6]
-        scores_str = parts[7]
+        
+        # Ασφαλής ανάκτηση προαιρετικών στηλών (αν υπάρχουν)
+        stars = parts[4] if len(parts) > 4 else "⭐"
+        odds_str = parts[5] if len(parts) > 5 else "Απόδοση: -"
+        stake_str = parts[6] if len(parts) > 6 else "Ποντάρισμα: -"
+        scores_str = parts[7] if len(parts) > 7 else "-"
         
         # Μετάφραση Λίγκας
         greek_league = LEAGUE_TRANSLATIONS.get(league_raw, league_raw)
         
-        # Δημιουργία της V3 Κάρτας Αγώνα
+        # Εμφάνιση Κάρτας
         st.markdown(f"""
             <div class="match-card">
                 <div class="league-label">🏆 {greek_league}</div>
@@ -119,5 +121,4 @@ if match_found:
             </div>
         """, unsafe_allow_html=True)
 else:
-    st.info("ℹ️ Δεν υπάρχουν διαθέσιμα προγνωστικά αυτή τη στιγμή. Βεβαιώσου ότι έχει τρέξει επιτυχώς ο Scraper (main.py).")
-
+    st.info("ℹ️ Δεν υπάρχουν διαθέσιμα προγνωστικά αυτή τη στιγμή. Βεβαιώσου ότι έχει τρέξει επιτυχώς ο Scraper (main.py) και έχει δημιουργήσει το αρχείο daily_predictions.txt.")
