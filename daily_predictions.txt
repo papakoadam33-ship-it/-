@@ -1,2 +1,7 @@
---- ΥΒΡΙΔΙΚΑ ΠΡΟΓΝΩΣΤΙΚΑ V3 (07/06/2026 15:16) ---
-ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ/ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΕΜΠΙΣΤΟΣΥΝΗ|ΑΠΟΔΟΣΗ|KELLY STAKE|ΠΙΘΑΝΑ ΣΚΟΡ
+--- ΠΡΟΓΝΩΣΤΙΚΑ 07/06/2026 20:01 ---
+ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
+World Cup|Mexico - South Africa|11/06 22:00|Under 2.5|79|No GG (71%)
+World Cup|South Korea - Czechia|12/06 05:00|Under 2.5|79|No GG (71%)
+World Cup|Canada - Bosnia-Herzegovina|12/06 22:00|Under 2.5|79|No GG (71%)
+World Cup|United States - Paraguay|13/06 04:00|Under 2.5|79|No GG (71%)
+World Cup|Qatar - Switzerland|13/06 22:00|Under 2.5|79|No GG (71%)
