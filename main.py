@@ -3,7 +3,7 @@ import requests
 import math
 import time
 import sqlite3
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 # --- API KEYS (Διαβάζονται αυτόματα από τα GitHub Secrets ή χρησιμοποιούν το fallback) ---
 FOOTBALL_KEY = os.environ.get("FOOTBALL_API_KEY", "a963742bcd5642afbe8c842d057f25ad")
@@ -189,7 +189,8 @@ def main():
     init_database()
     predictions = []
     
-    now_gr = datetime.utcnow() + timedelta(hours=3)
+    # Διορθώθηκε: Χρήση timezone.utc αντί της κατηργημένης utcnow()
+    now_gr = datetime.now(timezone.utc) + timedelta(hours=3)
     today = now_gr.date()
     tomorrow = today + timedelta(days=1)
     day_after = today + timedelta(days=2)
@@ -200,7 +201,7 @@ def main():
     cursor = conn.cursor()
 
     for code, info in LEAGUES.items():
-        print(f"Ανάλυση & Λήψη αποδόσεων για: {info['name']}...")
+        print(f"Διαδικασία για τη λίγκα: {info['name']}...")
         l_stats = get_advanced_stats(code)
         real_odds = get_real_odds(info['odds_market'])
         time.sleep(7)
@@ -211,7 +212,9 @@ def main():
             if res.status_code == 200:
                 for m in res.json().get('matches', []):
                     if m['status'] in ['SCHEDULED', 'TIMED']:
-                        gr_dt = datetime.strptime(m['utcDate'], "%Y-%m-%dT%H:%M:%SZ") + timedelta(hours=3)
+                        # ΔΙΟΡΘΩΘΗΚΕ: Χρήση του fromisoformat για να μην κρασάρει με τη μορφή ημερομηνίας του API
+                        utc_date_str = m['utcDate'].replace("Z", "+00:00")
+                        gr_dt = datetime.fromisoformat(utc_date_str) + timedelta(hours=3)
                         match_date_str = gr_dt.strftime("%Y-%m-%d")
                         
                         if match_date_str in allowed_dates:
