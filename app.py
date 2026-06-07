@@ -5,6 +5,7 @@ st.set_page_config(page_title="MARIOS PRO-BET", page_icon="⚡", layout="centere
 
 # --- ΛΕΞΙΚΟ ΜΕΤΑΦΡΑΣΕΩΝ ---
 LEAGUE_TRANSLATIONS = {
+    "Campeonato Brasileiro": "Πρωτάθλημα Βραζιλίας (Brasileirao) 🇧🇷",
     "Premier League": "Πρωτάθλημα Αγγλίας (Premier League) 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
     "La Liga": "Πρωτάθλημα Ισπανίας (La Liga) 🇪🇸",
     "Serie A": "Πρωτάθλημα Ιταλίας (Serie A) 🇮🇹",
@@ -72,7 +73,6 @@ if os.path.exists(filename):
                 if clean_line.startswith("---") or clean_line.startswith("ΛΙΓΚΑ") or not clean_line:
                     continue
                 parts = clean_line.split("|")
-                # Έλεγχος για τις 6 στήλες του αρχικού σου κώδικα
                 if len(parts) >= 5:
                     matches_to_render.append(parts)
                     match_found = True
@@ -80,7 +80,7 @@ if os.path.exists(filename):
         timestamp = "Live"
 
 st.markdown(f'<div class="date-badge">📅 ΕΝΗΜΕΡΩΣΗ: {timestamp}</div>', unsafe_allow_html=True)
-st.markdown('<div class="vip-section-title">🔥 VIP PICKS (ΥΨΗΛΟ ΠΟΣΟΣΤΟ)</div>', unsafe_allow_html=True)
+st.markdown('<div class="vip-section-title">🔥 VIP PICKS (ΕΠΟΜΕΝΕΣ 7 ΗΜΕΡΕΣ)</div>', unsafe_allow_html=True)
 
 if match_found:
     for parts in matches_to_render:
@@ -95,7 +95,7 @@ if match_found:
             <div class="match-card">
                 <div class="league-label">🏆 {LEAGUE_TRANSLATIONS.get(league_raw, league_raw)}</div>
                 <div class="teams-label">{teams}</div>
-                <div class="time-badge">🕒 Ώρα: {match_time}</div>
+                <div class="time-badge">🕒 {match_time}</div>
                 <div class="prediction-row">
                     <div class="tip-main">👑 {tip}</div>
                     <div class="pct-badge">🎯 {pct}%</div>
@@ -104,4 +104,5 @@ if match_found:
             </div>
         """, unsafe_allow_html=True)
 else:
-    st.info("ℹ️ Δεν υπάρχουν προγνωστικά διαθέσιμα για σήμερα στις επιλεγμένες λίγκες.")
+    st.info("ℹ️ Δεν υπάρχουν προγνωστικά διαθέσιμα για τις επόμενες 7 ημέρες. Μόλις ο scraper βρει αγώνες (π.χ. στη Βραζιλία), θα εμφανιστούν αυτόματα εδώ.")
+
