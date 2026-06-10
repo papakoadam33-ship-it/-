@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 09/06/2026 16:38 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 10/06/2026 10:00 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 World Cup|Mexico - South Africa|11/06 22:00|Under 2.5|79|No GG (71%)
 World Cup|South Korea - Czechia|12/06 05:00|Under 2.5|79|No GG (71%)
@@ -14,3 +14,6 @@ World Cup|Ivory Coast - Ecuador|15/06 02:00|Under 2.5|79|No GG (71%)
 World Cup|Sweden - Tunisia|15/06 05:00|Under 2.5|79|No GG (71%)
 World Cup|Spain - Cape Verde Islands|15/06 19:00|Under 2.5|79|No GG (71%)
 World Cup|Belgium - Egypt|15/06 22:00|Under 2.5|79|No GG (71%)
+World Cup|Saudi Arabia - Uruguay|16/06 01:00|Under 2.5|79|No GG (71%)
+World Cup|Iran - New Zealand|16/06 04:00|Under 2.5|79|No GG (71%)
+World Cup|France - Senegal|16/06 22:00|Under 2.5|79|No GG (71%)
