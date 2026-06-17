@@ -1,9 +1,5 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 16/06/2026 18:49 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 17/06/2026 11:22 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
-World Cup|France - Senegal|16/06 22:00|Under 2.5|79|No GG (71%)
-World Cup|Iraq - Norway|17/06 01:00|Under 2.5|79|No GG (71%)
-World Cup|Argentina - Algeria|17/06 04:00|Under 2.5|79|No GG (71%)
-World Cup|Austria - Jordan|17/06 07:00|Under 2.5|79|No GG (71%)
 World Cup|Portugal - Congo DR|17/06 20:00|Under 2.5|79|No GG (71%)
 World Cup|England - Croatia|17/06 23:00|Under 2.5|79|No GG (71%)
 World Cup|Ghana - Panama|18/06 02:00|Under 2.5|79|No GG (71%)
@@ -24,4 +20,9 @@ World Cup|Spain - Saudi Arabia|21/06 19:00|Over 2.5|100|GG (100%)
 World Cup|Belgium - Iran|21/06 22:00|Over 2.5|59|GG (61%)
 World Cup|Uruguay - Cape Verde Islands|22/06 01:00|Over 2.5|100|GG (100%)
 World Cup|New Zealand - Egypt|22/06 04:00|Over 2.5|59|GG (61%)
-World Cup|Argentina - Austria|22/06 20:00|Under 2.5|79|No GG (71%)
+World Cup|Argentina - Austria|22/06 20:00|Under 2.5|59|GG (90%)
+World Cup|France - Iraq|23/06 00:00|Over 2.5|99|GG (53%)
+World Cup|Norway - Senegal|23/06 03:00|Over 2.5|99|GG (53%)
+World Cup|Jordan - Algeria|23/06 06:00|Under 2.5|59|GG (90%)
+World Cup|Portugal - Uzbekistan|23/06 20:00|Under 2.5|79|No GG (71%)
+World Cup|England - Ghana|23/06 23:00|Under 2.5|79|No GG (71%)
