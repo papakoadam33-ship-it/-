@@ -1,6 +1,5 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 28/06/2026 15:12 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 29/06/2026 10:22 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
-World Cup|South Africa - Canada|28/06 22:00|2-3 Goals|46|No GG (65%)
 World Cup|Brazil - Japan|29/06 20:00|2-3 Goals|47|No GG (62%)
 World Cup|Germany - Paraguay|29/06 23:30|Over 2.5|77|No GG (52%)
 World Cup|Netherlands - Morocco|30/06 04:00|Over 2.5|83|GG (80%)
@@ -16,4 +15,6 @@ World Cup|Switzerland - Algeria|03/07 06:00|Over 2.5|90|GG (71%)
 World Cup|Australia - Egypt|03/07 21:00|Under 2.5|84|No GG (76%)
 World Cup|Argentina - Cape Verde Islands|04/07 01:00|Under 2.5|79|No GG (88%)
 World Cup|Colombia - Ghana|04/07 04:30|Under 2.5|94|No GG (92%)
-World Cup|None - None|04/07 20:00|2-3 Goals|55|GG (58%)
+World Cup|Canada - None|04/07 20:00|2-3 Goals|55|GG (58%)
+World Cup|None - None|05/07 00:00|2-3 Goals|55|GG (58%)
+World Cup|None - None|05/07 23:00|2-3 Goals|55|GG (58%)
