@@ -1,8 +1,5 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 01/07/2026 16:31 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 02/07/2026 09:32 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
-World Cup|England - Congo DR|01/07 19:00|Under 2.5|61|No GG (61%)
-World Cup|Belgium - Senegal|01/07 23:00|Over 2.5|82|GG (71%)
-World Cup|United States - Bosnia-Herzegovina|02/07 03:00|Over 2.5|92|GG (80%)
 World Cup|Spain - Austria|02/07 22:00|2-3 Goals|46|GG (92%)
 World Cup|Portugal - Croatia|03/07 02:00|2-3 Goals|55|No GG (67%)
 World Cup|Switzerland - Algeria|03/07 06:00|Over 2.5|90|GG (71%)
@@ -12,8 +9,8 @@ World Cup|Colombia - Ghana|04/07 04:30|Under 2.5|94|No GG (92%)
 World Cup|Canada - Morocco|04/07 20:00|Over 2.5|75|GG (70%)
 World Cup|Paraguay - France|05/07 00:00|Over 2.5|88|No GG (55%)
 World Cup|Brazil - Norway|05/07 23:00|Over 2.5|83|GG (57%)
-World Cup|None - None|06/07 03:00|2-3 Goals|55|GG (58%)
+World Cup|Mexico - England|06/07 03:00|Under 2.5|89|GG (67%)
 World Cup|None - None|06/07 22:00|2-3 Goals|55|GG (58%)
-World Cup|None - None|07/07 03:00|2-3 Goals|55|GG (58%)
+World Cup|United States - Belgium|07/07 03:00|Over 2.5|69|GG (69%)
 World Cup|None - None|07/07 19:00|2-3 Goals|55|GG (58%)
 World Cup|None - None|07/07 23:00|2-3 Goals|55|GG (58%)
