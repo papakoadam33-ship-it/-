@@ -1,7 +1,8 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 08/07/2026 15:14 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 09/07/2026 09:35 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 World Cup|France - Morocco|09/07 23:00|Over 2.5|70|GG (58%)
 World Cup|Spain - Belgium|10/07 22:00|Under 2.5|82|GG (76%)
 World Cup|Norway - England|12/07 00:00|Over 2.5|87|GG (78%)
 World Cup|Argentina - Switzerland|12/07 04:00|Over 2.5|79|GG (75%)
 World Cup|None - None|14/07 22:00|2-3 Goals|55|GG (58%)
+World Cup|None - None|15/07 22:00|2-3 Goals|55|GG (58%)
