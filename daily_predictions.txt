@@ -1,10 +1,5 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 14/07/2026 08:21 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 14/07/2026 15:05 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
-Campeonato Brasileiro|Botafogo FR - Santos FC|17/07 01:30|Over 2.5|71|GG (71%)
-Campeonato Brasileiro|EC Vitória - CR Vasco da Gama|17/07 01:30|Over 2.5|67|GG (60%)
-Campeonato Brasileiro|EC Bahia - Chapecoense AF|18/07 01:30|Over 2.5|67|GG (64%)
-Campeonato Brasileiro|Fluminense FC - RB Bragantino|18/07 02:00|2-3 Goals|46|No GG (53%)
-Campeonato Brasileiro|Mirassol FC - Grêmio FBPA|18/07 02:00|Under 2.5|65|No GG (58%)
 World Cup|France - Spain|14/07 22:00|Under 2.5|94|No GG (89%)
 World Cup|England - Argentina|15/07 22:00|2-3 Goals|45|GG (59%)
 World Cup|None - None|19/07 00:00|2-3 Goals|55|GG (58%)
