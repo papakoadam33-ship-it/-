@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 15/07/2026 14:36 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 15/07/2026 15:09 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|Botafogo FR - Santos FC|17/07 01:30|Over 2.5|71|GG (71%)
 Campeonato Brasileiro|EC Vitória - CR Vasco da Gama|17/07 01:30|Over 2.5|67|GG (60%)
