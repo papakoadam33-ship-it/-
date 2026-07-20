@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 20/07/2026 09:09 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 20/07/2026 16:00 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|CA Mineiro - EC Bahia|22/07 01:30|2-3 Goals|46|GG (53%)
 Campeonato Brasileiro|Coritiba FBC - SE Palmeiras|23/07 01:30|Over 2.5|58|No GG (50%)
