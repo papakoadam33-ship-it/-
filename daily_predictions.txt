@@ -1,6 +1,5 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 21/07/2026 15:19 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 22/07/2026 08:40 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
-Campeonato Brasileiro|CA Mineiro - EC Bahia|22/07 01:30|2-3 Goals|46|GG (53%)
 Campeonato Brasileiro|Coritiba FBC - SE Palmeiras|23/07 01:30|Over 2.5|58|No GG (50%)
 Campeonato Brasileiro|Chapecoense AF - CR Flamengo|23/07 03:30|2-3 Goals|45|No GG (54%)
 Campeonato Brasileiro|SC Internacional - Cruzeiro EC|23/07 03:30|Over 2.5|65|GG (66%)
@@ -10,10 +9,10 @@ Campeonato Brasileiro|SC Corinthians Paulista - Clube do Remo|24/07 01:30|Over 2
 Campeonato Brasileiro|CA Paranaense - SC Internacional|26/07 00:30|Under 2.5|67|No GG (60%)
 Campeonato Brasileiro|Santos FC - Chapecoense AF|26/07 00:30|Over 2.5|64|GG (60%)
 Campeonato Brasileiro|CR Vasco da Gama - Mirassol FC|26/07 02:30|Under 2.5|68|No GG (65%)
-Campeonato Brasileiro|EC Bahia - SC Corinthians Paulista|26/07 22:00|Over 2.5|65|GG (66%)
+Campeonato Brasileiro|EC Bahia - SC Corinthians Paulista|26/07 22:00|Over 2.5|61|GG (63%)
 Campeonato Brasileiro|Cruzeiro EC - Botafogo FR|26/07 22:00|Over 2.5|64|GG (64%)
 Campeonato Brasileiro|RB Bragantino - Coritiba FBC|27/07 00:30|Over 2.5|69|GG (61%)
 Campeonato Brasileiro|CR Flamengo - São Paulo FC|27/07 00:30|2-3 Goals|45|GG (55%)
 Campeonato Brasileiro|Grêmio FBPA - Fluminense FC|27/07 00:30|2-3 Goals|46|GG (53%)
-Campeonato Brasileiro|SE Palmeiras - CA Mineiro|27/07 01:30|Under 2.5|73|No GG (65%)
+Campeonato Brasileiro|SE Palmeiras - CA Mineiro|27/07 01:30|Under 2.5|76|No GG (70%)
 Campeonato Brasileiro|Clube do Remo - EC Vitória|27/07 01:30|2-3 Goals|46|GG (56%)
