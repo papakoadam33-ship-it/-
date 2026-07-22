@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 22/07/2026 08:40 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 22/07/2026 15:22 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|Coritiba FBC - SE Palmeiras|23/07 01:30|Over 2.5|58|No GG (50%)
 Campeonato Brasileiro|Chapecoense AF - CR Flamengo|23/07 03:30|2-3 Goals|45|No GG (54%)
