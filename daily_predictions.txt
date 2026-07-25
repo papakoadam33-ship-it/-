@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 25/07/2026 08:35 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 25/07/2026 14:56 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|CA Paranaense - SC Internacional|26/07 00:30|2-3 Goals|46|GG (50%)
 Campeonato Brasileiro|Santos FC - Chapecoense AF|26/07 00:30|Over 2.5|70|GG (56%)
