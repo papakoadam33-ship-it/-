@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 24/07/2026 15:13 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 25/07/2026 08:35 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|CA Paranaense - SC Internacional|26/07 00:30|2-3 Goals|46|GG (50%)
 Campeonato Brasileiro|Santos FC - Chapecoense AF|26/07 00:30|Over 2.5|70|GG (56%)
@@ -18,3 +18,5 @@ Campeonato Brasileiro|SC Internacional - CR Flamengo|30/07 01:30|Over 2.5|67|GG 
 Campeonato Brasileiro|Mirassol FC - Clube do Remo|30/07 01:30|2-3 Goals|47|No GG (50%)
 Campeonato Brasileiro|Fluminense FC - EC Bahia|30/07 03:30|2-3 Goals|46|GG (54%)
 Campeonato Brasileiro|EC Vitória - SE Palmeiras|30/07 03:30|Under 2.5|69|No GG (71%)
+Campeonato Brasileiro|SC Corinthians Paulista - CA Paranaense|31/07 01:30|Under 2.5|58|No GG (52%)
+Campeonato Brasileiro|Coritiba FBC - Cruzeiro EC|31/07 03:30|Over 2.5|70|GG (68%)
