@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 29/07/2026 08:43 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 29/07/2026 15:55 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|SC Internacional - CR Flamengo|30/07 01:30|Over 2.5|65|GG (53%)
 Campeonato Brasileiro|Mirassol FC - Clube do Remo|30/07 01:30|2-3 Goals|47|No GG (50%)
