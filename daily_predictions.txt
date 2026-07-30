@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 30/07/2026 08:31 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 30/07/2026 15:24 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|SC Corinthians Paulista - CA Paranaense|31/07 01:30|Under 2.5|66|No GG (59%)
 Campeonato Brasileiro|Coritiba FBC - Cruzeiro EC|31/07 03:30|2-3 Goals|46|GG (53%)
