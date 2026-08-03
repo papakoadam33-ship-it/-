@@ -1,3 +1,9 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 02/08/2026 14:55 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 03/08/2026 09:10 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|Grêmio FBPA - São Paulo FC|08/08 22:00|2-3 Goals|47|GG (51%)
+Campeonato Brasileiro|Clube do Remo - CA Mineiro|09/08 00:30|Under 2.5|60|No GG (58%)
+Campeonato Brasileiro|Coritiba FBC - Chapecoense AF|09/08 02:30|2-3 Goals|47|No GG (53%)
+Campeonato Brasileiro|Botafogo FR - Fluminense FC|09/08 03:00|Under 2.5|80|No GG (71%)
+Campeonato Brasileiro|Cruzeiro EC - Mirassol FC|09/08 17:00|Under 2.5|72|No GG (64%)
+Campeonato Brasileiro|EC Bahia - CR Vasco da Gama|09/08 22:00|Under 2.5|62|No GG (73%)
+Campeonato Brasileiro|SE Palmeiras - SC Internacional|09/08 22:00|Over 2.5|66|No GG (70%)
