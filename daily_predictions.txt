@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 04/08/2026 08:40 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 04/08/2026 15:53 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|Grêmio FBPA - São Paulo FC|08/08 22:00|2-3 Goals|47|GG (51%)
 Campeonato Brasileiro|Clube do Remo - CA Mineiro|09/08 00:30|Under 2.5|60|No GG (58%)
