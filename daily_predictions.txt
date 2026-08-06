@@ -1,12 +1,12 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 06/08/2026 08:39 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 06/08/2026 15:51 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
-Campeonato Brasileiro|Grêmio FBPA - São Paulo FC|08/08 22:00|2-3 Goals|47|GG (51%)
+Campeonato Brasileiro|Grêmio FBPA - São Paulo FC|08/08 22:00|2-3 Goals|46|GG (56%)
 Campeonato Brasileiro|Clube do Remo - CA Mineiro|09/08 00:30|Under 2.5|60|No GG (58%)
-Campeonato Brasileiro|Coritiba FBC - Chapecoense AF|09/08 02:30|2-3 Goals|47|No GG (53%)
-Campeonato Brasileiro|Botafogo FR - Fluminense FC|09/08 03:00|Under 2.5|80|No GG (71%)
-Campeonato Brasileiro|Cruzeiro EC - Mirassol FC|09/08 17:00|Under 2.5|72|No GG (64%)
-Campeonato Brasileiro|EC Bahia - CR Vasco da Gama|09/08 22:00|Under 2.5|62|No GG (73%)
-Campeonato Brasileiro|SE Palmeiras - SC Internacional|09/08 22:00|Over 2.5|66|No GG (70%)
-Campeonato Brasileiro|RB Bragantino - SC Corinthians Paulista|10/08 00:30|Under 2.5|84|No GG (75%)
-Campeonato Brasileiro|Santos FC - CA Paranaense|10/08 00:30|2-3 Goals|45|No GG (57%)
+Campeonato Brasileiro|Coritiba FBC - Chapecoense AF|09/08 02:30|Over 2.5|63|GG (53%)
+Campeonato Brasileiro|Botafogo FR - Fluminense FC|09/08 03:00|Under 2.5|69|No GG (61%)
+Campeonato Brasileiro|Cruzeiro EC - Mirassol FC|09/08 17:00|Under 2.5|62|No GG (56%)
+Campeonato Brasileiro|EC Bahia - CR Vasco da Gama|09/08 22:00|Under 2.5|58|No GG (66%)
+Campeonato Brasileiro|SE Palmeiras - SC Internacional|09/08 22:00|Over 2.5|67|No GG (54%)
+Campeonato Brasileiro|RB Bragantino - SC Corinthians Paulista|10/08 00:30|Under 2.5|67|No GG (59%)
+Campeonato Brasileiro|Santos FC - CA Paranaense|10/08 00:30|2-3 Goals|47|No GG (54%)
 Campeonato Brasileiro|CR Flamengo - EC Vitória|10/08 01:30|2-3 Goals|45|No GG (67%)
