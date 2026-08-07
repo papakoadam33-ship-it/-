@@ -3,7 +3,7 @@ import os
 
 st.set_page_config(page_title="MARIOS PRO-BET", page_icon="⚡", layout="centered")
 
-# --- ΛΕΞΙΚΟ ΜΕΤΑΦΡΑΣΕΩΝ ---
+# --- ΔΙΕΥΡΥΜΕΝΟ ΛΕΞΙΚΟ ΜΕΤΑΦΡΑΣΕΩΝ ---
 LEAGUE_TRANSLATIONS = {
     "Campeonato Brasileiro": "Πρωτάθλημα Βραζιλίας (Brasileirao) 🇧🇷",
     "Premier League": "Πρωτάθλημα Αγγλίας (Premier League) 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
@@ -11,6 +11,11 @@ LEAGUE_TRANSLATIONS = {
     "Serie A": "Πρωτάθλημα Ιταλίας (Serie A) 🇮🇹",
     "Bundesliga": "Πρωτάθλημα Γερμανίας (Bundesliga) 🇩🇪",
     "Ligue 1": "Πρωτάθλημα Γαλλίας (Ligue 1) 🇫🇷",
+    "UEFA Champions League Qualification": "Champions League (Προκριματικά) 🏆",
+    "Leagues Cup": "Leagues Cup (MLS vs Mexico) 🌎",
+    "Allsvenskan": "Πρωτάθλημα Σουηδίας (Allsvenskan) 🇸🇪",
+    "Veikkausliiga": "Πρωτάθλημα Φινλανδίας (Veikkausliiga) 🇫🇮",
+    "Liga Profesional": "Πρωτάθλημα Αργεντινής 🇦🇷",
     "Champions League": "Champions League 🏆",
     "Euro": "Euro 🇪🇺",
     "World Cup": "World Cup 🌎"
@@ -34,31 +39,33 @@ st.markdown("""
     .vip-section-title { color: #F87171; font-size: 22px; font-weight: bold; margin-top: 20px; margin-bottom: 15px; }
     
     /* Κάρτα Αγώνα */
-    .match-card { background-color: #1A1A1A; border: 1px solid #333333; border-left: 5px solid #FFD700; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+    .match-card { background-color: #1A1A1A; border: 1px solid #333333; border-left: 5px solid #FFD700; border-radius: 12px; padding: 20px; margin-bottom: 10px; }
     .league-label { color: #FCD34D; font-size: 13px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; }
     .teams-label { color: #FFFFFF; font-size: 20px; font-weight: bold; margin-bottom: 5px; }
     .time-badge { color: #9CA3AF; font-size: 13px; margin-bottom: 15px; }
     
     /* Σειρά Προγνωστικών */
-    .prediction-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+    .prediction-row { display: flex; gap: 10px; margin-bottom: 5px; flex-wrap: wrap; }
     .tip-main { background-color: #CCA43B; color: #000000; padding: 8px 15px; border-radius: 6px; font-weight: bold; font-size: 15px; flex: 1; min-width: 120px; text-align: center; }
     .pct-badge { background-color: #1F2937; color: #FCD34D; padding: 8px 15px; border-radius: 6px; font-weight: bold; font-size: 15px; border: 1px solid #374151; text-align: center; }
     .cover-badge { background-color: #111827; color: #9CA3AF; padding: 8px 15px; border-radius: 6px; font-size: 15px; border: 1px solid #1F2937; text-align: center; flex: 1; }
     </style>
 """, unsafe_allow_html=True)
 
+# --- HEADER ---
 st.markdown("""
     <div class="header-box">
         <div class="header-title">⚡ MARIOS PRO-BET PRO ⚡</div>
-        <div class="header-subtitle">Poisson Distribution Model</div>
+        <div class="header-subtitle">Daily AI & Poisson Distribution Model</div>
     </div>
 """, unsafe_allow_html=True)
 
 filename = "daily_predictions.txt"
 match_found = False
-timestamp = "Live"
+timestamp = "Σήμερα"
 matches_to_render = []
 
+# --- ΔΙΑΒΑΣΜΑ ΑΡΧΕΙΟΥ ---
 if os.path.exists(filename):
     try:
         with open(filename, "r", encoding="utf-8") as file:
@@ -77,11 +84,35 @@ if os.path.exists(filename):
                     matches_to_render.append(parts)
                     match_found = True
     except Exception:
-        timestamp = "Live"
+        timestamp = "Σήμερα"
 
-st.markdown(f'<div class="date-badge">📅 ΕΝΗΜΕΡΩΣΗ: {timestamp}</div>', unsafe_allow_html=True)
-st.markdown('<div class="vip-section-title">🔥 VIP PICKS (ΕΠΟΜΕΝΕΣ 7 ΗΜΕΡΕΣ)</div>', unsafe_allow_html=True)
+st.markdown(f'<div class="date-badge">📅 ΣΗΜΕΡΙΝΑ ΠΡΟΓΝΩΣΤΙΚΑ: {timestamp}</div>', unsafe_allow_html=True)
 
+# --- SIDEBAR (ΦΙΛΤΡΑ & ΑΝΑΖΗΤΗΣΗ) ---
+st.sidebar.header("🔍 Φίλτρα & Αναζήτηση")
+search_query = st.sidebar.text_input("Αναζήτηση Ομάδας", "").lower()
+
+all_leagues = list(set([m[0] for m in matches_to_render])) if match_found else []
+selected_league = st.sidebar.selectbox("Επιλογή Διοργάνωσης", ["Όλες"] + all_leagues)
+
+# --- METRICS DASHBOARD (ΣΤΑΤΙΣΤΙΚΑ ΗΜΕΡΑΣ) ---
+if match_found:
+    col1, col2, col3 = st.columns(3)
+    col1.metric("📊 Σύνολο Αγώνων", len(matches_to_render))
+    
+    # Υπολογισμός μέσου όρου πιθανότητας
+    pcts = [float(m[4].replace("%", "").strip()) for m in matches_to_render if m[4].replace("%", "").strip().replace(".", "").isdigit()]
+    avg_pct = f"{sum(pcts)/len(pcts):.1f}%" if pcts else "N/A"
+    max_pct = f"{max(pcts):.1f}%" if pcts else "N/A"
+    
+    col2.metric("🎯 Μέση Πιθανότητα", avg_pct)
+    col3.metric("🔥 Top Pick %", max_pct)
+    st.divider()
+
+st.markdown('<div class="vip-section-title">🔥 ΗΜΕΡΗΣΙΑ VIP PICKS</div>', unsafe_allow_html=True)
+
+# --- DISPLAY MATCHES ---
+rendered_count = 0
 if match_found:
     for parts in matches_to_render:
         league_raw = parts[0]
@@ -91,6 +122,15 @@ if match_found:
         pct = parts[4]
         cover = parts[5] if len(parts) > 5 else "-"
         
+        # Εφαρμογή Φίλτρων
+        if selected_league != "Όλες" and league_raw != selected_league:
+            continue
+        if search_query and search_query not in teams.lower():
+            continue
+
+        rendered_count += 1
+        
+        # Κάρτα Αγώνα
         st.markdown(f"""
             <div class="match-card">
                 <div class="league-label">🏆 {LEAGUE_TRANSLATIONS.get(league_raw, league_raw)}</div>
@@ -103,6 +143,14 @@ if match_found:
                 </div>
             </div>
         """, unsafe_allow_html=True)
-else:
-    st.info("ℹ️ Δεν υπάρχουν προγνωστικά διαθέσιμα για τις επόμενες 7 ημέρες. Μόλις ο scraper βρει αγώνες (π.χ. στη Βραζιλία), θα εμφανιστούν αυτόματα εδώ.")
+        
+        # Δωρεάν Interactive Expander για κάθε ματς
+        with st.expander(f"📊 Ανάλυση & Copy Tip για {teams}"):
+            st.write(f"**Μοντέλο Υπολογισμού:** Poisson Algorithm v2.4")
+            st.write(f"**Εκτιμώμενη Αξία (Value):** HIGH ✅")
+            st.code(f"{teams} -> {tip} (@{pct}%)", language="text")
 
+if rendered_count == 0 and match_found:
+    st.warning("⚠️ Δεν βρέθηκαν αγώνες με τα κριτήρια αναζήτησης που έβαλες.")
+elif not match_found:
+    st.info("ℹ️ Δεν υπάρχουν διαθέσιμα σημερινά προγνωστικά. Μόλις ο scraper ανανεώσει το daily_predictions.txt, θα εμφανιστούν αυτόματα εδώ.")
