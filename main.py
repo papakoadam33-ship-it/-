@@ -7,7 +7,7 @@ from datetime import datetime, timedelta, timezone
 API_KEY = "a963742bcd5642afbe8c842d057f25ad"
 HEADERS = { "X-Auth-Token": API_KEY }
 
-# Προστέθηκε η Βραζιλία (BSA) που έχει αγώνες το καλοκαίρι
+# ΟΛΕΣ ΟΙ ΔΩΡΕΑΝ ΔΙΟΡΓΑΝΩΣΕΙΣ ΠΟΥ ΥΠΟΣΤΗΡΙΖΕΙ ΤΟ FOOTBALL-DATA.ORG API
 LEAGUES = {
     "BSA": "Campeonato Brasileiro",
     "PL": "Premier League",
@@ -15,6 +15,9 @@ LEAGUES = {
     "SA": "Serie A",
     "BL1": "Bundesliga",
     "FL1": "Ligue 1",
+    "PPD": "Primeira Liga",        # Πορτογαλία
+    "DED": "Eredivisie",            # Ολλανδία
+    "ELC": "Championship",          # Β' Αγγλίας
     "CL": "Champions League",
     "EC": "Euro",
     "WC": "World Cup"
@@ -22,7 +25,10 @@ LEAGUES = {
 
 def poisson_probability(lmbda, k):
     if lmbda <= 0: return 0
-    return (math.exp(-lmbda) * (lmbda**k)) / math.factorial(k)
+    try:
+        return (math.exp(-lmbda) * (lmbda**k)) / math.factorial(k)
+    except OverflowError:
+        return 0
 
 def get_advanced_stats(league_code):
     stats = {}
@@ -36,14 +42,15 @@ def get_advanced_stats(league_code):
             for standing in data.get('standings', []):
                 for team in standing.get('table', []):
                     name = team['team']['name']
+                    played = team['playedGames']
                     stats[name] = {
-                        'overall_avg_scored': team['goalsFor'] / team['playedGames'] if team['playedGames'] > 0 else 1.0,
-                        'overall_avg_conceded': team['goalsAgainst'] / team['playedGames'] if team['playedGames'] > 0 else 1.0,
+                        'overall_avg_scored': team['goalsFor'] / played if played > 0 else 1.0,
+                        'overall_avg_conceded': team['goalsAgainst'] / played if played > 0 else 1.0,
                         'recent_goals_scored': [],
                         'recent_goals_conceded': []
                     }
         
-        time.sleep(7)
+        time.sleep(6) # Καθυστέρηση για αποφυγή 429 Too Many Requests
 
         m_res = requests.get(matches_url, headers=HEADERS, timeout=15)
         if m_res.status_code == 200:
@@ -102,15 +109,14 @@ def calculate_prediction(home, away, league_stats):
 
 def main():
     predictions = []
-    # Χρήση timezone-aware UTC+3 για την Ελλάδα
+    # Ώρα Ελλάδος (UTC+3)
     now_gr = datetime.now(timezone.utc) + timedelta(hours=3)
-    
-    # Φτιάχνει λίστα με τις επόμενες 7 ημέρες για να τραβάει αρκετούς αγώνες
     allowed_dates = [(now_gr.date() + timedelta(days=i)).strftime("%Y-%m-%d") for i in range(7)]
     
     for code, label in LEAGUES.items():
+        print(f"Σάρωση: {label} ({code})...")
         l_stats = get_advanced_stats(code)
-        time.sleep(7)
+        time.sleep(6)
 
         url = f"https://api.football-data.org/v4/competitions/{code}/matches"
         try:
@@ -119,29 +125,31 @@ def main():
                 matches_data = res.json()
                 for m in matches_data.get('matches', []):
                     if m['status'] in ['SCHEDULED', 'TIMED']:
-                        # Μετατροπή της ώρας σε UTC+3
                         utc_dt = datetime.fromisoformat(m['utcDate'].replace("Z", "+00:00"))
                         gr_dt = utc_dt + timedelta(hours=3)
                         match_date_str = gr_dt.strftime("%Y-%m-%d")
                         
-                        # Έλεγχος αν ο αγώνας είναι μέσα στο επόμενο 7ήμερο
                         if match_date_str in allowed_dates:
                             home = m['homeTeam']['name']
                             away = m['awayTeam']['name']
                             tip, pct, cover = calculate_prediction(home, away, l_stats)
-                            m_time = gr_dt.strftime("%d/%m %H:%M") # Εμφανίζει και την ημερομηνία
+                            m_time = gr_dt.strftime("%d/%m %H:%M")
                             predictions.append(f"{label}|{home} - {away}|{m_time}|{tip}|{pct}|{cover}")
         except Exception as e:
+            print(f"Σφάλμα αγώνων {code}: {e}")
             continue
         
-        time.sleep(7)
+        time.sleep(6)
 
+    # Εγγραφή στο daily_predictions.txt
     with open("daily_predictions.txt", "w", encoding="utf-8") as f:
         timestamp = now_gr.strftime("%d/%m/%Y %H:%M")
         f.write(f"--- ΠΡΟΓΝΩΣΤΙΚΑ {timestamp} ---\n")
         f.write("ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ\n")
         for p in predictions:
             f.write(p + "\n")
+            
+    print("Η ενημέρωση ολοκληρώθηκε επιτυχώς!")
 
 if __name__ == "__main__":
     main()
