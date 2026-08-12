@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 12/08/2026 07:41 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 12/08/2026 14:39 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|Fluminense FC - SE Palmeiras|15/08 22:30|Under 2.5|74|No GG (72%)
 Campeonato Brasileiro|CA Paranaense - RB Bragantino|16/08 00:30|Under 2.5|84|No GG (79%)
