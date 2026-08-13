@@ -1,10 +1,9 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 12/08/2026 14:39 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 13/08/2026 07:44 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|Fluminense FC - SE Palmeiras|15/08 22:30|Under 2.5|74|No GG (72%)
 Campeonato Brasileiro|CA Paranaense - RB Bragantino|16/08 00:30|Under 2.5|84|No GG (79%)
 Campeonato Brasileiro|São Paulo FC - Coritiba FBC|16/08 03:00|Under 2.5|70|No GG (63%)
 Campeonato Brasileiro|Chapecoense AF - EC Bahia|16/08 17:00|Under 2.5|69|No GG (77%)
-Campeonato Brasileiro|CA Mineiro - Grêmio FBPA|16/08 22:00|2-3 Goals|46|GG (55%)
 Campeonato Brasileiro|CR Vasco da Gama - Santos FC|16/08 22:00|Under 2.5|62|No GG (61%)
 Campeonato Brasileiro|Mirassol FC - CR Flamengo|17/08 00:30|2-3 Goals|46|No GG (65%)
 Campeonato Brasileiro|EC Vitória - Botafogo FR|17/08 00:30|Under 2.5|73|No GG (77%)
@@ -16,15 +15,7 @@ La Liga|Real Racing Club de Santander - Villarreal CF|16/08 18:00|2-3 Goals|55|G
 La Liga|RCD Espanyol de Barcelona - Levante UD|16/08 20:00|2-3 Goals|46|GG (56%)
 La Liga|RC Celta de Vigo - CA Osasuna|16/08 22:30|2-3 Goals|46|GG (51%)
 La Liga|RC Deportivo La Coruña - Elche CF|17/08 22:00|2-3 Goals|55|GG (58%)
-Eredivisie|Telstar 1963 - Sparta Rotterdam|14/08 21:00|Under 2.5|79|GG (78%)
-Eredivisie|Willem II Tilburg - NEC|15/08 17:30|Over 2.5|83|GG (74%)
-Eredivisie|FC Utrecht - AZ|15/08 19:45|Over 2.5|59|GG (95%)
-Eredivisie|SBV Excelsior - PSV|15/08 21:00|Over 2.5|94|GG (99%)
-Eredivisie|Fortuna Sittard - SC Cambuur-Leeuwarden|15/08 22:00|Over 2.5|94|GG (99%)
-Eredivisie|ADO Den Haag - FC Groningen|16/08 13:15|Over 2.5|59|GG (95%)
-Eredivisie|Feyenoord Rotterdam - Go Ahead Eagles|16/08 15:30|Under 2.5|95|GG (53%)
-Eredivisie|FC Twente '65 - PEC Zwolle|16/08 15:30|Over 2.5|100|GG (100%)
-Eredivisie|AFC Ajax - SC Heerenveen|16/08 17:45|Over 2.5|100|GG (100%)
+La Liga|Club Atlético de Madrid - Málaga CF|19/08 22:00|2-3 Goals|55|GG (58%)
 Championship|Wolverhampton Wanderers FC - Blackburn Rovers FC|14/08 22:00|Under 2.5|79|No GG (71%)
 Championship|Bolton Wanderers FC - Preston North End FC|15/08 14:30|Under 2.5|79|No GG (71%)
 Championship|Norwich City FC - West Bromwich Albion FC|15/08 17:00|Under 2.5|79|No GG (71%)
