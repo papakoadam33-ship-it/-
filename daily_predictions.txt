@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 19/08/2026 14:16 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 20/08/2026 06:38 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|Fluminense FC - Clube do Remo|22/08 22:00|2-3 Goals|46|No GG (50%)
 Campeonato Brasileiro|SC Internacional - CA Mineiro|23/08 00:30|Under 2.5|65|No GG (67%)
@@ -20,18 +20,18 @@ Premier League|Manchester City FC - AFC Bournemouth|23/08 16:00|Under 2.5|79|No 
 Premier League|Brighton & Hove Albion FC - Aston Villa FC|23/08 16:00|Under 2.5|79|No GG (71%)
 Premier League|Newcastle United FC - Liverpool FC|23/08 18:30|Under 2.5|79|No GG (71%)
 Premier League|Fulham FC - Chelsea FC|24/08 22:00|Under 2.5|79|No GG (71%)
-La Liga|Club Atlético de Madrid - Málaga CF|19/08 22:00|Under 2.5|79|No GG (71%)
 La Liga|Rayo Vallecano de Madrid - Deportivo Alavés|20/08 22:00|Over 2.5|83|GG (99%)
 La Liga|Real Betis Balompié - Real Sociedad de Fútbol|21/08 22:00|Under 2.5|79|No GG (71%)
 La Liga|Athletic Club - Sevilla FC|22/08 18:00|Under 2.5|59|No GG (57%)
 La Liga|Valencia CF - RC Celta de Vigo|22/08 20:30|Under 2.5|79|No GG (71%)
 La Liga|RCD Espanyol de Barcelona - Real Madrid CF|22/08 22:30|Under 2.5|59|GG (90%)
-La Liga|Club Atlético de Madrid - Villarreal CF|23/08 18:00|Over 2.5|59|GG (61%)
+La Liga|Club Atlético de Madrid - Villarreal CF|23/08 18:00|Over 2.5|59|GG (95%)
 La Liga|Getafe CF - Real Racing Club de Santander|23/08 20:30|Over 2.5|83|GG (99%)
 La Liga|Elche CF - FC Barcelona|23/08 22:30|Under 2.5|79|No GG (71%)
 La Liga|CA Osasuna - Levante UD|24/08 20:30|Under 2.5|59|GG (90%)
-La Liga|Málaga CF - RC Deportivo La Coruña|24/08 22:30|Under 2.5|79|No GG (71%)
+La Liga|Málaga CF - RC Deportivo La Coruña|24/08 22:30|Under 2.5|79|GG (78%)
 La Liga|Valencia CF - Real Betis Balompié|25/08 22:00|Under 2.5|79|No GG (71%)
+La Liga|Real Madrid CF - Real Sociedad de Fútbol|26/08 22:00|Under 2.5|79|No GG (71%)
 Serie A|Udinese Calcio - Como 1907|22/08 19:30|Under 2.5|79|No GG (71%)
 Serie A|FC Internazionale Milano - AC Monza|22/08 19:30|Under 2.5|79|No GG (71%)
 Serie A|Genoa CFC - SSC Napoli|22/08 21:45|Under 2.5|79|No GG (71%)
