@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 22/08/2026 06:34 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 22/08/2026 14:12 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|Fluminense FC - Clube do Remo|22/08 22:00|2-3 Goals|46|No GG (50%)
 Campeonato Brasileiro|SC Internacional - CA Mineiro|23/08 00:30|Under 2.5|65|No GG (67%)
