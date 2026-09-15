@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 15/09/2026 11:12 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 15/09/2026 18:20 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|Botafogo FR - Grêmio FBPA|17/09 01:30|Under 2.5|65|No GG (58%)
 Campeonato Brasileiro|CA Mineiro - Chapecoense AF|19/09 22:00|Over 2.5|61|GG (56%)
