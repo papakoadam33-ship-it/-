@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 17/09/2026 11:12 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 17/09/2026 18:22 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|CA Mineiro - Chapecoense AF|19/09 22:00|Over 2.5|61|GG (56%)
 Campeonato Brasileiro|Mirassol FC - Botafogo FR|19/09 23:00|Over 2.5|58|GG (60%)
