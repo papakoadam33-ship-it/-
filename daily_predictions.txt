@@ -1,17 +1,2 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 20/09/2026 17:23 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 21/09/2026 11:23 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
-Campeonato Brasileiro|SC Corinthians Paulista - Fluminense FC|20/09 22:00|Over 2.5|65|GG (59%)
-Campeonato Brasileiro|EC Vitória - Cruzeiro EC|20/09 22:00|2-3 Goals|45|GG (56%)
-Campeonato Brasileiro|CR Flamengo - RB Bragantino|21/09 00:30|2-3 Goals|47|No GG (61%)
-Campeonato Brasileiro|CA Paranaense - EC Bahia|21/09 01:30|Over 2.5|93|GG (87%)
-Premier League|Fulham FC - Manchester United FC|20/09 18:30|Over 2.5|71|GG (66%)
-La Liga|RC Deportivo La Coruña - Real Betis Balompié|20/09 19:30|2-3 Goals|46|GG (53%)
-La Liga|Villarreal CF - Levante UD|20/09 19:30|Over 2.5|78|GG (76%)
-La Liga|Valencia CF - Real Sociedad de Fútbol|20/09 22:00|Under 2.5|61|No GG (64%)
-Serie A|Juventus FC - Atalanta BC|20/09 19:00|2-3 Goals|47|No GG (52%)
-Serie A|AC Milan - US Lecce|20/09 21:45|Over 2.5|64|GG (55%)
-Bundesliga|FC Schalke 04 - SV 07 Elversberg|20/09 18:30|Over 2.5|82|GG (77%)
-Bundesliga|SC Paderborn 07 - TSG 1899 Hoffenheim|20/09 20:30|Under 2.5|66|GG (87%)
-Ligue 1|OGC Nice - Lille OSC|20/09 18:15|Under 2.5|73|No GG (92%)
-Ligue 1|Olympique de Marseille - Paris Saint-Germain FC|20/09 21:45|Over 2.5|67|GG (67%)
-Eredivisie|NEC - Go Ahead Eagles|20/09 17:45|Over 2.5|97|GG (94%)
