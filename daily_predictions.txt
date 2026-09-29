@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 29/09/2026 12:18 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 29/09/2026 19:41 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|São Paulo FC - Santos FC|03/10 02:00|Under 2.5|64|No GG (58%)
 Campeonato Brasileiro|CA Mineiro - RB Bragantino|04/10 00:30|2-3 Goals|47|No GG (52%)
