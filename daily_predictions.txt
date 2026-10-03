@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 03/10/2026 11:43 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 03/10/2026 17:59 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|CA Mineiro - RB Bragantino|04/10 00:30|2-3 Goals|47|No GG (52%)
 Campeonato Brasileiro|RB Bragantino - Mirassol FC|08/10 01:30|2-3 Goals|46|GG (54%)
