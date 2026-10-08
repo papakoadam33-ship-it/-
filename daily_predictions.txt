@@ -1,17 +1,17 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 08/10/2026 12:44 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 08/10/2026 20:39 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|Santos FC - CR Flamengo|09/10 01:30|2-3 Goals|47|No GG (56%)
 Campeonato Brasileiro|CA Paranaense - CA Mineiro|09/10 02:00|Over 2.5|74|GG (72%)
 Campeonato Brasileiro|Fluminense FC - Coritiba FBC|09/10 03:30|Over 2.5|89|GG (82%)
 Campeonato Brasileiro|SE Palmeiras - EC Bahia|09/10 03:30|Under 2.5|58|No GG (57%)
-Campeonato Brasileiro|CR Vasco da Gama - Clube do Remo|11/10 00:00|Over 2.5|71|GG (56%)
+Campeonato Brasileiro|CR Vasco da Gama - Clube do Remo|11/10 00:00|Over 2.5|69|GG (52%)
 Campeonato Brasileiro|São Paulo FC - EC Vitória|11/10 03:00|2-3 Goals|47|No GG (52%)
 Campeonato Brasileiro|CA Mineiro - Santos FC|11/10 22:00|2-3 Goals|46|GG (54%)
 Campeonato Brasileiro|CR Flamengo - Fluminense FC|11/10 23:30|Over 2.5|59|No GG (52%)
 Campeonato Brasileiro|Grêmio FBPA - SC Internacional|11/10 23:30|2-3 Goals|46|GG (52%)
 Campeonato Brasileiro|SE Palmeiras - SC Corinthians Paulista|11/10 23:30|Under 2.5|58|No GG (75%)
 Campeonato Brasileiro|EC Bahia - Mirassol FC|12/10 01:30|Over 2.5|65|GG (64%)
-Campeonato Brasileiro|Coritiba FBC - Botafogo FR|12/10 22:00|Over 2.5|77|GG (75%)
+Campeonato Brasileiro|Coritiba FBC - Botafogo FR|12/10 22:00|Over 2.5|74|GG (73%)
 Campeonato Brasileiro|Chapecoense AF - CA Paranaense|13/10 01:30|Over 2.5|88|GG (76%)
 Campeonato Brasileiro|RB Bragantino - Cruzeiro EC|13/10 03:00|Over 2.5|62|GG (59%)
 Premier League|Arsenal FC - Leeds United FC|10/10 14:30|Under 2.5|78|No GG (69%)
