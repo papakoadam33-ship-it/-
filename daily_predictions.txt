@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 09/10/2026 12:49 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 09/10/2026 20:14 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|CR Vasco da Gama - Clube do Remo|11/10 00:00|Over 2.5|69|GG (52%)
 Campeonato Brasileiro|São Paulo FC - EC Vitória|11/10 03:00|2-3 Goals|47|No GG (52%)
