@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 20/10/2026 11:02 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 20/10/2026 18:29 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|Cruzeiro EC - Clube do Remo|24/10 02:00|Over 2.5|65|GG (61%)
 Campeonato Brasileiro|SC Internacional - Botafogo FR|24/10 22:30|Under 2.5|58|No GG (52%)
