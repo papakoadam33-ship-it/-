@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 21/10/2026 11:07 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 21/10/2026 18:45 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|Cruzeiro EC - Clube do Remo|24/10 02:00|Over 2.5|65|GG (61%)
 Campeonato Brasileiro|SC Internacional - Botafogo FR|24/10 22:30|Under 2.5|58|No GG (52%)
@@ -54,12 +54,12 @@ Bundesliga|Borussia Dortmund - Eintracht Frankfurt|24/10 19:30|Over 2.5|82|GG (5
 Bundesliga|TSG 1899 Hoffenheim - Bayer 04 Leverkusen|25/10 17:30|Over 2.5|95|GG (82%)
 Bundesliga|SC Freiburg - FC Bayern München|25/10 19:30|Over 2.5|77|GG (70%)
 Ligue 1|Stade Brestois 29 - OGC Nice|23/10 21:45|2-3 Goals|46|GG (53%)
-Ligue 1|Toulouse FC - ES Troyes AC|24/10 18:15|Over 2.5|85|No GG (50%)
 Ligue 1|Racing Club de Lens - Paris FC|24/10 21:45|Over 2.5|71|GG (70%)
 Ligue 1|AS Monaco FC - Lille OSC|25/10 17:00|Under 2.5|74|No GG (67%)
 Ligue 1|Olympique de Marseille - Le Havre AC|25/10 19:15|Over 2.5|69|GG (56%)
 Ligue 1|Stade Rennais FC 1901 - RC Strasbourg Alsace|25/10 19:15|Over 2.5|94|GG (90%)
 Ligue 1|Angers SCO - FC Lorient|25/10 19:15|2-3 Goals|46|No GG (53%)
+Ligue 1|Toulouse FC - ES Troyes AC|25/10 19:15|Over 2.5|85|No GG (50%)
 Ligue 1|AJ Auxerre - Le Mans FC|25/10 19:15|Over 2.5|81|GG (78%)
 Ligue 1|Paris Saint-Germain FC - Olympique Lyonnais|25/10 22:45|2-3 Goals|45|GG (56%)
 Eredivisie|Go Ahead Eagles - Telstar 1963|23/10 21:00|Over 2.5|81|GG (78%)
