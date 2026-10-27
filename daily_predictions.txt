@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 27/10/2026 11:30 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 27/10/2026 19:06 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|RB Bragantino - Chapecoense AF|29/10 01:30|2-3 Goals|45|GG (51%)
 Campeonato Brasileiro|Fluminense FC - SC Internacional|29/10 01:30|2-3 Goals|46|GG (50%)
@@ -60,14 +60,14 @@ Bundesliga|FC Bayern München - Borussia Dortmund|31/10 20:30|2-3 Goals|47|No GG
 Bundesliga|1. FC Union Berlin - 1. FC Köln|01/11 17:30|Under 2.5|61|No GG (63%)
 Bundesliga|Eintracht Frankfurt - Hamburger SV|01/11 19:30|Over 2.5|71|GG (70%)
 Ligue 1|Le Havre AC - Paris Saint-Germain FC|30/10 21:00|Over 2.5|77|No GG (52%)
+Ligue 1|OGC Nice - Stade Rennais FC 1901|30/10 21:00|Over 2.5|73|GG (72%)
 Ligue 1|Lille OSC - Racing Club de Lens|30/10 23:05|2-3 Goals|46|GG (52%)
-Ligue 1|OGC Nice - Stade Rennais FC 1901|31/10 19:15|Over 2.5|73|GG (72%)
-Ligue 1|Olympique Lyonnais - Angers SCO|31/10 22:45|2-3 Goals|55|No GG (52%)
-Ligue 1|FC Lorient - Stade Brestois 29|31/10 22:45|Under 2.5|66|No GG (58%)
 Ligue 1|ES Troyes AC - Le Mans FC|31/10 22:45|Under 2.5|59|No GG (67%)
 Ligue 1|RC Strasbourg Alsace - AJ Auxerre|01/11 17:00|Over 2.5|75|GG (67%)
+Ligue 1|Olympique Lyonnais - Angers SCO|01/11 19:15|2-3 Goals|55|No GG (52%)
 Ligue 1|Paris FC - AS Monaco FC|01/11 19:15|2-3 Goals|47|GG (51%)
 Ligue 1|Olympique de Marseille - Toulouse FC|01/11 22:45|Over 2.5|83|GG (80%)
+Ligue 1|FC Lorient - Stade Brestois 29|02/11 22:45|Under 2.5|66|No GG (58%)
 Eredivisie|Feyenoord Rotterdam - Fortuna Sittard|31/10 18:30|Over 2.5|90|GG (59%)
 Eredivisie|SC Heerenveen - NEC|31/10 20:45|Over 2.5|74|GG (59%)
 Eredivisie|PSV - Willem II Tilburg|31/10 20:45|Over 2.5|97|GG (64%)
