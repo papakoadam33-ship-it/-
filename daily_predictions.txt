@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 28/10/2026 12:08 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 28/10/2026 19:54 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|RB Bragantino - Chapecoense AF|29/10 01:30|2-3 Goals|45|GG (51%)
 Campeonato Brasileiro|Fluminense FC - SC Internacional|29/10 01:30|2-3 Goals|46|GG (50%)
