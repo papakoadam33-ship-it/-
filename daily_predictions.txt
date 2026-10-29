@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 29/10/2026 12:08 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 29/10/2026 20:12 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|CA Mineiro - Cruzeiro EC|30/10 01:30|Over 2.5|70|GG (69%)
 Campeonato Brasileiro|CR Vasco da Gama - CR Flamengo|30/10 02:00|2-3 Goals|45|GG (58%)
