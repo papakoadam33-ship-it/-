@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 30/10/2026 12:18 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 30/10/2026 19:53 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|SC Corinthians Paulista - Mirassol FC|31/10 02:00|2-3 Goals|46|No GG (54%)
 Campeonato Brasileiro|Coritiba FBC - EC Vitória|31/10 22:00|2-3 Goals|45|No GG (62%)
