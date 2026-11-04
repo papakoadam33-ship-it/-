@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 04/11/2026 13:11 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 04/11/2026 21:19 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|CA Paranaense - CR Vasco da Gama|05/11 01:30|Over 2.5|60|GG (61%)
 Campeonato Brasileiro|CR Flamengo - Grêmio FBPA|05/11 01:30|Over 2.5|63|GG (55%)
@@ -79,8 +79,6 @@ Championship|Blackburn Rovers FC - West Ham United FC|07/11 18:00|Over 2.5|81|GG
 Championship|West Bromwich Albion FC - Millwall FC|07/11 18:00|Over 2.5|73|GG (67%)
 Championship|Preston North End FC - Southampton FC|07/11 18:00|Over 2.5|80|No GG (59%)
 Championship|Birmingham City FC - Swansea City AFC|07/11 18:00|Over 2.5|67|No GG (59%)
-Champions League|PAE AEK - Real Madrid CF|04/11 20:45|Over 2.5|98|GG (72%)
-Champions League|Fenerbahçe SK - Liverpool FC|04/11 20:45|Over 2.5|99|GG (83%)
 Champions League|RB Leipzig - Manchester City FC|04/11 23:00|Over 2.5|97|GG (72%)
 Champions League|SK Slavia Praha - Arsenal FC|04/11 23:00|Over 2.5|79|No GG (51%)
 Champions League|PSV - Club Brugge KV|04/11 23:00|2-3 Goals|46|GG (50%)
