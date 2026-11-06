@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 06/11/2026 13:09 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 06/11/2026 20:44 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|EC Vitória - Fluminense FC|07/11 02:00|2-3 Goals|46|GG (55%)
 Premier League|Everton FC - Coventry City FC|06/11 23:00|Under 2.5|60|No GG (55%)
