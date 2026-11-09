@@ -1,15 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 08/11/2026 19:52 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 09/11/2026 13:39 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
-Premier League|Crystal Palace FC - Liverpool FC|08/11 17:00|Over 2.5|67|No GG (50%)
-Premier League|Sunderland AFC - Chelsea FC|08/11 17:00|2-3 Goals|47|No GG (70%)
-Premier League|Ipswich Town FC - AFC Bournemouth|08/11 17:00|Over 2.5|79|GG (72%)
-Premier League|Brighton & Hove Albion FC - Brentford FC|08/11 17:00|2-3 Goals|46|No GG (65%)
-Premier League|Manchester United FC - Aston Villa FC|08/11 19:30|2-3 Goals|46|No GG (55%)
-La Liga|RC Celta de Vigo - Levante UD|08/11 20:30|2-3 Goals|46|GG (52%)
-La Liga|Villarreal CF - Getafe CF|08/11 20:30|Under 2.5|64|No GG (62%)
-La Liga|Club Atlético de Madrid - FC Barcelona|08/11 23:00|2-3 Goals|55|GG (60%)
-Serie A|FC Internazionale Milano - Como 1907|08/11 20:00|2-3 Goals|47|No GG (52%)
-Serie A|ACF Fiorentina - Juventus FC|08/11 22:45|Over 2.5|65|GG (65%)
-Bundesliga|TSG 1899 Hoffenheim - FC Schalke 04|08/11 21:30|Under 2.5|74|No GG (75%)
-Ligue 1|Racing Club de Lens - Olympique de Marseille|08/11 22:45|Over 2.5|81|GG (77%)
-Eredivisie|FC Utrecht - NEC|08/11 22:00|Over 2.5|81|GG (78%)
+Campeonato Brasileiro|Mirassol FC - CA Mineiro|15/11 00:30|Under 2.5|70|No GG (62%)
+Campeonato Brasileiro|Chapecoense AF - CR Vasco da Gama|15/11 02:30|Over 2.5|64|GG (58%)
