@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 10/11/2026 13:37 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 10/11/2026 21:22 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|Mirassol FC - CA Mineiro|15/11 00:30|Under 2.5|70|No GG (62%)
 Campeonato Brasileiro|Chapecoense AF - CR Vasco da Gama|15/11 02:30|Over 2.5|64|GG (58%)
