@@ -1,4 +1,4 @@
---- ΠΡΟΓΝΩΣΤΙΚΑ 13/11/2026 21:17 ---
+--- ΠΡΟΓΝΩΣΤΙΚΑ 14/11/2026 12:39 ---
 ΛΙΓΚΑ|ΑΓΩΝΑΣ|ΗΜΕΡ_ΩΡΑ|ΠΡΟΒΛΕΨΗ|ΠΟΣΟΣΤΟ|ΚΑΛΥΨΗ
 Campeonato Brasileiro|Mirassol FC - CA Mineiro|15/11 00:30|Under 2.5|70|No GG (62%)
 Campeonato Brasileiro|Chapecoense AF - CR Vasco da Gama|15/11 02:30|Over 2.5|64|GG (58%)
@@ -8,3 +8,9 @@ Campeonato Brasileiro|Cruzeiro EC - SE Palmeiras|19/11 02:30|Over 2.5|71|GG (50%
 Campeonato Brasileiro|CR Flamengo - CA Paranaense|19/11 02:30|Over 2.5|77|GG (53%)
 Campeonato Brasileiro|SC Corinthians Paulista - Botafogo FR|19/11 03:30|Under 2.5|60|No GG (53%)
 Campeonato Brasileiro|Grêmio FBPA - EC Bahia|19/11 03:30|Over 2.5|65|GG (66%)
+Campeonato Brasileiro|CR Vasco da Gama - SC Internacional|20/11 01:30|2-3 Goals|46|GG (51%)
+Campeonato Brasileiro|EC Vitória - RB Bragantino|20/11 01:30|Over 2.5|58|No GG (56%)
+Campeonato Brasileiro|São Paulo FC - Fluminense FC|20/11 03:30|Under 2.5|60|No GG (53%)
+La Liga|Athletic Club - RCD Espanyol de Barcelona|20/11 23:00|Under 2.5|77|No GG (71%)
+Bundesliga|FC Bayern München - 1. FC Köln|20/11 22:30|Over 2.5|70|GG (54%)
+Ligue 1|ES Troyes AC - Le Havre AC|20/11 22:45|Under 2.5|58|No GG (53%)
